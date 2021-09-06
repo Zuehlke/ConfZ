@@ -1,7 +1,8 @@
-from ..confz_source import ConfZSources, ConfZSource, ConfZFileSource, ConfZEnvSource
+from ..confz_source import ConfZSources, ConfZSource, ConfZFileSource, ConfZEnvSource, ConfZCLArgSource
 from ..exceptions import ConfZException
 from .file_loader import FileLoader
 from .env_loader import EnvLoader
+from .cl_arg_loader import CLArgLoader
 
 
 def _populate_config(config: dict, confz_source: ConfZSource):
@@ -9,6 +10,8 @@ def _populate_config(config: dict, confz_source: ConfZSource):
         FileLoader.populate_config(config, confz_source)
     elif isinstance(confz_source, ConfZEnvSource):
         EnvLoader.populate_config(config, confz_source)
+    elif isinstance(confz_source, ConfZCLArgSource):
+        CLArgLoader.populate_config(config, confz_source)
     else:
         raise ConfZException(f'Unknown config source type "{type(confz_source)}"')
 

@@ -39,15 +39,28 @@ class ConfZFileSource(ConfZSource):
 class ConfZEnvSource(ConfZSource):
     """Source config for `ConfZ` models for environment variables. Environment variable names are transformed to
     lowercase and all dashes are replaced by underscores. The definitions below are not case-sensitive and can be
-    written with underscore or dash. An exception is ´prefix´, which needs to match exactly."""
+    written with underscore or dash. An exception is ´prefix´, which needs to match exactly. Double underscores
+    can be used to access recursive configurations."""
     # These three attributes specify environment variables to read from. Either, all environment variables can be used
     # by setting ´allow_all´ or only specific variables by populating ´allow´. In the former case, certain environment
     # variables can be excluded by populating ´deny´.
     allow_all: bool = False
     allow: Optional[List[str]] = None
     deny: Optional[List[str]] = None
-    # The selection above can be narrowed down to a specific prefix, e.g. "CONFIG_". The variable in the lists above
-    # do not need to include this prefix, it is automatically added.
+    # The selection above can be narrowed down to a specific prefix, e.g. "CONFIG_". The variables in the lists above
+    # or the map below do not need to include this prefix, it is automatically added. This option is especially
+    # recommended, if ´allow_all´ is set.
     prefix: Optional[str] = None
     # Certain environment variables can be mapped to config arguments with a different name.
+    remap: Optional[Dict[str, str]] = None
+
+
+@dataclass
+class ConfZCLArgSource(ConfZSource):
+    """Source config for `ConfZ` models for command line arguments. Command line arguments are case-sensitive.
+    Double underscore can be used to access recursive configurations."""
+    # Optionally, all command line arguments can have a prefix, e.g. "config_". The map below does not need to include
+    # this prefix, it is automatically added.
+    prefix: Optional[str] = None
+    # Certain command line arguments can be mapped to config arguments with a different name.
     remap: Optional[Dict[str, str]] = None
