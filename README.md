@@ -1,4 +1,4 @@
-# ZConfig
+# ConfZ
 
 This repo is under construction!
 

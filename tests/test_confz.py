@@ -1,24 +1,24 @@
 from pathlib import Path
 
-from zconfig import ZConfig, ZConfigSource
+from confz import ConfZ, ConfZSource
 
 
-class DummyConfig(ZConfig):
+class DummyConfig(ConfZ):
     some_attr: str
 
 
-class MyConfig(ZConfig):
+class MyConfig(ConfZ):
     some_attr: str
 
-    CONFIG_SOURCE = ZConfigSource(
+    CONFIG_SOURCE = ConfZSource(
         file=Path('asdf1')
     )
 
 
-class MyConfig2(ZConfig):
+class MyConfig2(ConfZ):
     some_attr: str
 
-    CONFIG_SOURCE = ZConfigSource(
+    CONFIG_SOURCE = ConfZSource(
         file=Path('asdf2')
     )
 
@@ -30,6 +30,6 @@ def test_general():
     print(' ', MyConfig2())
     print(' ', MyConfig())
     print(' ', MyConfig2())
-    print(' ', MyConfig(config_source=ZConfigSource()))
-    print(' ', MyConfig2(config_source=ZConfigSource()))
+    print(' ', MyConfig(config_source=ConfZSource()))
+    print(' ', MyConfig2(config_source=ConfZSource()))
     print(MyConfig() is MyConfig())
