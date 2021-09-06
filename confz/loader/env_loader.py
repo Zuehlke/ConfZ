@@ -43,6 +43,7 @@ class EnvLoader(Loader):
     def populate_config(cls, config: dict, confz_source: ConfZEnvSource):
         remap = cls._transform_remap(confz_source.remap)
 
+        env_vars = dict()
         for env_var in os.environ:
             var_name = env_var
             if confz_source.prefix is not None:
@@ -57,4 +58,7 @@ class EnvLoader(Loader):
             if remap is not None and var_name in remap:
                 var_name = remap[var_name]
 
-            config[var_name] = os.environ[env_var]
+            env_vars[var_name] = os.environ[env_var]
+
+        env_vars = cls.transform_nested_dicts(env_vars)
+        config.update(env_vars)

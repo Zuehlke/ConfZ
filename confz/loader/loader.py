@@ -1,10 +1,40 @@
 from abc import ABC, abstractmethod
+from typing import Dict, Any
 
 from ..confz_source import ConfZSource
+from ..exceptions import ConfZEnvException
 
 
 class Loader(ABC):
     """An abstract base class for all config loaders."""
+
+    @classmethod
+    def transform_nested_dicts(cls, dict_in: Dict[str, Any], separator: str = '__') -> Dict[str, Any]:
+        """Transform dictionaries into nested dictionaries, using a separator in the keys as hint.
+        :param dict_in: A dictionary with string-keys.
+        :param separator: The string used to separate dict keys.
+        :return: The transformed dictionary, splitting keys at the separator and creating a new dictionary out of it.
+        """
+        dict_out = dict()
+        for key, value in dict_in.items():
+            if separator in key:
+                inner_keys = key.split(separator)
+                dict_inner = dict_out
+                for idx, inner_key in enumerate(inner_keys):
+                    if idx == len(inner_keys) - 1:
+                        dict_inner[inner_key] = value
+                    else:
+                        if inner_key not in dict_inner:
+                            dict_inner[inner_key] = {}
+                        else:
+                            if not isinstance(dict_inner[inner_key], dict):
+                                raise ConfZEnvException(f'Environment variables contradict each other: '
+                                                        f'Key "{inner_key}" is both a value and a nested dict.')
+                        dict_inner = dict_inner[inner_key]
+            else:
+                dict_out[key] = value
+
+        return dict_out
 
     @classmethod
     @abstractmethod
