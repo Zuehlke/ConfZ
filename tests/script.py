@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from confz import ConfZ, ConfZFileSource
+from confz import ConfZ, ConfZEnvSource
 
 ASSET_FOLDER = Path(__file__).parent.resolve() / 'assets'
 
@@ -8,9 +8,9 @@ ASSET_FOLDER = Path(__file__).parent.resolve() / 'assets'
 class MyConfig(ConfZ):
     some_attr: str
 
-    CONFIG_SOURCES = ConfZFileSource(
-        folder=ASSET_FOLDER,
-        name=Path('config.yml')
+    CONFIG_SOURCES = ConfZEnvSource(
+        allow_all=True,
+        prefix='CONF_'
     )
 
 
