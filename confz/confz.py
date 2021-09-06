@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from pydantic import BaseModel
 
-from .confz_source import ConfZSource
+from .confz_source import ConfZSources
 from .loader import load_config
 
 
@@ -13,16 +13,16 @@ class ConfZMetaclass(type(BaseModel)):
 
     _confz_instances = {}
 
-    def __call__(cls, config_source: ConfZSource = None, **kwargs):
+    def __call__(cls, config_sources: ConfZSources = None, **kwargs):
         """Called every time an instance of any ConfZ object is created. Injects the config value population and
         singleton mchanism."""
-        if config_source is not None:
-            config = load_config(kwargs, config_source)
+        if config_sources is not None:
+            config = load_config(kwargs, config_sources)
             return super().__call__(**config)
 
-        if cls.CONFIG_SOURCE is not None:
+        if cls.CONFIG_SOURCES is not None:
             if cls not in cls._confz_instances:
-                config = load_config(kwargs, cls.CONFIG_SOURCE)
+                config = load_config(kwargs, cls.CONFIG_SOURCES)
                 cls._confz_instances[cls] = super().__call__(**config)
             return cls._confz_instances[cls]
 
@@ -38,4 +38,4 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
     with the sources defined in the `ConfZSource` object as above. Additionally, a singleton mechanism is in place
     for this case, returning the same config class instance every time the constructor is called."""
 
-    CONFIG_SOURCE: ClassVar = None
+    CONFIG_SOURCES: ClassVar[ConfZSources] = None
