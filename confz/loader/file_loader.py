@@ -15,7 +15,7 @@ class FileLoader(Loader):
     """Config loader for config files."""
 
     @classmethod
-    def _get_filename(cls, confz_source: ConfZFileSource) -> Optional[Path]:
+    def _get_filename(cls, confz_source: ConfZFileSource) -> Path:
         if confz_source.name is not None:
             file_path = confz_source.name
         elif confz_source.env_var is not None:
@@ -38,7 +38,7 @@ class FileLoader(Loader):
                 except IndexError:
                     raise ConfZFileException(f'Command-line argument "{confz_source.cl_arg}" is not set.')
         else:
-            return None
+            raise ConfZFileException(f'No file source set.')
 
         if confz_source.folder is not None:
             file_path = confz_source.folder / file_path
@@ -80,8 +80,6 @@ class FileLoader(Loader):
     @classmethod
     def populate_config(cls, config: dict, confz_source: ConfZFileSource):
         file_path = cls._get_filename(confz_source)
-        if file_path is None:
-            return
         file_format = cls._get_format(file_path, confz_source.format)
         file_content = cls._read_file(file_path, file_format)
         config.update(file_content)

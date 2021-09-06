@@ -23,7 +23,7 @@ class ConfZFileSource(ConfZSource):
     # These three attributes specify a config file. The config file can either be given directly by a path `file`,
     # it can be read from an environment variable `file_env` or it can be passed as command line argument `file_cli`
     # both at a specific position (integer, e.g. 1) or after a specific option (string, e.g.
-    # '--config-file config.yml'). If none of these three options is specified, no config file is read.
+    # '--config-file config.yml').
     name: Optional[Path] = None
     env_var: Optional[str] = None
     cl_arg: Optional[Union[int, str]] = None
