@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any
 
 from ..confz_source import ConfZSource
-from ..exceptions import ConfZException
+from ..exceptions import ConfZUpdateException
 
 
 class Loader(ABC):
@@ -17,8 +17,8 @@ class Loader(ABC):
         for key, value in update_dict.items():
             if isinstance(value, dict) and key in original_dict:
                 if not isinstance(original_dict[key], dict):
-                    raise ConfZException(f'Config variables contradict each other: '
-                                         f'Key "{key}" is both a value and a nested dict.')
+                    raise ConfZUpdateException(f'Config variables contradict each other: '
+                                               f'Key "{key}" is both a value and a nested dict.')
                 cls.update_dict_recursively(original_dict[key], value)
             else:
                 original_dict[key] = value
@@ -43,8 +43,8 @@ class Loader(ABC):
                             dict_inner[inner_key] = {}
                         else:
                             if not isinstance(dict_inner[inner_key], dict):
-                                raise ConfZException(f'Config variables contradict each other: '
-                                                     f'Key "{inner_key}" is both a value and a nested dict.')
+                                raise ConfZUpdateException(f'Config variables contradict each other: '
+                                                           f'Key "{inner_key}" is both a value and a nested dict.')
                         dict_inner = dict_inner[inner_key]
             else:
                 dict_out[key] = value
