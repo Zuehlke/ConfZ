@@ -26,4 +26,4 @@ class CLArgLoader(Loader):
                 cl_args[cl_name] = cl_value
 
         cl_args = cls.transform_nested_dicts(cl_args)
-        config.update(cl_args)
+        cls.update_dict_recursively(config, cl_args)

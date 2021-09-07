@@ -61,4 +61,4 @@ class EnvLoader(Loader):
             env_vars[var_name] = os.environ[env_var]
 
         env_vars = cls.transform_nested_dicts(env_vars)
-        config.update(env_vars)
+        cls.update_dict_recursively(config, env_vars)

@@ -82,4 +82,4 @@ class FileLoader(Loader):
         file_path = cls._get_filename(confz_source)
         file_format = cls._get_format(file_path, confz_source.format)
         file_content = cls._read_file(file_path, file_format)
-        config.update(file_content)
+        cls.update_dict_recursively(config, file_content)
