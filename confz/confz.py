@@ -36,6 +36,10 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
     defined in the `ConfZSource` object (files, env-vars, commandline args).
     - If the config class has the class variable `CONFIG_SOURCE` defined, it is used to to enrich the existing kwargs
     with the sources defined in the `ConfZSource` object as above. Additionally, a singleton mechanism is in place
-    for this case, returning the same config class instance every time the constructor is called."""
+    for this case, returning the same config class instance every time the constructor is called.
+    Additionally, the object is faux-immutable per default."""
 
     CONFIG_SOURCES: ClassVar[ConfZSources] = None
+
+    class Config:
+        allow_mutation = False
