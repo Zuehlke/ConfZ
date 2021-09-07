@@ -3,7 +3,19 @@ from typing import ClassVar
 from pydantic import BaseModel
 
 from .confz_source import ConfZSources
-from .loader import load_config
+from .loader import get_loader
+
+
+def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:
+    config = config_kwargs.copy()
+    if isinstance(confz_sources, list):
+        for confz_source in confz_sources:
+            loader = get_loader(type(confz_source))
+            loader.populate_config(config, confz_source)
+    else:
+        loader = get_loader(type(confz_sources))
+        loader.populate_config(config, confz_sources)
+    return config
 
 
 class ConfZMetaclass(type(BaseModel)):
@@ -17,12 +29,12 @@ class ConfZMetaclass(type(BaseModel)):
         """Called every time an instance of any ConfZ object is created. Injects the config value population and
         singleton mchanism."""
         if config_sources is not None:
-            config = load_config(kwargs, config_sources)
+            config = _load_config(kwargs, config_sources)
             return super().__call__(**config)
 
         if cls.CONFIG_SOURCES is not None:
             if cls not in cls._confz_instances:
-                config = load_config(kwargs, cls.CONFIG_SOURCES)
+                config = _load_config(kwargs, cls.CONFIG_SOURCES)
                 cls._confz_instances[cls] = super().__call__(**config)
             return cls._confz_instances[cls]
 

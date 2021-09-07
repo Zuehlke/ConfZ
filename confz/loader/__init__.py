@@ -1,1 +1,2 @@
-from .load_config import load_config
+from .loader import Loader
+from .register import register_loader, get_loader
