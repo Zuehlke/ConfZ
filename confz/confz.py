@@ -3,7 +3,7 @@ from typing import ClassVar
 from pydantic import BaseModel
 
 from .confz_source import ConfZSources
-from .loader import get_loader
+from .loaders import get_loader
 
 
 def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:
