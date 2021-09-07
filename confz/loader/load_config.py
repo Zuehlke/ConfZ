@@ -1,5 +1,5 @@
-from ..confz_source import ConfZSources, ConfZSource, ConfZFileSource, ConfZEnvSource, ConfZCLArgSource
-from ..exceptions import ConfZException
+from confz.confz_source import ConfZSources, ConfZSource, ConfZFileSource, ConfZEnvSource, ConfZCLArgSource
+from confz.exceptions import ConfZException
 from .file_loader import FileLoader
 from .env_loader import EnvLoader
 from .cl_arg_loader import CLArgLoader

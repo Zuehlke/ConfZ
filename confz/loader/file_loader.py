@@ -7,8 +7,8 @@ from typing import Optional
 import yaml
 
 from .loader import Loader
-from ..confz_source import ConfZFileSource, FileFormat
-from ..exceptions import ConfZFileException
+from confz.confz_source import ConfZFileSource, FileFormat
+from confz.exceptions import ConfZFileException
 
 
 class FileLoader(Loader):

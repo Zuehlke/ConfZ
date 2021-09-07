@@ -1,7 +1,7 @@
 import sys
 
 from .loader import Loader
-from ..confz_source import ConfZCLArgSource
+from confz.confz_source import ConfZCLArgSource
 
 
 class CLArgLoader(Loader):

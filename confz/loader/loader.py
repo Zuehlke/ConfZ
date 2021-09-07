@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
 
-from ..confz_source import ConfZSource
-from ..exceptions import ConfZUpdateException
+from confz.confz_source import ConfZSource
+from confz.exceptions import ConfZUpdateException
 
 
 class Loader(ABC):

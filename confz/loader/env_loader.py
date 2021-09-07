@@ -2,7 +2,7 @@ import os
 from typing import Dict, Optional
 
 from .loader import Loader
-from ..confz_source import ConfZEnvSource
+from confz.confz_source import ConfZEnvSource
 
 
 class EnvLoader(Loader):
