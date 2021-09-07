@@ -3,6 +3,7 @@ from typing import ClassVar
 from pydantic import BaseModel
 
 from .confz_source import ConfZSources
+from .exceptions import ConfZException
 from .loaders import get_loader
 
 
@@ -33,6 +34,9 @@ class ConfZMetaclass(type(BaseModel)):
             return super().__call__(**config)
 
         if cls.CONFIG_SOURCES is not None:
+            if len(kwargs) > 0:
+                raise ConfZException('Singleton mechanism enabled ("CONFIG_SOURCES" is defined), so keyword arguments '
+                                     'are not supported')
             if cls not in cls._confz_instances:
                 config = _load_config(kwargs, cls.CONFIG_SOURCES)
                 cls._confz_instances[cls] = super().__call__(**config)
