@@ -58,7 +58,7 @@ APIConfig().port = 1234             # raises an error
 
 ### More Config Sources
 
-`ConfZ` is highly flexible in defining the source of your config. Do you need multiple environments? No Problem:
+`ConfZ` is highly flexible in defining the source of your config. Do you have multiple environments? No Problem:
 
 ```python
 from pathlib import Path
@@ -91,14 +91,34 @@ class MyConfig(ConfZ):
 
 `ConfZ` now tries to populate your config either from environment variables having the same name as your attributes or
 by reading command line arguments that start with `conf_`. Recursive models are supported too, for example if you want
-to control the user-name in the API above, you can either set the variable `DB__user` or pass the command line argument
-`--conf_db__user`
+to control the user-name in the API above, you can either set the environment variable `DB__USER` or pass the command
+line argument `--conf_db__user`.
+
+Next to composition, `ConfZ` also supports inheritance. This allows to even further re-use your config, for example:
+
+```python
+from pathlib import Path
+
+from confz import ConfZ, ConfZFileSource
+from pydantic import SecretStr, AnyUrl
+
+class DBConfig(ConfZ):
+    user: str
+    password: SecretStr
+
+class LocalDBConfig(DBConfig):
+    CONFIG_SOURCES = ConfZFileSource(name=Path('/path/to/config/local_db.yml'))
+
+class RemoteDBConfig(DBConfig):
+    host: AnyUrl
+    CONFIG_SOURCES = ConfZFileSource(name=Path('/path/to/config/remote_db.yml'))
+```
 
 ### Local Configs
 
-In some scenarios, the config should not be a singleton (for example if you have a dynamic number of services,
-all with the same config structure, but each has its individual instance). Instead of defining `CONFIG_SOURCES` as
-class variable, it can also be passed to the constructor:
+In some scenarios, the config should not be a singleton. Maybe the number of config instances is not even known at 
+the time of defining the config class. Instead of defining `CONFIG_SOURCES` as class variable, the source can also be
+passed to the constructor directly:
 
 ```python
 from pathlib import Path
@@ -108,7 +128,6 @@ from confz import ConfZ, ConfZFileSource, ConfZEnvSource
 class LocalConfig(ConfZ):
     number: int
     text: str
-
 
 config1 = LocalConfig(config_sources=ConfZFileSource(name=Path('/path/to/config.yml')))    
 config2 = LocalConfig(config_sources=ConfZEnvSource(prefix='CONF_', allow=['text']), number=1)
