@@ -49,11 +49,13 @@ print(f"Serving API at {APIConfig().host}, port {APIConfig().port}.")
 As can be seen, the config does neither have to be loaded explicitly, nor instantiated globally. `ConfZ` automatically loads
 your config as defined in `CONFIG_SOURCES` the first time you access it. Thanks to its singleton mechanism, this
 happens the first time only, afterwards you get back a cached,
-[immutable](https://pydantic-docs.helpmanual.io/usage/models/#faux-immutability) instance:
+[immutable](https://pydantic-docs.helpmanual.io/usage/models/#faux-immutability) instance, behaving like any other
+_pydantic_ instance.
 
 ```python
 assert APIConfig() is APIConfig()   # true
 APIConfig().port = 1234             # raises an error
+APIConfig().json()                  # get a json representation of the whole config
 ```
 
 ### More Config Sources
