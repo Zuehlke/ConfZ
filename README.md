@@ -139,6 +139,31 @@ config3 = LocalConfig(number=1, text='hello world')
 As can be seen, additional keyword-arguments can be provided as well. If neither class variable `CONFIG_SOURCES` nor
 constructor argument `config_sources` is provided, `ConfZ` behaves like a regular _pydantic_ class.
 
+### Change Config Values / Testing
+
+In some scenarios, you might want to change your config values, for example within a unit test. However, if you set the
+`CONFIG_SOURCES` class variable, this is not directly possible. To overcome this, every config class provides a context
+manager to temporarily change your config:
+
+```python
+from pathlib import Path
+
+from confz import ConfZ, ConfZFileSource, ConfZDataSource
+
+class MyConfig(ConfZ):
+    number: int
+    CONFIG_SOURCES = ConfZFileSource(name=Path('/path/to/config.yml'))
+
+print(MyConfig().number)                            # will print the value from the config-file
+
+new_source = ConfZDataSource(data={'number': 42})
+with MyConfig.change_config_sources(new_source):
+    print(MyConfig().number)                        # will print '42'
+
+print(MyConfig().number)                            # will print the value from the config-file again
+```
+
+
 ## Documentation
 
 TODO:
