@@ -163,20 +163,40 @@ with MyConfig.change_config_sources(new_source):
 print(MyConfig().number)                            # will print the value from the config-file again
 ```
 
+### Validation
+
+By default, your config gets loaded the first time you instantiate the class, e.g. with `MyConfig().attribute`. If the
+config class cannot populate all mandatory fields, _pydantic_ will raise an error at this point. To make sure this does
+not happen in an inconvenient moment, you can also instruct `ConfZ` to load all configs beforehand:
+
+```python
+from confz import validate_all_configs
+
+if __name__ == '__main__':
+    validate_all_configs()
+    # your application code
+```
+
+The function `validate_all_configs` will instantiate all config classes defined in your code at any (reachable)
+location that have `CONFIG_SOURCES` set. Please note that _validated_ means that _pydantic_ was able to parse your
+input data, see [data conversion](https://pydantic-docs.helpmanual.io/usage/models/#data-conversion).
+
 
 ## Documentation
 
 TODO:
 - Behaviour of ConfZ
-  - Bare class
+  - Bare class (pydantic, immutable)
   - Usage with class variable (singleton, no kwargs)
   - Usage with init argument (no singleton, kwargs)
   - Usage with context manager
   - Restriction that only leaves can have class variables
+  - Early loading of config with validate_all_configs
 - Loaders and their ConfZSource
   - Order / what overwrites whats (incl. kwargs)
   - Config Files
   - Environment Variables
   - CL Arguments
+  - Constant data
 - Register own Loaders
 - Exceptions

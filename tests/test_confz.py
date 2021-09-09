@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from confz import ConfZ, ConfZDataSource
+from confz import ConfZ, ConfZDataSource, validate_all_configs
 from confz.exceptions import ConfZException
 
 
@@ -95,3 +95,25 @@ def test_change_sources():
 
     assert config_before.attr3 == 3
     assert config_before is ParentConfig1()
+
+
+def test_validate():
+    class NewInner(ConfZ):
+        attr1: int
+
+    class NewOuter(ConfZ):
+        inner: NewInner
+        attr2: int
+
+        CONFIG_SOURCES = ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2})
+
+    validate_all_configs()
+
+    class NewOuter2(ConfZ):
+        inner: NewInner
+        attr2: int
+
+        CONFIG_SOURCES = ConfZDataSource(data={'attr2': 2})
+
+    with pytest.raises(ValidationError):
+        validate_all_configs()
