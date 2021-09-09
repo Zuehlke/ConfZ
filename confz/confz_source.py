@@ -69,6 +69,6 @@ class ConfZCLArgSource(ConfZSource):
 @dataclass
 class ConfZDataSource(ConfZSource):
     """Source config for `ConfZ` models for raw data, i.e. constants. This can be useful for unit-test together with
-    ´set_config_sources()´ to inject test data into the config."""
+    ´change_config_sources()´ to inject test data into the config."""
     # All data should go into this (possibly nested) dict.
     data: Dict[str, Any]

@@ -1,9 +1,7 @@
-import os
-
 import pytest
 from pydantic import ValidationError
 
-from confz import ConfZ, ConfZEnvSource
+from confz import ConfZ, ConfZDataSource
 from confz.exceptions import ConfZException
 
 
@@ -19,79 +17,81 @@ class OuterConfig(ConfZ):
 class ParentConfig1(OuterConfig):
     attr3: int
 
-    CONFIG_SOURCES = ConfZEnvSource(allow_all=True, prefix='CONF_')
+    CONFIG_SOURCES = ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2, 'attr3': 3})
 
 
 class ParentConfig2(OuterConfig):
     attr4: int
 
-    CONFIG_SOURCES = ConfZEnvSource(allow_all=True, prefix='CONF_')
+    CONFIG_SOURCES = ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2, 'attr4': 4})
 
 
 class ParentConfig3(OuterConfig):
     attr5: int
 
-    CONFIG_SOURCES = ConfZEnvSource(allow_all=True, prefix='CONF_')
 
-
-@pytest.fixture
-def env_vars():
-    os.environ['CONF_inner__attr1'] = '1'
-    os.environ['CONF_attr2'] = '2'
-    os.environ['CONF_attr3'] = '3'
-    os.environ['CONF_attr4'] = '4'
-    yield
-    del os.environ['CONF_inner__attr1']
-    del os.environ['CONF_attr2']
-    del os.environ['CONF_attr3']
-    del os.environ['CONF_attr4']
-
-
-def test_transparent():
-    # assert that needs kwargs
+def test_simple():
+    # needs kwargs
     with pytest.raises(ValidationError):
         OuterConfig()
 
-    # assert that uses kwargs
+    # uses kwargs
     config1 = OuterConfig(attr2=2, inner={'attr1': 1})
     assert config1.inner.attr1 == 1
     assert config1.attr2 == 2
 
-    # assert no singleton
+    # no singleton
     config2 = OuterConfig(attr2=2, inner={'attr1': 1})
+    assert config1 == config2
     assert config1 is not config2
 
 
-def test_class_var(env_vars):
-    # assert that kwargs do not work
-    with pytest.raises(ConfZException):
-        ParentConfig1(attr3=3)
-
-    # assert that uses env vars
+def test_class_var():
+    # uses sources
     config1 = ParentConfig1()
     assert config1.attr2 == 2
 
-    # asset that singleton
-    assert ParentConfig1() == config1
+    # kwargs do not work
+    with pytest.raises(ConfZException):
+        ParentConfig1(attr3=3)
+
+    # singleton
+    assert ParentConfig1() is config1
     assert ParentConfig2() is ParentConfig2()
-    assert ParentConfig1() is not ParentConfig2
+    assert ParentConfig1() is not ParentConfig2()
     assert ParentConfig1().inner is ParentConfig1().inner
     assert ParentConfig1().inner is not ParentConfig2().inner
 
 
-def test_init_arg(env_vars):
-    # assert that uses env vars
-    config = OuterConfig(config_sources=ConfZEnvSource(allow_all=True, prefix='CONF_'))
-    assert config.attr2 == 2
+def test_init_arg():
+    # assert that uses sources
+    config = OuterConfig(config_sources=ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 20}))
+    assert config.attr2 == 20
 
-    # assert that no singleton
+    # no singleton
     assert ParentConfig1() is ParentConfig1()
-    config1 = ParentConfig1(config_sources=ConfZEnvSource(allow_all=True, prefix='CONF_'))
-    config2 = ParentConfig1(config_sources=ConfZEnvSource(allow_all=True, prefix='CONF_'))
+    config1 = ParentConfig1(config_sources=ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2, 'attr3': 3}))
+    config2 = ParentConfig1(config_sources=ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2, 'attr3': 3}))
+    assert config1 == config2
     assert config1 is not config2
 
-    # assert that uses kwargs
+    # uses kwargs
     with pytest.raises(ValidationError):
-        ParentConfig3(config_sources=ConfZEnvSource(allow_all=True, prefix='CONF_'))
-    config = ParentConfig3(attr5=5, config_sources=ConfZEnvSource(allow_all=True, prefix='CONF_'))
+        ParentConfig3(config_sources=ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2}))
+    config = ParentConfig3(attr5=5, config_sources=ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2}))
     assert config.attr5 == 5
+
+
+def test_change_sources():
+    config_before = ParentConfig1()
+    assert config_before.attr3 == 3
+    assert config_before is ParentConfig1()
+
+    new_source = ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2, 'attr3': 30})
+    with ParentConfig1.change_config_sources(new_source):
+        assert ParentConfig1().attr3 == 30
+        assert ParentConfig1() is ParentConfig1()
+        assert ParentConfig1() is not config_before
+
+    assert config_before.attr3 == 3
+    assert config_before is ParentConfig1()
