@@ -6,9 +6,9 @@ from typing import Optional
 
 import yaml
 
-from .loader import Loader
 from confz.confz_source import ConfZFileSource, FileFormat
 from confz.exceptions import ConfZFileException
+from .loader import Loader
 
 
 class FileLoader(Loader):
@@ -16,27 +16,27 @@ class FileLoader(Loader):
 
     @classmethod
     def _get_filename(cls, confz_source: ConfZFileSource) -> Path:
-        if confz_source.name is not None:
-            file_path = confz_source.name
-        elif confz_source.name_from_env is not None:
-            if confz_source.name_from_env not in os.environ:
-                raise ConfZFileException(f'Environment variable "{confz_source.name_from_env}" is not set.')
-            file_path = Path(os.environ[confz_source.name_from_env])
-        elif confz_source.name_from_cl is not None:
-            if isinstance(confz_source.name_from_cl, int):
+        if confz_source.file is not None:
+            file_path = confz_source.file
+        elif confz_source.file_from_env is not None:
+            if confz_source.file_from_env not in os.environ:
+                raise ConfZFileException(f'Environment variable "{confz_source.file_from_env}" is not set.')
+            file_path = Path(os.environ[confz_source.file_from_env])
+        elif confz_source.file_from_cl is not None:
+            if isinstance(confz_source.file_from_cl, int):
                 try:
-                    file_path = Path(sys.argv[confz_source.name_from_cl])
+                    file_path = Path(sys.argv[confz_source.file_from_cl])
                 except IndexError:
-                    raise ConfZFileException(f'Command-line argument number {confz_source.name_from_cl} is not set.')
+                    raise ConfZFileException(f'Command-line argument number {confz_source.file_from_cl} is not set.')
             else:
                 try:
-                    idx = sys.argv.index(confz_source.name_from_cl)
+                    idx = sys.argv.index(confz_source.file_from_cl)
                 except ValueError:
-                    raise ConfZFileException(f'Command-line argument "{confz_source.name_from_cl}" not found.')
+                    raise ConfZFileException(f'Command-line argument "{confz_source.file_from_cl}" not found.')
                 try:
                     file_path = Path(sys.argv[idx+1])
                 except IndexError:
-                    raise ConfZFileException(f'Command-line argument "{confz_source.name_from_cl}" is not set.')
+                    raise ConfZFileException(f'Command-line argument "{confz_source.file_from_cl}" is not set.')
         else:
             raise ConfZFileException(f'No file source set.')
 

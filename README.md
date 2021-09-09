@@ -31,7 +31,7 @@ class APIConfig(ConfZ):
     port: int
     db: DBConfig
 
-    CONFIG_SOURCES = ConfZFileSource(name=Path('/path/to/config.yml'))
+    CONFIG_SOURCES = ConfZFileSource(file=Path('/path/to/config.yml'))
 ```
 
 Thanks to [pydantic](https://pydantic-docs.helpmanual.io/), you can use a wide variety of
@@ -71,7 +71,7 @@ class MyConfig(ConfZ):
     ...
     CONFIG_SOURCES = ConfZFileSource(
         folder=Path('/path/to/config/folder'),
-        name_from_env='ENVIRONMENT'
+        file_from_env='ENVIRONMENT'
     )
 ```
 
@@ -109,11 +109,11 @@ class DBConfig(ConfZ):
     password: SecretStr
 
 class LocalDBConfig(DBConfig):
-    CONFIG_SOURCES = ConfZFileSource(name=Path('/path/to/config/local_db.yml'))
+    CONFIG_SOURCES = ConfZFileSource(file=Path('/path/to/config/local_db.yml'))
 
 class RemoteDBConfig(DBConfig):
     host: AnyUrl
-    CONFIG_SOURCES = ConfZFileSource(name=Path('/path/to/config/remote_db.yml'))
+    CONFIG_SOURCES = ConfZFileSource(file=Path('/path/to/config/remote_db.yml'))
 ```
 
 ### Local Configs
@@ -131,7 +131,7 @@ class LocalConfig(ConfZ):
     number: int
     text: str
 
-config1 = LocalConfig(config_sources=ConfZFileSource(name=Path('/path/to/config.yml')))    
+config1 = LocalConfig(config_sources=ConfZFileSource(file=Path('/path/to/config.yml')))    
 config2 = LocalConfig(config_sources=ConfZEnvSource(prefix='CONF_', allow=['text']), number=1)
 config3 = LocalConfig(number=1, text='hello world')
 ```
@@ -152,7 +152,7 @@ from confz import ConfZ, ConfZFileSource, ConfZDataSource
 
 class MyConfig(ConfZ):
     number: int
-    CONFIG_SOURCES = ConfZFileSource(name=Path('/path/to/config.yml'))
+    CONFIG_SOURCES = ConfZFileSource(file=Path('/path/to/config.yml'))
 
 print(MyConfig().number)                            # will print the value from the config-file
 
@@ -171,6 +171,7 @@ TODO:
   - Bare class
   - Usage with class variable (singleton, no kwargs)
   - Usage with init argument (no singleton, kwargs)
+  - Usage with context manager
   - Restriction that only leaves can have class variables
 - Loaders and their ConfZSource
   - Order / what overwrites whats (incl. kwargs)

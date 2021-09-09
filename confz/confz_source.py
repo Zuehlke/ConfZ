@@ -20,13 +20,13 @@ class FileFormat(Enum):
 @dataclass
 class ConfZFileSource(ConfZSource):
     """Source config for `ConfZ` models for config files."""
-    # These three attributes specify a config file. The config file can either be given directly by a path `name`,
-    # it can be read from an environment variable `name_from_env` or it can be passed as command line argument
-    # `name_from_cl` both at a specific position (integer, e.g. 1) or after a specific option (string, e.g.
+    # These three attributes specify a config file. The config file can either be given directly by a path `file`,
+    # it can be read from an environment variable `file_from_env` or it can be passed as command line argument
+    # `file_from_cl` both at a specific position (integer, e.g. 1) or after a specific option (string, e.g.
     # '--config-file config.yml').
-    name: Optional[Path] = None
-    name_from_env: Optional[str] = None
-    name_from_cl: Optional[Union[int, str]] = None
+    file: Optional[Path] = None
+    file_from_env: Optional[str] = None
+    file_from_cl: Optional[Union[int, str]] = None
 
     # The file specified above can optionally be relative to this folder
     folder: Optional[Path] = None
