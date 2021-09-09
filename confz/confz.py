@@ -24,8 +24,6 @@ class ConfZMetaclass(type(BaseModel)):
     implemented the logic in `__call__` in the ConfZ class itself with `__new__` instead, but pydantic currently
     does not support to overwrite this method."""
 
-    _confz_instances = {}
-
     def __call__(cls, config_sources: ConfZSources = None, **kwargs):
         """Called every time an instance of any ConfZ object is created. Injects the config value population and
         singleton mchanism."""
@@ -37,10 +35,10 @@ class ConfZMetaclass(type(BaseModel)):
             if len(kwargs) > 0:
                 raise ConfZException('Singleton mechanism enabled ("CONFIG_SOURCES" is defined), so keyword arguments '
                                      'are not supported')
-            if cls not in cls._confz_instances:
+            if getattr(cls, '_confz_instance', None) is None:
                 config = _load_config(kwargs, cls.CONFIG_SOURCES)
-                cls._confz_instances[cls] = super().__call__(**config)
-            return cls._confz_instances[cls]
+                cls._confz_instance = super().__call__(**config)
+            return cls._confz_instance
 
         return super().__call__(**kwargs)
 
@@ -59,3 +57,12 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
 
     class Config:
         allow_mutation = False
+
+    @classmethod
+    def set_config_sources(cls, config_sources: ConfZSources):
+        """Set the config sources as class variable. If they are already defined, they will be overwritten. If the
+        class was instantiated already and a singleton was created, it will be deleted.
+        :param config_sources: The new config sources.
+        """
+        cls._confz_instance = None
+        cls.CONFIG_SOURCES = config_sources
