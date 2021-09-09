@@ -1,12 +1,12 @@
 from typing import Type, Dict
 
-from confz.confz_source import ConfZSource, ConfZFileSource, ConfZEnvSource, ConfZCLArgSource
+from confz.confz_source import ConfZSource, ConfZFileSource, ConfZEnvSource, ConfZCLArgSource, ConfZDataSource
 from confz.exceptions import ConfZException
-from .loader import Loader
-from .file_loader import FileLoader
-from .env_loader import EnvLoader
 from .cl_arg_loader import CLArgLoader
-
+from .data_loader import DataLoader
+from .env_loader import EnvLoader
+from .file_loader import FileLoader
+from .loader import Loader
 
 _loaders: Dict[Type[ConfZSource], Type[Loader]] = {}
 
@@ -29,3 +29,4 @@ def register_loader(confz_source: Type[ConfZSource], loader: Type[Loader]):
 register_loader(ConfZFileSource, FileLoader)
 register_loader(ConfZEnvSource, EnvLoader)
 register_loader(ConfZCLArgSource, CLArgLoader)
+register_loader(ConfZDataSource, DataLoader)

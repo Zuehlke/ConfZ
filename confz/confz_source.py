@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Optional, Union, List, Dict
+from typing import Optional, Union, List, Dict, Any
 
 
 @dataclass
@@ -64,3 +64,11 @@ class ConfZCLArgSource(ConfZSource):
     prefix: Optional[str] = None
     # Certain command line arguments can be mapped to config arguments with a different name.
     remap: Optional[Dict[str, str]] = None
+
+
+@dataclass
+class ConfZDataSource(ConfZSource):
+    """Source config for `ConfZ` models for raw data, i.e. constants. This can be useful for unit-test together with
+    ´set_config_sources()´ to inject test data into the config."""
+    # All data should go into this (possibly nested) dict.
+    data: Dict[str, Any]
