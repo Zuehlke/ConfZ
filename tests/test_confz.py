@@ -83,21 +83,25 @@ def test_init_arg():
 
 
 def test_change_sources():
+    # singleton works
     config_before = ParentConfig1()
     assert config_before.attr3 == 3
     assert config_before is ParentConfig1()
 
+    # can change source and singleton
     new_source = ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2, 'attr3': 30})
     with ParentConfig1.change_config_sources(new_source):
         assert ParentConfig1().attr3 == 30
         assert ParentConfig1() is ParentConfig1()
         assert ParentConfig1() is not config_before
 
+    # singleton in place again afterwards
     assert config_before.attr3 == 3
     assert config_before is ParentConfig1()
 
 
 def test_validate():
+    # works with new configs
     class NewInner(ConfZ):
         attr1: int
 
@@ -109,6 +113,7 @@ def test_validate():
 
     validate_all_configs()
 
+    # detects missing data
     class NewOuter2(ConfZ):
         inner: NewInner
         attr2: int

@@ -1,1 +1,1 @@
-{"some_attr": "some_val"}
+{"inner": {"attr1":  "1"}, "attr2": "2"}
