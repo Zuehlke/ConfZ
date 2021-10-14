@@ -84,10 +84,11 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
         allow_mutation = False
 
     @classmethod
-    def change_config_sources(cls, config_sources: ConfZSources):
+    def change_config_sources(cls, config_sources: ConfZSources) -> SourceChangeManager:
         """Change the config sources class variable within a controlled context. Within this context, the sources
         will be different and the singleton reset, if it existed. This can be useful in unit tests to temporarily
         change a configuration.
         :param config_sources: The temporary config sources for within the context.
+        :return: Context manager for change of config sources
         """
         return SourceChangeManager(cls, config_sources)

@@ -1,8 +1,18 @@
 # ConfZ – Pydantic Config Management
 
-ConfZ is a ... (TODO).
+`ConfZ` is a configuration management library for Python based on [pydantic](https://pydantic-docs.helpmanual.io/).
+It easily allows you to
 
-**Note:** PREVIEW, this project is under construction!
+* load your configuration from config files, environment variables, command line arguments and more sources
+* transform the loaded data into a desired format and validate it
+* access the results as Python dataclass-like objects with full IDE support
+
+It furthermore supports you in common use cases like:
+
+* Multiple environments
+* Singleton with lazy loading
+* Config changes for unit tests
+* Custom config sources
 
 ## Installation
 
@@ -185,18 +195,17 @@ input data, see [data conversion](https://pydantic-docs.helpmanual.io/usage/mode
 ## Documentation
 
 TODO:
-- Behaviour of ConfZ
+- The ConfZ Class
   - Bare class (pydantic, immutable)
-  - Usage with class variable (singleton, no kwargs)
   - Usage with init argument (no singleton, kwargs)
-  - Usage with context manager
-  - Restriction that only leaves can have class variables
-  - Early loading of config with validate_all_configs
-- Loaders and their ConfZSource
-  - Order / what overwrites whats (incl. kwargs)
+  - Usage with class variable (singleton, no kwargs)
+    - Restriction that only leaves can have class variables
+    - Early loading of config with validate_all_configs
+- Config Sources and Loaders
+  - Order / what overwrites what (incl. kwargs)
   - Config Files
   - Environment Variables
   - CL Arguments
   - Constant data
-- Register own Loaders
-- Exceptions
+- Context Manager
+- Extending ConfZ
