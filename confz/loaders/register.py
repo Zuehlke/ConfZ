@@ -19,9 +19,10 @@ def get_loader(confz_source: Type[ConfZSource]):
 
 
 def register_loader(confz_source: Type[ConfZSource], loader: Type[Loader]):
-    """Register a ´ConfZSource´ with a specific loader. Can be used to extend ´ConfZ´ with own loaders.
-    :param confz_source: The ´ConfZSource´ sub-type.
-    :param loader: The ´Loader´ sub-type.
+    """Register a :class:`~confz.ConfZSource` with a specific loader. Can be used to extend `ConfZ` with own loaders.
+
+    :param confz_source: The :class:`~confz.ConfZSource` sub-type.
+    :param loader: The :class:`~confz.loaders.Loader` sub-type.
     """
     _loaders[confz_source] = loader
 

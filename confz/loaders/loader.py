@@ -10,7 +10,8 @@ class Loader(ABC):
 
     @classmethod
     def update_dict_recursively(cls, original_dict: Dict, update_dict: Dict):
-        """Updates the original dict with the new data. Similar to ´dict.update()´, but works with nested dicts.
+        """Updates the original dict with the new data. Similar to `dict.update()`, but works with nested dicts.
+
         :param original_dict: The original dictionary to update in-place.
         :param update_dict: The new data.
         """
@@ -26,6 +27,7 @@ class Loader(ABC):
     @classmethod
     def transform_nested_dicts(cls, dict_in: Dict[str, Any], separator: str = '__') -> Dict[str, Any]:
         """Transform dictionaries into nested dictionaries, using a separator in the keys as hint.
+
         :param dict_in: A dictionary with string-keys.
         :param separator: The string used to separate dict keys.
         :return: The transformed dictionary, splitting keys at the separator and creating a new dictionary out of it.
@@ -55,6 +57,7 @@ class Loader(ABC):
     @abstractmethod
     def populate_config(cls, config: dict, confz_source: ConfZSource):
         """Populate the config-dict with new config arguments based on the source.
+
         :param config: Config dictionary, gets extended with new arguments
         :param confz_source: Source configuration.
         """

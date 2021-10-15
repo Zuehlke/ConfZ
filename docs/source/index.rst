@@ -1,5 +1,5 @@
-ConfZ – Pydantic Config Management
-==================================
+ConfZ -- Pydantic Config Management
+===================================
 
 TODO:
   - About

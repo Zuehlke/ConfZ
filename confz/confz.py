@@ -1,3 +1,5 @@
+from __future__ import annotations  # for sphinx's autodoc_type_aliases
+
 from contextlib import AbstractContextManager
 from typing import ClassVar, Type
 
@@ -68,27 +70,28 @@ class SourceChangeManager(AbstractContextManager):
 
 
 class ConfZ(BaseModel, metaclass=ConfZMetaclass):
-    """ConfZ Base Class, parent of every config class. Internally wraps the pydantic `BaseModel` class and behaves
+    """Base class, parent of every config class. Internally wraps :class:`BaseModel` of pydantic and behaves
     transparent except for two cases:
-    - If the constructor gets `config_source` as kwarg, it is used to enrich the other kwargs with the sources
-    defined in the `ConfZSource` object (files, env-vars, commandline args).
-    - If the config class has the class variable `CONFIG_SOURCE` defined, it is used to to enrich the existing kwargs
-    with the sources defined in the `ConfZSource` object as above. Additionally, a singleton mechanism is in place
-    for this case, returning the same config class instance every time the constructor is called.
-    Additionally, the object is faux-immutable per default."""
 
-    CONFIG_SOURCES: ClassVar[ConfZSources] = None
+    - If the constructor gets `config_sources` as kwarg, these sources are used as input to enrich the other kwargs.
+    - If the class has the class variable `CONFIG_SOURCES` defined, these sources are used as input.
+
+    In the latter case, a singleton mechanism is activated, returning the same config class instance every time the
+    constructor is called."""
+
+    CONFIG_SOURCES: ClassVar[ConfZSources] = None   #: Sources to use as input.
     _confz_instance: ClassVar['ConfZ'] = None
 
     class Config:
         allow_mutation = False
 
     @classmethod
-    def change_config_sources(cls, config_sources: ConfZSources) -> SourceChangeManager:
-        """Change the config sources class variable within a controlled context. Within this context, the sources
-        will be different and the singleton reset, if it existed. This can be useful in unit tests to temporarily
+    def change_config_sources(cls, config_sources: ConfZSources) -> AbstractContextManager:
+        """Change the `CONFIG_SOURCES` class variable within a controlled context. Within this context, the sources
+        will be different and the singleton reset. This can be useful in unit tests to temporarily
         change a configuration.
+
         :param config_sources: The temporary config sources for within the context.
-        :return: Context manager for change of config sources
+        :return: Context manager for change of config sources.
         """
         return SourceChangeManager(cls, config_sources)

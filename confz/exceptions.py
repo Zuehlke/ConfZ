@@ -12,9 +12,9 @@ class ConfZFileException(ConfZException):
 
 class ConfZEnvException(ConfZException):
     """Exception which is raised if something went wrong while reading environment variables.
-    PLACEHOLDER, NOT IN USE RIGHT NOW."""
+    *Placeholder, this exception is not in use right now.*"""
 
 
 class ConfZCLArgException(ConfZException):
     """Exception which is raised if something went wrong while reading command line arguments.
-    PLACEHOLDER, NOT IN USE RIGHT NOW."""
+    *Placeholder, this exception is not in use right now.*"""
