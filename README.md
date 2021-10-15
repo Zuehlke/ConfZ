@@ -14,6 +14,7 @@ It furthermore supports you in common use cases like:
 * Config changes for unit tests
 * Custom config sources
 
+
 ## Installation
 
 `ConfZ` is on [PyPI](https://pypi.org/project/confz/) and can be installed with pip:
@@ -22,7 +23,8 @@ It furthermore supports you in common use cases like:
 pip install confz
 ```
 
-## Example Usage
+
+## Quick Start
 
 The first step of using `ConfZ` is to declare your config classes and sources, for example in `config.py`:
 
@@ -56,8 +58,8 @@ from config import APIConfig
 print(f"Serving API at {APIConfig().host}, port {APIConfig().port}.")
 ```
 
-As can be seen, the config does neither have to be loaded explicitly, nor instantiated globally. `ConfZ` automatically loads
-your config as defined in `CONFIG_SOURCES` the first time you access it. Thanks to its singleton mechanism, this
+As can be seen, the config does neither have to be loaded explicitly, nor instantiated globally. `ConfZ` automatically
+loads your config as defined in `CONFIG_SOURCES` the first time you access it. Thanks to its singleton mechanism, this
 happens the first time only, afterwards you get back a cached,
 [immutable](https://pydantic-docs.helpmanual.io/usage/models/#faux-immutability) instance, behaving like any other
 _pydantic_ instance.
@@ -105,26 +107,6 @@ class MyConfig(ConfZ):
 by reading command line arguments that start with `conf_`. Recursive models are supported too, for example if you want
 to control the user-name in the API above, you can either set the environment variable `DB__USER` or pass the command
 line argument `--conf_db__user`.
-
-Next to composition, `ConfZ` also supports inheritance. This allows to even further re-use your config, for example:
-
-```python
-from pathlib import Path
-
-from confz import ConfZ, ConfZFileSource
-from pydantic import SecretStr, AnyUrl
-
-class DBConfig(ConfZ):
-    user: str
-    password: SecretStr
-
-class LocalDBConfig(DBConfig):
-    CONFIG_SOURCES = ConfZFileSource(file=Path('/path/to/config/local_db.yml'))
-
-class RemoteDBConfig(DBConfig):
-    host: AnyUrl
-    CONFIG_SOURCES = ConfZFileSource(file=Path('/path/to/config/remote_db.yml'))
-```
 
 ### Local Configs
 
@@ -190,3 +172,8 @@ if __name__ == '__main__':
 The function `validate_all_configs` will instantiate all config classes defined in your code at any (reachable)
 location that have `CONFIG_SOURCES` set. Please note that _validated_ means that _pydantic_ was able to parse your
 input data, see [data conversion](https://pydantic-docs.helpmanual.io/usage/models/#data-conversion).
+
+
+## Documentation
+
+The full documentation of `ConfZ`'s features can be found at TODO.
