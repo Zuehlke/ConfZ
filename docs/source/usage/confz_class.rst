@@ -37,13 +37,19 @@ APIConfig(
     db=DBConfig(user='my-user', password=SecretStr('**********'))
 )
 
+.. note::
+
+   Pydantic sees itself as a parsing library, not a validation library. This means, it may cast input data to force it
+   to conform to model field types, and in some cases this may result in a loss of information. See
+   `Data conversion <https://pydantic-docs.helpmanual.io/usage/models/#data-conversion>`_ for detailed information.
+
 Since ``api_config`` is a standard python object, your IDE will give you full support like code-completion and
-type-checks. It also supports all methods available by `BaseModel` of pydantic, e.g.
+type-checks. It also supports all methods available by `BaseModel` of pydantic, for example:
 
 >>> api_config.json()
 '{"host": "http://my-host.com", "port": 1234, "db": {"user": "my-user", "password": "**********"}}'
 
-and is `faux-immutable <https://pydantic-docs.helpmanual.io/usage/models/#faux-immutability>`_ per default:
+It is `faux-immutable <https://pydantic-docs.helpmanual.io/usage/models/#faux-immutability>`_ per default:
 
 >>> api_config.port = 1
 TypeError: "APIConfig" is immutable and does not support item assignment
