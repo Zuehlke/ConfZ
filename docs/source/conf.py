@@ -17,11 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-from datetime import datetime
-
 project = 'ConfZ'
-copyright = f'{datetime.now().year}, Zuehlke'
-author = 'Zuehlke'
+copyright = f'2021, Zühlke'
+author = 'Zühlke'
 
 
 # -- General configuration ---------------------------------------------------
