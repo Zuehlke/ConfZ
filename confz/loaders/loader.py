@@ -14,6 +14,7 @@ class Loader(ABC):
 
         :param original_dict: The original dictionary to update in-place.
         :param update_dict: The new data.
+        :raises ConfZUpdateException: If dict keys contradict each other.
         """
         for key, value in update_dict.items():
             if isinstance(value, dict) and key in original_dict:
@@ -31,6 +32,7 @@ class Loader(ABC):
         :param dict_in: A dictionary with string-keys.
         :param separator: The string used to separate dict keys.
         :return: The transformed dictionary, splitting keys at the separator and creating a new dictionary out of it.
+        :raises ConfZUpdateException: If dict keys contradict each other.
         """
         dict_out = dict()
         for key, value in dict_in.items():

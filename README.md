@@ -190,22 +190,3 @@ if __name__ == '__main__':
 The function `validate_all_configs` will instantiate all config classes defined in your code at any (reachable)
 location that have `CONFIG_SOURCES` set. Please note that _validated_ means that _pydantic_ was able to parse your
 input data, see [data conversion](https://pydantic-docs.helpmanual.io/usage/models/#data-conversion).
-
-
-## Documentation
-
-TODO:
-- The ConfZ Class
-  - Bare class (pydantic, immutable)
-  - Usage with init argument (no singleton, kwargs)
-  - Usage with class variable (singleton, no kwargs)
-    - Restriction that only leaves can have class variables
-    - Early loading of config with validate_all_configs
-- Config Sources and Loaders
-  - Order / what overwrites what (incl. kwargs)
-  - Config Files
-  - Environment Variables
-  - CL Arguments
-  - Constant data
-- Context Manager
-- Extending ConfZ

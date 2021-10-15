@@ -13,7 +13,10 @@ def _get_sub_classes(cls):
 
 def validate_all_configs():
     """Instantiates all config classes with a singleton mechanism (`CONFIG_SOURCES` set). This allows to catch
-    validation errors early instead of waiting for the first access."""
+    validation errors early instead of waiting for the first access.
+
+    :raises ConfZException: If any config could not be loaded.
+    """
     for config_class in _get_sub_classes(ConfZ):
         if config_class.CONFIG_SOURCES is not None:
             config_class()
