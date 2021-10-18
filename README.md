@@ -192,4 +192,4 @@ The full documentation of `ConfZ`'s features can be found at [readthedocs](https
 `ConfZ` was programmed and will be maintained by [Zühlke](https://www.zuehlke.com).
 Special thanks to Iwan's [ConfMe](https://github.com/iwanbolzern/ConfMe), which inspired this project.
 
-Want to contribute to `ConfZ`? Check out the [contribution guidelines](CONTRIBUTING.md).
+Want to contribute to `ConfZ`? Check out the [contribution instruction & guidelines](CONTRIBUTING.md).
