@@ -1,5 +1,11 @@
 # ConfZ – Pydantic Config Management
 
+[![tests](https://github.com/Zuehlke/ConfZ/actions/workflows/tests.yaml/badge.svg)](https://github.com/Zuehlke/ConfZ/actions/workflows/tests.yaml)
+[![Documentation Status](https://readthedocs.org/projects/confz/badge/?version=latest)](https://confz.readthedocs.io/en/latest/?badge=latest)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/confz)
+![PyPI](https://img.shields.io/pypi/v/confz)
+![PyPI - License](https://img.shields.io/pypi/l/confz)
+
 # PREVIEW: This library is still under construction!
 
 `ConfZ` is a configuration management library for Python based on [pydantic](https://pydantic-docs.helpmanual.io/).
@@ -179,3 +185,11 @@ input data, see [data conversion](https://pydantic-docs.helpmanual.io/usage/mode
 ## Documentation
 
 The full documentation of `ConfZ`'s features can be found at [readthedocs](https://confz.readthedocs.io/).
+
+
+## About
+
+`ConfZ` was programmed and will be maintained by [Zühlke](https://www.zuehlke.com).
+Special thanks to Iwan's [ConfMe](https://github.com/iwanbolzern/ConfMe), which inspired this project.
+
+Want to contribute to `ConfZ`? Check out the [contribution guidelines](CONTRIBUTING.md).
