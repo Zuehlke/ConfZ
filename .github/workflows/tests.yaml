@@ -20,13 +20,3 @@ jobs:
       - name: run pytest with coverage
         run: |
           pytest --cov=confz
-      - name: report coverage
-        uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: await exec.exec('coverage report')
-            })
