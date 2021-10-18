@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "confz"
 version = "0.2.0"
-description = ""
-authors = ["Silvan Melchior"]
+description = "ConfZ is a configuration management library for Python based on pydantic."
+authors = ["Zühlke"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.6"
 pydantic = "^1.8.2"
 PyYAML = "^5.4.1"
 
