@@ -1,8 +1,19 @@
 [tool.poetry]
 name = "confz"
-version = "0.3.0"
+version = "0.4.0"
 description = "ConfZ is a configuration management library for Python based on pydantic."
+license = "MIT"
 authors = ["Zühlke"]
+homepage = "https://confz.readthedocs.io"
+repository = "https://github.com/Zuehlke/ConfZ"
+documentation = "https://confz.readthedocs.io"
+keywords = ["Configuration Management", "Config Management"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
