@@ -1,10 +1,11 @@
 [tool.poetry]
 name = "confz"
-version = "0.4.0"
+version = "0.2.1"
 description = "ConfZ is a configuration management library for Python based on pydantic."
 license = "MIT"
 authors = ["Zühlke"]
-homepage = "https://confz.readthedocs.io"
+readme = "README.md"
+homepage = "https://github.com/Zuehlke/ConfZ"
 repository = "https://github.com/Zuehlke/ConfZ"
 documentation = "https://confz.readthedocs.io"
 keywords = ["Configuration Management", "Config Management"]
