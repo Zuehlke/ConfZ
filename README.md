@@ -23,7 +23,7 @@ It furthermore supports you in common use cases like:
 * Custom config sources
 
 
-## Installation
+## :package: Installation
 
 `ConfZ` is on [PyPI](https://pypi.org/project/confz/) and can be installed with pip:
 
@@ -32,7 +32,7 @@ pip install confz
 ```
 
 
-## Quick Start
+## :rocket: Quick Start
 
 The first step of using `ConfZ` is to declare your config classes and sources, for example in `config.py`:
 
@@ -182,12 +182,12 @@ location that have `CONFIG_SOURCES` set. Please note that _validated_ means that
 input data, see [data conversion](https://pydantic-docs.helpmanual.io/usage/models/#data-conversion).
 
 
-## Documentation
+## :book: Documentation
 
 The full documentation of `ConfZ`'s features can be found at [readthedocs](https://confz.readthedocs.io/).
 
 
-## About
+## :information_source: About
 
 `ConfZ` was programmed and will be maintained by [Zühlke](https://www.zuehlke.com).
 Special thanks to Iwan's [ConfMe](https://github.com/iwanbolzern/ConfMe), which inspired this project.
