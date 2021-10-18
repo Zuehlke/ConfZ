@@ -178,4 +178,4 @@ input data, see [data conversion](https://pydantic-docs.helpmanual.io/usage/mode
 
 ## Documentation
 
-The full documentation of `ConfZ`'s features can be found at TODO.
+The full documentation of `ConfZ`'s features can be found at [readthedocs](https://confz.readthedocs.io/).

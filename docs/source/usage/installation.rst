@@ -7,4 +7,4 @@ ConfZ is on `PyPI <https://pypi.org/project/confz/>`_ and can be installed with 
 
    pip install confz
 
-It works with python >= 3.6 TODO and only depends on pydantic and pyyaml.
+It requires python >= 3.7 and only depends on pydantic and pyyaml.
