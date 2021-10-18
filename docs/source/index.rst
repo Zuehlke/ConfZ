@@ -17,7 +17,7 @@ It furthermore supports you in common use cases like:
 
 .. topic:: Quick Start
 
-   This is the documentation of ConfZ. For a quick start, see the `README <...>`_ (TODO).
+   This is the documentation of ConfZ. For a quick start, see the `README <https://github.com/Zuehlke/ConfZ#readme>`_.
 
 
 Contents
