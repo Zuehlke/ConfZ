@@ -27,7 +27,8 @@ class ConfZFileSource(ConfZSource):
     """Alternatively, use this environment variable to get the file."""
     file_from_cl: Optional[Union[int, str]] = None
     """Alternatively, use this command line argument to get the file name/path. It can be a specific position 
-    (integer, e.g. `1`) or after a specific option (string, e.g. `\\-\\-config-file`)."""
+    (integer, e.g. `1`) or after a specific option (string, e.g. `\\-\\-config-file`). In the latter case, the file
+    name must follow after whitespace, an equal sign between argument and value is not supported at the moment."""
     folder: Optional[Path] = None
     """The file specified above can optionally be relative to this folder."""
     format: Optional[FileFormat] = None
@@ -58,12 +59,14 @@ class ConfZEnvSource(ConfZSource):
 @dataclass
 class ConfZCLArgSource(ConfZSource):
     """Source config for command line arguments. Command line arguments are case-sensitive. Dot-notation can be
-    used to access nested configurations."""
+    used to access nested configurations. Only command line arguments starting with two dashes (\\-\\-) are considered.
+    Between argument and value must be whitespace, an equal sign is not supported at the moment."""
     prefix: Optional[str] = None
-    """Optionally, all command line arguments can have a prefix, e.g. `config_`. The map below does not need to include
-    this prefix, it is automatically added."""
+    """Optionally, all command line arguments can have a prefix, e.g. `config_`. The prefix does not need to include
+    the two dashes at the beginning. The map below does not need to include the prefix, it is automatically added."""
     remap: Optional[Dict[str, str]] = None
-    """Certain command line arguments can be mapped to config arguments with a different name."""
+    """Certain command line arguments can be mapped to config arguments with a different name. The map does not need to
+    include the two dashes at the beginning."""
 
 
 @dataclass
