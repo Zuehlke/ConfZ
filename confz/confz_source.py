@@ -38,8 +38,8 @@ class ConfZFileSource(ConfZSource):
 class ConfZEnvSource(ConfZSource):
     """Source config for environment variables. Environment variable names are transformed to
     lowercase and all dashes are replaced by underscores. The definitions below are not case-sensitive and can be
-    written with underscore or dash. An exception is `prefix`, which needs to match exactly. Double underscores
-    can be used to access recursive configurations."""
+    written with underscore or dash. An exception is `prefix`, which needs to match exactly. Dot-notation
+    can be used to access nested configurations."""
     allow_all: bool = False
     """Allow potentially all environment variables to be read as config option."""
     allow: Optional[List[str]] = None
@@ -57,8 +57,8 @@ class ConfZEnvSource(ConfZSource):
 
 @dataclass
 class ConfZCLArgSource(ConfZSource):
-    """Source config for command line arguments. Command line arguments are case-sensitive. Double underscore can be
-    used to access recursive configurations."""
+    """Source config for command line arguments. Command line arguments are case-sensitive. Dot-notation can be
+    used to access nested configurations."""
     prefix: Optional[str] = None
     """Optionally, all command line arguments can have a prefix, e.g. `config_`. The map below does not need to include
     this prefix, it is automatically added."""

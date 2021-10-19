@@ -113,8 +113,8 @@ class MyConfig(ConfZ):
 
 `ConfZ` now tries to populate your config either from environment variables having the same name as your attributes or
 by reading command line arguments that start with `conf_`. Recursive models are supported too, for example if you want
-to control the user-name in the API above, you can either set the environment variable `DB__USER` or pass the command
-line argument `--conf_db__user`.
+to control the user-name in the API above, you can either set the environment variable `DB.USER` or pass the command
+line argument `--conf_db.user`.
 
 ### Local Configs
 
