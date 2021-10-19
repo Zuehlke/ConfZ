@@ -45,7 +45,7 @@ A corresponding github webhook triggers builds on [readthedocs](https://readthed
 The documentation can also be built locally with 
 
 ```
-sphinx-build -b html source build
+make html
 ```
 
 in the [docs](docs) folder.

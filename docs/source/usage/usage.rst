@@ -1,11 +1,12 @@
 Using ConfZ
 ===========
 
+This part of the documentation contains user guides explaining all aspects of ConfZ.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   installation
    confz_class
    sources_loaders
    context_manager

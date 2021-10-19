@@ -20,6 +20,18 @@ It furthermore supports you in common use cases like:
    This is the documentation of ConfZ. For a quick start, see the `README <https://github.com/Zuehlke/ConfZ#readme>`_.
 
 
+Installation
+------------
+
+ConfZ is on `PyPI <https://pypi.org/project/confz/>`_ and can be installed with pip:
+
+.. code-block:: console
+
+   pip install confz
+
+It requires python >= 3.7 and only depends on pydantic and pyyaml.
+
+
 Contents
 --------
 
@@ -30,8 +42,8 @@ Contents
    reference/reference
 
 
-Indices and Search
-------------------
+Index and Search
+----------------
 
 * :ref:`genindex`
 * :ref:`search`
