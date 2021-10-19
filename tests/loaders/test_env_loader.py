@@ -14,7 +14,7 @@ class OuterConfig(ConfZ):
 
 
 def test_allow_all(monkeypatch):
-    monkeypatch.setenv('INNER__ATTR1-NAME', '1')
+    monkeypatch.setenv('INNER.ATTR1-NAME', '1')
     monkeypatch.setenv('ATTR2', '2')
     config = OuterConfig(config_sources=ConfZEnvSource(
         allow_all=True
@@ -24,12 +24,12 @@ def test_allow_all(monkeypatch):
 
 
 def test_allow_deny(monkeypatch):
-    monkeypatch.setenv('INNER__ATTR1-NAME', '1')
+    monkeypatch.setenv('INNER.ATTR1-NAME', '1')
     monkeypatch.setenv('ATTR2', '2')
 
     # works if all allowed
     config = OuterConfig(config_sources=ConfZEnvSource(
-        allow=['inner__attr1_name', 'attr2']
+        allow=['inner.attr1_name', 'attr2']
     ))
     assert config.inner.attr1_name == 1
     assert config.attr2 == 2
@@ -43,13 +43,13 @@ def test_allow_deny(monkeypatch):
     # raises error if denied
     with pytest.raises(ValidationError):
         OuterConfig(config_sources=ConfZEnvSource(
-            allow=['inner__attr1_name', 'attr2'],
+            allow=['inner.attr1_name', 'attr2'],
             deny=['attr2']
         ))
 
 
 def test_prefix(monkeypatch):
-    monkeypatch.setenv('CONFIG_INNER__ATTR1-NAME', '1')
+    monkeypatch.setenv('CONFIG_INNER.ATTR1-NAME', '1')
     monkeypatch.setenv('CONFIG_ATTR2', '2')
 
     # prefix works
@@ -62,7 +62,7 @@ def test_prefix(monkeypatch):
 
     # allow does not use prefix
     config = OuterConfig(config_sources=ConfZEnvSource(
-        allow=['inner__attr1_name', 'attr2'],
+        allow=['inner.attr1_name', 'attr2'],
         prefix='CONFIG_'
     ))
     assert config.inner.attr1_name == 1
@@ -84,7 +84,7 @@ def test_remap(monkeypatch):
     config = OuterConfig(config_sources=ConfZEnvSource(
         allow_all=True,
         remap={
-            'val1': 'inner__attr1_name',
+            'val1': 'inner.attr1_name',
             'val2': 'attr2',
         }
     ))
@@ -98,7 +98,7 @@ def test_remap(monkeypatch):
         allow_all=True,
         prefix='CONFIG_',
         remap={
-            'val1': 'inner__attr1_name',
+            'val1': 'inner.attr1_name',
             'val2': 'attr2',
         }
     ))
