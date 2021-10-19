@@ -48,10 +48,24 @@ exclude_patterns = ['build', 'Thumbs.db', '.DS_Store']
 #
 html_theme = 'alabaster'
 
+html_theme_options = {
+    'description': 'ConfZ is a configuration management library for Python based on pydantic.',
+    'github_user': 'Zuehlke',
+    'github_repo': 'ConfZ',
+    'github_button': True,
+    'github_type': 'star',
+    'github_count': False,
+    'extra_nav_links': {
+        'Quick Start': 'https://github.com/Zuehlke/ConfZ#readme'
+    },
+    'show_powered_by': False,
+    'show_relbar_bottom': True
+}
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['_static']
+html_static_path = ['custom.css']
 
 # -- Options for extensions --------------------------------------------------
 
