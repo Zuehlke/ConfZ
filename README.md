@@ -6,8 +6,6 @@
 ![PyPI](https://img.shields.io/pypi/v/confz)
 ![PyPI - License](https://img.shields.io/pypi/l/confz)
 
-# PREVIEW: This library is still under construction!
-
 `ConfZ` is a configuration management library for Python based on [pydantic](https://pydantic-docs.helpmanual.io/).
 It easily allows you to
 
