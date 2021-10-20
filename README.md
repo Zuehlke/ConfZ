@@ -73,10 +73,15 @@ happens the first time only, afterwards you get back a cached,
 _pydantic_ instance.
 
 ```python
-assert APIConfig() is APIConfig()   # true
-APIConfig().port = 1234             # raises an error
-APIConfig().json()                  # get a json representation of the whole config
+assert APIConfig() is APIConfig()   # true because of singleton mechanism
+APIConfig().port = 1234             # raises an error because of immutability
+APIConfig().json()                  # call pydantic's method to get a json representation
 ```
+
+**Note:** While the implicit and hidden loading of your config might be surprising and feel a bit like Python magic at 
+first, it allows you to reduce a lot of boilerplate. Instead of having to load your config explicitly and then passing 
+it down to all code layers that need it, you can directly access it from anywhere by just importing your config class 
+and accessing for example `APIConfig().db.user` directly.
 
 ### More Config Sources
 
@@ -116,30 +121,31 @@ by reading command line arguments that start with `conf_`. Recursive models are 
 to control the user-name in the API above, you can either set the environment variable `DB.USER` or pass the command
 line argument `--conf_db.user`.
 
-### Local Configs
+### Explicit Loading
 
-In some scenarios, the config should not be a singleton. Maybe the number of config instances is not even known at 
-the time of defining the config class. Instead of defining `CONFIG_SOURCES` as class variable, the source can also be
-passed to the constructor directly:
+In some scenarios, the config should not be a global singleton, but loaded explicitly and passed around locally. 
+Instead of defining `CONFIG_SOURCES` as class variable, the sources can also be defined in the constructor directly:
 
 ```python
 from pathlib import Path
 
 from confz import ConfZ, ConfZFileSource, ConfZEnvSource
 
-class LocalConfig(ConfZ):
+class MyConfig(ConfZ):
     number: int
     text: str
 
-config1 = LocalConfig(config_sources=ConfZFileSource(file=Path('/path/to/config.yml')))    
-config2 = LocalConfig(config_sources=ConfZEnvSource(prefix='CONF_', allow=['text']), number=1)
-config3 = LocalConfig(number=1, text='hello world')
+config1 = MyConfig(config_sources=ConfZFileSource(file=Path('/path/to/config.yml')))    
+config2 = MyConfig(config_sources=ConfZEnvSource(prefix='CONF_', allow=['text']), number=1)
+config3 = MyConfig(number=1, text='hello world')
 ```
 
-As can be seen, additional keyword-arguments can be provided as well. If neither class variable `CONFIG_SOURCES` nor
-constructor argument `config_sources` is provided, `ConfZ` behaves like a regular _pydantic_ class.
+As can be seen, additional keyword-arguments can be provided as well.
 
-### Change Config Values / Testing
+**Note:** If neither class variable `CONFIG_SOURCES` nor constructor argument `config_sources` is provided, `ConfZ` 
+behaves like a regular _pydantic_ class.
+
+### Change Config Values
 
 In some scenarios, you might want to change your config values, for example within a unit test. However, if you set the
 `CONFIG_SOURCES` class variable, this is not directly possible. To overcome this, every config class provides a context
@@ -163,11 +169,12 @@ with MyConfig.change_config_sources(new_source):
 print(MyConfig().number)                            # will print the value from the config-file again
 ```
 
-### Validation
+### Early Validation
 
-By default, your config gets loaded the first time you instantiate the class, e.g. with `MyConfig().attribute`. If the
-config class cannot populate all mandatory fields, _pydantic_ will raise an error at this point. To make sure this does
-not happen in an inconvenient moment, you can also instruct `ConfZ` to load all configs beforehand:
+By default, your config gets loaded the first time you instantiate the class, e.g. with `MyConfig().attribute`. This
+prevents side effects like loading a file while you import your config classes. If the config class cannot populate all 
+mandatory fields in the correct format, _pydantic_ will raise an error at this point. To make sure this does not happen
+in an inconvenient moment, you can also instruct `ConfZ` to load all configs beforehand:
 
 ```python
 from confz import validate_all_configs
@@ -178,11 +185,17 @@ if __name__ == '__main__':
 ```
 
 The function `validate_all_configs` will instantiate all config classes defined in your code at any (reachable)
-location that have `CONFIG_SOURCES` set. Please note that _validated_ means that _pydantic_ was able to parse your
-input data, see [data conversion](https://pydantic-docs.helpmanual.io/usage/models/#data-conversion).
+location that have `CONFIG_SOURCES` set.
 
 
 ## :book: Documentation
+
+Now you've seen the two ways how `ConfZ` can be used: With class variable config sources, unlocking a singleton with
+lazy loading, or with keyword argument config sources, allowing to directly load your config values. In both cases,
+defining your config sources from files, command line arguments and environment variables is highly flexible 
+(and also extendable, by the way), while _pydantic_ still makes sure that everything matches your expectations in the
+end. You've also seen how to temporarily change your config for example in unit tests and how to validate 
+your singleton config classes early in the code already.
 
 The full documentation of `ConfZ`'s features can be found at [readthedocs](https://confz.readthedocs.io/).
 
@@ -190,6 +203,7 @@ The full documentation of `ConfZ`'s features can be found at [readthedocs](https
 ## :information_source: About
 
 `ConfZ` was programmed and will be maintained by [Zühlke](https://www.zuehlke.com).
-Special thanks to Iwan's [ConfMe](https://github.com/iwanbolzern/ConfMe), which inspired this project.
+The first version was realized by [Silvan](https://github.com/silvanmelchior).
+Special thanks to Iwan with his [ConfMe](https://github.com/iwanbolzern/ConfMe), which inspired this project.
 
-Want to contribute to `ConfZ`? Check out the [contribution instruction & guidelines](CONTRIBUTING.md).
+Want to contribute to `ConfZ`? Check out the contribution [instruction & guidelines](CONTRIBUTING.md).
