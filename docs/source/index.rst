@@ -1,5 +1,5 @@
-ConfZ -- Pydantic Config Management
-===================================
+ConfZ -- Pydantic Config Management TEST
+========================================
 
 ConfZ is a configuration management library for Python based on `pydantic <https://pydantic-docs.helpmanual.io/>`_.
 It easily allows you to
