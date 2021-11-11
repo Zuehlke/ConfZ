@@ -1,10 +1,11 @@
 from __future__ import annotations  # for sphinx's autodoc_type_aliases
 
 from contextlib import AbstractContextManager
-from typing import ClassVar, Type
+from typing import ClassVar, List
 
 from pydantic import BaseModel
 
+from .change import SourceChangeManager
 from .confz_source import ConfZSources
 from .exceptions import ConfZException
 from .loaders import get_loader
@@ -46,29 +47,6 @@ class ConfZMetaclass(type(BaseModel)):
         return super().__call__(**kwargs)
 
 
-class SourceChangeManager(AbstractContextManager):
-    """Config sources change context manager, allows to change config sources within a controlled context and resets
-    everything afterwards."""
-
-    def __init__(self, config_class: Type['ConfZ'], config_sources: ConfZSources):
-        self._config_class = config_class
-        self._config_sources = config_sources
-        self._backup_instance = None
-        self._backup_sources = None
-
-    def __enter__(self):
-        self._backup_instance = self._config_class._confz_instance
-        self._config_class._confz_instance = None
-
-        self._backup_sources = self._config_class.CONFIG_SOURCES
-        self._config_class.CONFIG_SOURCES = self._config_sources
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self._config_class._confz_instance = self._backup_instance
-        self._config_class.CONFIG_SOURCES = self._backup_sources
-
-
 class ConfZ(BaseModel, metaclass=ConfZMetaclass):
     """Base class, parent of every config class. Internally wraps :class:`BaseModel` of pydantic and behaves
     transparent except for two cases:
@@ -79,8 +57,9 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
     In the latter case, a singleton mechanism is activated, returning the same config class instance every time the
     constructor is called."""
 
-    CONFIG_SOURCES: ClassVar[ConfZSources] = None   #: Sources to use as input.
+    CONFIG_SOURCES: ClassVar[ConfZSources] = None  #: Sources to use as input.
     _confz_instance: ClassVar['ConfZ'] = None
+    _listeners: ClassVar[List['Listener']] = None
 
     class Config:
         allow_mutation = False
