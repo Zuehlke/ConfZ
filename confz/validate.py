@@ -15,7 +15,7 @@ def validate_all_configs(include_listeners: bool = False):
     """Instantiates all config classes with a singleton mechanism (`CONFIG_SOURCES` set). This allows to catch
     validation errors early instead of waiting for the first access.
 
-    :param include_listeners: Whether all listeners (marked with :func:`depends_on`) should be included.
+    :param include_listeners: Whether all listeners (marked with :func:`~confz.depends_on`) should be included.
     :raises ConfZException: If any config could not be loaded.
     """
     for config_class in _get_sub_classes(ConfZ):

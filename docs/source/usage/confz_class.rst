@@ -5,7 +5,7 @@ Raw Class
 ---------
 
 Per default, the :class:`~confz.ConfZ` class behaves like `BaseModel` of pydantic and allows to specify your config with
-typehints, either using standard Python types of more
+typehints, either using standard Python types or more
 `advanced ones <https://pydantic-docs.helpmanual.io/usage/types/>`_:
 
 >>> from confz import ConfZ
