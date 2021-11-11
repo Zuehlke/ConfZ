@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 
-from confz import ConfZ, ConfZDataSource, validate_all_configs
+from confz import ConfZ, ConfZDataSource
 from confz.exceptions import ConfZException
 
 
@@ -80,45 +80,3 @@ def test_init_arg():
         ParentConfig3(config_sources=ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2}))
     config = ParentConfig3(attr5=5, config_sources=ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2}))
     assert config.attr5 == 5
-
-
-def test_change_sources():
-    # singleton works
-    config_before = ParentConfig1()
-    assert config_before.attr3 == 3
-    assert config_before is ParentConfig1()
-
-    # can change source and singleton
-    new_source = ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2, 'attr3': 30})
-    with ParentConfig1.change_config_sources(new_source):
-        assert ParentConfig1().attr3 == 30
-        assert ParentConfig1() is ParentConfig1()
-        assert ParentConfig1() is not config_before
-
-    # singleton in place again afterwards
-    assert config_before.attr3 == 3
-    assert config_before is ParentConfig1()
-
-
-def test_validate():
-    # works with new configs
-    class NewInner(ConfZ):
-        attr1: int
-
-    class NewOuter(ConfZ):
-        inner: NewInner
-        attr2: int
-
-        CONFIG_SOURCES = ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2})
-
-    validate_all_configs()
-
-    # detects missing data
-    class NewOuter2(ConfZ):
-        inner: NewInner
-        attr2: int
-
-        CONFIG_SOURCES = ConfZDataSource(data={'attr2': 2})
-
-    with pytest.raises(ValidationError):
-        validate_all_configs()
