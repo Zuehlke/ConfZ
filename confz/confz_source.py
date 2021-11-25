@@ -37,7 +37,7 @@ class ConfZFileSource(ConfZSource):
 
 @dataclass
 class ConfZEnvSource(ConfZSource):
-    """Source config for environment variables. Environment variable names are transformed to
+    """Source config for environment variables and .env files. On loading of the source, the dotenv file values(if available) are merged with the environment, with environment always taking precedence in ase of name collusion. All loaded variable names are transformed to
     lowercase and all dashes are replaced by underscores. The definitions below are not case-sensitive and can be
     written with underscore or dash. An exception is `prefix`, which needs to match exactly. Dot-notation
     can be used to access nested configurations."""
@@ -54,8 +54,9 @@ class ConfZEnvSource(ConfZSource):
     recommended, if ´allow_all´ is set."""
     remap: Optional[Dict[str, str]] = None
     """Certain environment variables can be mapped to config arguments with a different name."""
-
-
+    env_file: str = ".env"
+    """Built in .env file loadingg with lower than environment precedence."""
+    
 @dataclass
 class ConfZCLArgSource(ConfZSource):
     """Source config for command line arguments. Command line arguments are case-sensitive. Dot-notation can be

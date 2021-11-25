@@ -9,7 +9,7 @@
 `ConfZ` is a configuration management library for Python based on [pydantic](https://pydantic-docs.helpmanual.io/).
 It easily allows you to
 
-* load your configuration from config files, environment variables, command line arguments and more sources
+* load your configuration from config files, environment variables and .env files, command line arguments and more sources
 * transform the loaded data into a desired format and validate it
 * access the results as Python dataclass-like objects with full IDE support
 
@@ -109,7 +109,7 @@ from confz import ConfZ, ConfZEnvSource, ConfZCLArgSource
 class MyConfig(ConfZ):
     ...
     CONFIG_SOURCES = [
-        ConfZEnvSource(allow_all=True),
+        ConfZEnvSource(allow_all=True, env_file=".env.local"),
         ConfZCLArgSource(prefix='conf_')
     ]
 ```
