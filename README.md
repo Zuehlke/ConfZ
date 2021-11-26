@@ -104,7 +104,7 @@ You can also provide a list as config source and read for example from environme
 arguments:
 
 ```python
-from pathlin import Path
+from pathlib import Path
 from confz import ConfZ, ConfZEnvSource, ConfZCLArgSource
 
 class MyConfig(ConfZ):
