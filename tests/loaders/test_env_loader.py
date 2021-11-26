@@ -1,10 +1,10 @@
 from pathlib import Path
 from typing import Optional
-from unittest import mock
 
 import pytest
 from confz import ConfZ, ConfZEnvSource
 from pydantic import ValidationError
+from tests.assets import ASSET_FOLDER
 
 
 class InnerConfig(ConfZ):
@@ -113,13 +113,11 @@ def test_remap(monkeypatch):
 
 
 def test_dotenv_loading(monkeypatch):
-    monkeypatch.setattr('os.path.isfile', lambda _: True)
-    monkeypatch.setattr('io.open', mock.mock_open(read_data="INNER.ATTR1-NAME=2001\nINNER.ATTR-OVERRIDE=2002\n"))
     monkeypatch.setenv('INNER.ATTR1_NAME', '21')
     monkeypatch.setenv('ATTR2', '1')
     config = OuterConfig(config_sources=ConfZEnvSource(
         allow_all=True,
-        file=Path(".env"),
+        file=Path(ASSET_FOLDER / 'config.env')
     ))
     assert config.attr2 == 1
     assert config.inner.attr1_name == 21
