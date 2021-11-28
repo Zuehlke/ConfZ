@@ -38,7 +38,7 @@ class ConfZFileSource(ConfZSource):
 @dataclass
 class ConfZEnvSource(ConfZSource):
     """Source config for environment variables and .env files. On loading of the source, the dotenv file
-    values(if available) are merged with the environment, with environment always taking precedence in case of
+    values (if available) are merged with the environment, with environment always taking precedence in case of
     name collusion. All loaded variable names are transformed to lowercase and all dashes are replaced by underscores.
     The definitions below are not case-sensitive and can be written with underscore or dash. An exception is `prefix`,
     which needs to match exactly. Dot-notation can be used to access nested configurations."""

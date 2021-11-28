@@ -1,9 +1,10 @@
 import os
 from typing import Dict, Optional
 
-from .loader import Loader
-from confz.confz_source import ConfZEnvSource
 from dotenv import dotenv_values
+
+from confz.confz_source import ConfZEnvSource
+from .loader import Loader
 
 
 class EnvLoader(Loader):
@@ -45,7 +46,7 @@ class EnvLoader(Loader):
         remap = cls._transform_remap(confz_source.remap)
 
         origin_env_vars = os.environ
-        if confz_source.file:
+        if confz_source.file is not None:
             origin_env_vars = {**dotenv_values(confz_source.file), **origin_env_vars}
         env_vars = dict()
         for env_var in origin_env_vars:

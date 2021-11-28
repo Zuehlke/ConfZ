@@ -1,15 +1,16 @@
-from pathlib import Path
 from typing import Optional
 
 import pytest
-from confz import ConfZ, ConfZEnvSource
 from pydantic import ValidationError
+
+from confz import ConfZ, ConfZEnvSource
 from tests.assets import ASSET_FOLDER
 
 
 class InnerConfig(ConfZ):
     attr1_name: int
     attr_override: Optional[str]
+
 
 class OuterConfig(ConfZ):
     attr2: int
@@ -27,6 +28,7 @@ def test_allow_all(monkeypatch):
     assert config.attr2 == 2
     assert config.inner.attr_override == 'secret'
 
+
 def test_allow_deny(monkeypatch):
     monkeypatch.setenv('ATTR2', '2')
     monkeypatch.setenv('INNER.ATTR1-NAME', '1')
@@ -38,7 +40,7 @@ def test_allow_deny(monkeypatch):
     ))
     assert config.attr2 == 2
     assert config.inner.attr1_name == 1
-    assert config.inner.attr_override == None
+    assert config.inner.attr_override is None
 
     # raises error if not all allowed
     with pytest.raises(ValidationError):
@@ -117,7 +119,7 @@ def test_dotenv_loading(monkeypatch):
     monkeypatch.setenv('ATTR2', '1')
     config = OuterConfig(config_sources=ConfZEnvSource(
         allow_all=True,
-        file=Path(ASSET_FOLDER / 'config.env')
+        file=ASSET_FOLDER / 'config.env'
     ))
     assert config.attr2 == 1
     assert config.inner.attr1_name == 21
