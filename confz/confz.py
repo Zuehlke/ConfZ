@@ -1,5 +1,6 @@
 from __future__ import annotations  # for sphinx's autodoc_type_aliases
 
+import sys
 from contextlib import AbstractContextManager
 from typing import ClassVar, List
 
@@ -9,6 +10,11 @@ from .change import SourceChangeManager
 from .confz_source import ConfZSources
 from .exceptions import ConfZException
 from .loaders import get_loader
+
+if (3, 10) > sys.version_info >= (3, 9, 8) or sys.version_info >= (3, 10, 1):
+    raise RuntimeError('There are currently some issues with class variables in pydantic. Thus, ConfZ only '
+                       'supports Python <3.9.8 or 3.10.0. See https://github.com/samuelcolvin/pydantic/pull/3403 '
+                       'for more information. ConfZ will be updated as soon as a new release of pydantic is available.')
 
 
 def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:

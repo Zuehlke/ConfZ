@@ -20,6 +20,7 @@ classifiers = [
 python = "^3.7, <3.9.8"
 pydantic = "^1.8.2"
 PyYAML = "^5.4.1"
+python-dotenv = "^0.19.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"

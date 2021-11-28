@@ -26,7 +26,7 @@ class ConfZFileSource(ConfZSource):
     file_from_env: Optional[str] = None
     """Alternatively, use this environment variable to get the file."""
     file_from_cl: Optional[Union[int, str]] = None
-    """Alternatively, use this command line argument to get the file name/path. It can be a specific position 
+    """Alternatively, use this command line argument to get the file name/path. It can be a specific position
     (integer, e.g. `1`) or after a specific option (string, e.g. `\\-\\-config-file`). In the latter case, the file
     name must follow after whitespace, an equal sign between argument and value is not supported at the moment."""
     folder: Optional[Path] = None
@@ -37,16 +37,17 @@ class ConfZFileSource(ConfZSource):
 
 @dataclass
 class ConfZEnvSource(ConfZSource):
-    """Source config for environment variables. Environment variable names are transformed to
-    lowercase and all dashes are replaced by underscores. The definitions below are not case-sensitive and can be
-    written with underscore or dash. An exception is `prefix`, which needs to match exactly. Dot-notation
-    can be used to access nested configurations."""
+    """Source config for environment variables and .env files. On loading of the source, the dotenv file
+    values (if available) are merged with the environment, with environment always taking precedence in case of
+    name collusion. All loaded variable names are transformed to lowercase and all dashes are replaced by underscores.
+    The definitions below are not case-sensitive and can be written with underscore or dash. An exception is `prefix`,
+    which needs to match exactly. Dot-notation can be used to access nested configurations."""
     allow_all: bool = False
     """Allow potentially all environment variables to be read as config option."""
     allow: Optional[List[str]] = None
     """Only allow a list of environment variables as input."""
     deny: Optional[List[str]] = None
-    """Do not allow to read from environemnt variables in this list. Useful if `allow_all` is set and certain variables 
+    """Do not allow to read from environemnt variables in this list. Useful if `allow_all` is set and certain variables
     should be excluded."""
     prefix: Optional[str] = None
     """The selection above can be narrowed down to a specific prefix, e.g. `CONFIG_`. The variables in the lists above
@@ -54,6 +55,8 @@ class ConfZEnvSource(ConfZSource):
     recommended, if ´allow_all´ is set."""
     remap: Optional[Dict[str, str]] = None
     """Certain environment variables can be mapped to config arguments with a different name."""
+    file: Optional[Path] = None
+    """Built in .env file loading with lower than environment precedence."""
 
 
 @dataclass

@@ -9,7 +9,7 @@
 `ConfZ` is a configuration management library for Python based on [pydantic](https://pydantic-docs.helpmanual.io/).
 It easily allows you to
 
-* load your configuration from config files, environment variables, command line arguments and more sources
+* load your configuration from config files, environment variables, command line arguments and more
 * transform the loaded data into a desired format and validate it
 * access the results as Python dataclass-like objects with full IDE support
 
@@ -53,7 +53,7 @@ class APIConfig(ConfZ):
 ```
 
 Thanks to [pydantic](https://pydantic-docs.helpmanual.io/), you can use a wide variety of
-[field types](https://pydantic-docs.helpmanual.io/usage/types/) and 
+[field types](https://pydantic-docs.helpmanual.io/usage/types/) and
 [validators](https://pydantic-docs.helpmanual.io/usage/validators/).
 
 From now on, in any other file, you can access your config directly:
@@ -76,9 +76,9 @@ APIConfig().port = 1234             # raises an error because of immutability
 APIConfig().json()                  # call pydantic's method to get a json representation
 ```
 
-**Note:** While the implicit and hidden loading of your config might be surprising and feel a bit like Python magic at 
-first, it allows you to reduce a lot of boilerplate. Instead of having to load your config explicitly and then passing 
-it down to all code layers that need it, you can directly access it from anywhere by just importing your config class 
+**Note:** While the implicit and hidden loading of your config might be surprising and feel a bit like Python magic at
+first, it allows you to reduce a lot of boilerplate. Instead of having to load your config explicitly and then passing
+it down to all code layers that need it, you can directly access it from anywhere by just importing your config class
 and accessing for example `APIConfig().db.user` directly.
 
 ### More Config Sources
@@ -100,16 +100,17 @@ class MyConfig(ConfZ):
 
 Your config file can now be defined in the environment variable `ENVIRONMENT` and is relative to `folder`.
 
-You can also provide a list as config source and read for example from environment variables and from command line
-arguments:
+You can also provide a list as config source and read for example from environment variables including a .env file and
+from command line arguments:
 
 ```python
+from pathlib import Path
 from confz import ConfZ, ConfZEnvSource, ConfZCLArgSource
 
 class MyConfig(ConfZ):
     ...
     CONFIG_SOURCES = [
-        ConfZEnvSource(allow_all=True),
+        ConfZEnvSource(allow_all=True, file=Path(".env.local")),
         ConfZCLArgSource(prefix='conf_')
     ]
 ```
@@ -121,7 +122,7 @@ line argument `--conf_db.user`.
 
 ### Explicit Loading
 
-In some scenarios, the config should not be a global singleton, but loaded explicitly and passed around locally. 
+In some scenarios, the config should not be a global singleton, but loaded explicitly and passed around locally.
 Instead of defining `CONFIG_SOURCES` as class variable, the sources can also be defined in the constructor directly:
 
 ```python
@@ -133,14 +134,14 @@ class MyConfig(ConfZ):
     number: int
     text: str
 
-config1 = MyConfig(config_sources=ConfZFileSource(file=Path('/path/to/config.yml')))    
+config1 = MyConfig(config_sources=ConfZFileSource(file=Path('/path/to/config.yml')))
 config2 = MyConfig(config_sources=ConfZEnvSource(prefix='CONF_', allow=['text']), number=1)
 config3 = MyConfig(number=1, text='hello world')
 ```
 
 As can be seen, additional keyword-arguments can be provided as well.
 
-**Note:** If neither class variable `CONFIG_SOURCES` nor constructor argument `config_sources` is provided, `ConfZ` 
+**Note:** If neither class variable `CONFIG_SOURCES` nor constructor argument `config_sources` is provided, `ConfZ`
 behaves like a regular _pydantic_ class.
 
 ### Change Config Values
@@ -170,7 +171,7 @@ print(MyConfig().number)                            # will print the value from 
 ### Early Validation
 
 By default, your config gets loaded the first time you instantiate the class, e.g. with `MyConfig().attribute`. This
-prevents side effects like loading a file while you import your config classes. If the config class cannot populate all 
+prevents side effects like loading a file while you import your config classes. If the config class cannot populate all
 mandatory fields in the correct format, _pydantic_ will raise an error at this point. To make sure this does not happen
 in an inconvenient moment, you can also instruct `ConfZ` to load all configs beforehand:
 
@@ -190,9 +191,9 @@ location that have `CONFIG_SOURCES` set.
 
 Now you've seen the two ways how `ConfZ` can be used: With class variable config sources, unlocking a singleton with
 lazy loading, or with keyword argument config sources, allowing to directly load your config values. In both cases,
-defining your config sources from files, command line arguments and environment variables is highly flexible 
+defining your config sources from files, command line arguments and environment variables is highly flexible
 (and also extendable, by the way), while _pydantic_ still makes sure that everything matches your expectations in the
-end. You've also seen how to temporarily change your config for example in unit tests and how to validate 
+end. You've also seen how to temporarily change your config for example in unit tests and how to validate
 your singleton config classes early in the code already.
 
 The full documentation of `ConfZ`'s features can be found at [readthedocs](https://confz.readthedocs.io/).
