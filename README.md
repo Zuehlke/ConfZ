@@ -9,7 +9,7 @@
 `ConfZ` is a configuration management library for Python based on [pydantic](https://pydantic-docs.helpmanual.io/).
 It easily allows you to
 
-* load your configuration from config files, environment variables and .env files, command line arguments and more sources
+* load your configuration from config files, environment variables, command line arguments and more
 * transform the loaded data into a desired format and validate it
 * access the results as Python dataclass-like objects with full IDE support
 
@@ -100,8 +100,8 @@ class MyConfig(ConfZ):
 
 Your config file can now be defined in the environment variable `ENVIRONMENT` and is relative to `folder`.
 
-You can also provide a list as config source and read for example from environment variables and from command line
-arguments:
+You can also provide a list as config source and read for example from environment variables including a .env file and
+from command line arguments:
 
 ```python
 from pathlib import Path
