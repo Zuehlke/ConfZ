@@ -40,7 +40,7 @@ This decorator also works for asynchronous functions::
     from confz import depends_on
 
     @depends_on(DBConfig)
-    async def my_fn():
+    async def get_engine():
         engine = create_async_engine(f'sqlite:///{DBConfig().path}', echo=True)
 
         async with engine.begin() as conn:
