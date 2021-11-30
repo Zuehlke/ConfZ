@@ -54,9 +54,17 @@ class Listener:
         self._backup_instances = {}
 
     def __call__(self):
-        if self._instance is None:
-            self._instance = self._fn()
-        return self._instance
+        if inspect.iscoroutinefunction(self._fn):
+            async def inner():
+                if self._instance is None:
+                    self._instance = await self._fn()
+                return self._instance
+        else:
+            def inner():
+                if self._instance is None:
+                    self._instance = self._fn()
+                return self._instance
+        return inner()
 
     def change_enter(self, context):
         self._backup_instances[context] = self._instance
