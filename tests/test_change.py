@@ -1,3 +1,5 @@
+import pytest
+
 from confz import ConfZ, ConfZDataSource, depends_on
 
 
@@ -80,3 +82,20 @@ def test_depends_configs():
     assert my_fn2() == 'val2'
     assert my_fn1() is config_before1
     assert my_fn2() is config_before2
+
+
+@pytest.mark.asyncio
+async def test_depends_async():
+    @depends_on
+    async def my_fn_async():
+        return 'val1'
+
+    @depends_on
+    def my_fn_sync():
+        return 'val2'
+
+    assert await my_fn_async() == 'val1'
+    assert await my_fn_async() is await my_fn_async()
+
+    assert my_fn_sync() == 'val2'
+    assert my_fn_sync() is my_fn_sync()
