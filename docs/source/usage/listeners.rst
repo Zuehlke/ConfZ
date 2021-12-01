@@ -35,20 +35,6 @@ changed because we are in a config change context manager and the function gets 
 allowing the new config to take effect. As soon as the context is left again, the original instance of the function
 singleton will be active again.
 
-This decorator also works for asynchronous functions::
-
-    from confz import depends_on
-
-    @depends_on(DBConfig)
-    async def get_engine():
-        engine = create_async_engine(f'sqlite:///{DBConfig().path}', echo=True)
-
-        async with engine.begin() as conn:
-            await conn.run_sync(meta.drop_all)
-            await conn.run_sync(meta.create_all)
-
-        return engine
-
 
 Early Loading
 -------------
@@ -64,3 +50,36 @@ their sources at a defined point in time. It provides an optional flag to also f
 
 This will also call all your functions decorated with :func:`~confz.depends_on` at any (reachable) location, if they
 depend on a class that has `CONFIG_SOURCES` set.
+
+
+Asynchronous Listeners
+----------------------
+
+
+The decorator also works for asynchronous functions::
+
+    from confz import depends_on
+
+    @depends_on(DBConfig)
+    async def get_engine():
+        engine = create_async_engine(f'sqlite:///{DBConfig().path}', echo=True)
+
+        async with engine.begin() as conn:
+            await conn.run_sync(meta.drop_all)
+            await conn.run_sync(meta.create_all)
+
+        return engine
+
+As soon as you have at least one async listener defined, :func:`~confz.validate_all_configs` becomes async whenever
+you set `include_listeners` to true. You could then call it with::
+
+    import asyncio
+
+    from confz import validate_all_configs
+
+    async def main():
+        await validate_all_configs(include_listeners=True)
+        # your application code
+
+    if __name__ == '__main__':
+        asyncio.run(main())

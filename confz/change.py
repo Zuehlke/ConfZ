@@ -53,8 +53,12 @@ class Listener:
         self._instance = None
         self._backup_instances = {}
 
+    @property
+    def is_async(self):
+        return inspect.iscoroutinefunction(self._fn)
+
     def __call__(self):
-        if inspect.iscoroutinefunction(self._fn):
+        if self.is_async:
             async def inner():
                 if self._instance is None:
                     self._instance = await self._fn()

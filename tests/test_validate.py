@@ -31,16 +31,31 @@ def test_validate():
     NewOuter2.CONFIG_SOURCES = ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2})
 
 
-def test_listeners():
+@pytest.mark.asyncio
+async def test_listeners():
     class EmptyConfig(ConfZ):
         CONFIG_SOURCES = []
 
+    called_sync = False
+
     @depends_on(EmptyConfig)
-    def working_fn():
-        pass
+    def working_fn_sync():
+        nonlocal called_sync
+        called_sync = True
+
+    called_async = False
+
+    @depends_on(EmptyConfig)
+    async def working_fn_async():
+        nonlocal called_async
+        called_async = True
 
     validate_all_configs(include_listeners=False)
-    validate_all_configs(include_listeners=True)
+    assert not called_sync
+    assert not called_async
+    await validate_all_configs(include_listeners=True)
+    assert called_sync
+    assert called_async
 
     @depends_on(EmptyConfig)
     def broken_fn():
@@ -48,4 +63,4 @@ def test_listeners():
 
     validate_all_configs(include_listeners=False)
     with pytest.raises(ValueError):
-        validate_all_configs(include_listeners=True)
+        await validate_all_configs(include_listeners=True)

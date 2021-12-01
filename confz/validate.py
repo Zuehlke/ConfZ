@@ -18,10 +18,29 @@ def validate_all_configs(include_listeners: bool = False):
     :param include_listeners: Whether all listeners (marked with :func:`~confz.depends_on`) should be included.
     :raises ConfZException: If any config could not be loaded.
     """
+    config_classes = []
+    sync_listeners = []
+    async_listeners = []
     for config_class in _get_sub_classes(ConfZ):
         if config_class.CONFIG_SOURCES is not None:
-            config_class()
+            config_classes.append(config_class)
             if include_listeners:
                 if config_class._listeners is not None:
                     for listener in config_class._listeners:
-                        listener()
+                        if listener.is_async:
+                            async_listeners.append(listener)
+                        else:
+                            sync_listeners.append(listener)
+
+    def sync_calls():
+        [cls() for cls in config_classes]
+        [fn() for fn in sync_listeners]
+
+    if len(async_listeners) > 0:
+        async def inner():
+            sync_calls()
+            [await fn() for fn in async_listeners]
+    else:
+        inner = sync_calls
+
+    return inner()
