@@ -33,6 +33,8 @@ class ConfZFileSource(ConfZSource):
     """The file specified above can optionally be relative to this folder."""
     format: Optional[FileFormat] = None
     """The format of the config file. If not specified, it will be inferred from the file ending."""
+    encoding: str = 'utf-8'
+    """The encoding of the file. Default is UTF-8."""
 
 
 @dataclass
@@ -56,7 +58,7 @@ class ConfZEnvSource(ConfZSource):
     remap: Optional[Dict[str, str]] = None
     """Certain environment variables can be mapped to config arguments with a different name."""
     file: Optional[Path] = None
-    """Built in .env file loading with lower than environment precedence."""
+    """Built in .env file loading with lower than environment precedence. Uses UTF-8 for decoding."""
 
 
 @dataclass

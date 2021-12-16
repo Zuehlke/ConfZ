@@ -65,9 +65,9 @@ class FileLoader(Loader):
         return suffix_format
 
     @classmethod
-    def _read_file(cls, file_path: Path, file_format: FileFormat) -> dict:
+    def _read_file(cls, file_path: Path, file_format: FileFormat, file_encoding: str) -> dict:
         try:
-            with file_path.open() as f:
+            with file_path.open(encoding=file_encoding) as f:
                 if file_format == FileFormat.YAML:
                     file_content = yaml.safe_load(f)
                 elif file_format == FileFormat.JSON:
@@ -81,5 +81,5 @@ class FileLoader(Loader):
     def populate_config(cls, config: dict, confz_source: ConfZFileSource):
         file_path = cls._get_filename(confz_source)
         file_format = cls._get_format(file_path, confz_source.format)
-        file_content = cls._read_file(file_path, file_format)
+        file_content = cls._read_file(file_path, file_format, confz_source.encoding)
         cls.update_dict_recursively(config, file_content)
