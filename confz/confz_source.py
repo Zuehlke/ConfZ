@@ -58,7 +58,7 @@ class ConfZEnvSource(ConfZSource):
     remap: Optional[Dict[str, str]] = None
     """Certain environment variables can be mapped to config arguments with a different name."""
     file: Optional[Path] = None
-    """Built in .env file loading with lower than environment precedence."""
+    """Built in .env file loading with lower than environment precedence. Uses UTF-8 for decoding."""
 
 
 @dataclass

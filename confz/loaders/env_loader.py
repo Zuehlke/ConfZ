@@ -48,6 +48,7 @@ class EnvLoader(Loader):
         origin_env_vars = os.environ
         if confz_source.file is not None:
             origin_env_vars = {**dotenv_values(confz_source.file), **origin_env_vars}
+
         env_vars = dict()
         for env_var in origin_env_vars:
             var_name = env_var
