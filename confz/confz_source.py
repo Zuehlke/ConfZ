@@ -33,6 +33,8 @@ class ConfZFileSource(ConfZSource):
     """The file specified above can optionally be relative to this folder."""
     format: Optional[FileFormat] = None
     """The format of the config file. If not specified, it will be inferred from the file ending."""
+    encoding: str = 'utf-8'
+    """The encoding of the file. Default is UTF-8."""
 
 
 @dataclass

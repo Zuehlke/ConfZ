@@ -8,11 +8,11 @@ from tests.assets import ASSET_FOLDER
 
 
 class InnerConfig(ConfZ):
-    attr1: int
+    attr1: str
 
 
 class OuterConfig(ConfZ):
-    attr2: int
+    attr2: str
     inner: InnerConfig
 
 
@@ -20,16 +20,16 @@ def test_json_file():
     config = OuterConfig(config_sources=ConfZFileSource(
         file=ASSET_FOLDER / 'config.json'
     ))
-    assert config.inner.attr1 == 1
-    assert config.attr2 == 2
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
 
 
 def test_yaml_file():
     config = OuterConfig(config_sources=ConfZFileSource(
         file=ASSET_FOLDER / 'config.yml'
     ))
-    assert config.inner.attr1 == 1
-    assert config.attr2 == 2
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
 
 
 def test_custom_file():
@@ -44,8 +44,8 @@ def test_custom_file():
         file=ASSET_FOLDER / 'config.txt',
         format=FileFormat.YAML
     ))
-    assert config.inner.attr1 == 1
-    assert config.attr2 == 2
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
 
 
 def test_invalid_file():
@@ -71,8 +71,8 @@ def test_from_env(monkeypatch):
         file_from_env=env_var,
         folder=ASSET_FOLDER
     ))
-    assert config.inner.attr1 == 1
-    assert config.attr2 == 2
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
 
 
 def test_from_cl_arg_idx(monkeypatch):
@@ -92,8 +92,8 @@ def test_from_cl_arg_idx(monkeypatch):
         file_from_cl=cl_arg_idx,
         folder=ASSET_FOLDER
     ))
-    assert config.inner.attr1 == 1
-    assert config.attr2 == 2
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
 
 
 def test_from_cl_arg_name(monkeypatch):
@@ -113,5 +113,5 @@ def test_from_cl_arg_name(monkeypatch):
         file_from_cl=cl_arg_name,
         folder=ASSET_FOLDER
     ))
-    assert config.inner.attr1 == 1
-    assert config.attr2 == 2
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
