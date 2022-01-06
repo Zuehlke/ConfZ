@@ -14,13 +14,15 @@ ConfZSources = Union[ConfZSource, List[ConfZSource]]
 
 class FileFormat(Enum):
     """Enum for file format."""
-    JSON = 'json'   #: JSON file format
-    YAML = 'yaml'   #: YAML file format
+
+    JSON = "json"  #: JSON file format
+    YAML = "yaml"  #: YAML file format
 
 
 @dataclass
 class ConfZFileSource(ConfZSource):
     """Source config for files."""
+
     file: Optional[Path] = None
     """Specify a config file directly by a path."""
     file_from_env: Optional[str] = None
@@ -33,7 +35,7 @@ class ConfZFileSource(ConfZSource):
     """The file specified above can optionally be relative to this folder."""
     format: Optional[FileFormat] = None
     """The format of the config file. If not specified, it will be inferred from the file ending."""
-    encoding: str = 'utf-8'
+    encoding: str = "utf-8"
     """The encoding of the file. Default is UTF-8."""
 
 
@@ -44,6 +46,7 @@ class ConfZEnvSource(ConfZSource):
     name collusion. All loaded variable names are transformed to lowercase and all dashes are replaced by underscores.
     The definitions below are not case-sensitive and can be written with underscore or dash. An exception is `prefix`,
     which needs to match exactly. Dot-notation can be used to access nested configurations."""
+
     allow_all: bool = False
     """Allow potentially all environment variables to be read as config option."""
     allow: Optional[List[str]] = None
@@ -66,6 +69,7 @@ class ConfZCLArgSource(ConfZSource):
     """Source config for command line arguments. Command line arguments are case-sensitive. Dot-notation can be
     used to access nested configurations. Only command line arguments starting with two dashes (\\-\\-) are considered.
     Between argument and value must be whitespace, an equal sign is not supported at the moment."""
+
     prefix: Optional[str] = None
     """Optionally, all command line arguments can have a prefix, e.g. `config_`. The prefix does not need to include
     the two dashes at the beginning. The map below does not need to include the prefix, it is automatically added."""
@@ -78,5 +82,6 @@ class ConfZCLArgSource(ConfZSource):
 class ConfZDataSource(ConfZSource):
     """Source config for raw data, i.e. constants. This can be useful for unit-test together with
     :meth:`~confz.ConfZ.change_config_sources` to inject test data into the config."""
+
     data: Dict[str, Any]
     """All data should go into this (possibly nested) dict."""

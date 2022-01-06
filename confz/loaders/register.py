@@ -1,6 +1,12 @@
 from typing import Type, Dict
 
-from confz.confz_source import ConfZSource, ConfZFileSource, ConfZEnvSource, ConfZCLArgSource, ConfZDataSource
+from confz.confz_source import (
+    ConfZSource,
+    ConfZFileSource,
+    ConfZEnvSource,
+    ConfZCLArgSource,
+    ConfZDataSource,
+)
 from confz.exceptions import ConfZException
 from .cl_arg_loader import CLArgLoader
 from .data_loader import DataLoader

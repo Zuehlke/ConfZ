@@ -37,8 +37,10 @@ class ConfZMetaclass(type(BaseModel)):
 
         if cls.CONFIG_SOURCES is not None:
             if len(kwargs) > 0:
-                raise ConfZException('Singleton mechanism enabled ("CONFIG_SOURCES" is defined), so keyword arguments '
-                                     'are not supported')
+                raise ConfZException(
+                    'Singleton mechanism enabled ("CONFIG_SOURCES" is defined), so keyword arguments '
+                    "are not supported"
+                )
             if cls._confz_instance is None:
                 config = _load_config(kwargs, cls.CONFIG_SOURCES)
                 cls._confz_instance = super().__call__(**config)
@@ -58,14 +60,16 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
     constructor is called."""
 
     CONFIG_SOURCES: ClassVar[ConfZSources] = None  #: Sources to use as input.
-    _confz_instance: ClassVar['ConfZ'] = None
-    _listeners: ClassVar[List['Listener']] = None
+    _confz_instance: ClassVar["ConfZ"] = None
+    _listeners: ClassVar[List["Listener"]] = None
 
     class Config:
         allow_mutation = False
 
     @classmethod
-    def change_config_sources(cls, config_sources: ConfZSources) -> AbstractContextManager:
+    def change_config_sources(
+        cls, config_sources: ConfZSources
+    ) -> AbstractContextManager:
         """Change the `CONFIG_SOURCES` class variable within a controlled context. Within this context, the sources
         will be different and the singleton reset. This can be useful in unit tests to temporarily
         change a configuration.

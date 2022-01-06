@@ -19,14 +19,18 @@ class Loader(ABC):
         for key, value in update_dict.items():
             if isinstance(value, dict) and key in original_dict:
                 if not isinstance(original_dict[key], dict):
-                    raise ConfZUpdateException(f'Config variables contradict each other: '
-                                               f'Key "{key}" is both a value and a nested dict.')
+                    raise ConfZUpdateException(
+                        f"Config variables contradict each other: "
+                        f'Key "{key}" is both a value and a nested dict.'
+                    )
                 cls.update_dict_recursively(original_dict[key], value)
             else:
                 original_dict[key] = value
 
     @classmethod
-    def transform_nested_dicts(cls, dict_in: Dict[str, Any], separator: str = '.') -> Dict[str, Any]:
+    def transform_nested_dicts(
+        cls, dict_in: Dict[str, Any], separator: str = "."
+    ) -> Dict[str, Any]:
         """Transform dictionaries into nested dictionaries, using a separator in the keys as hint.
 
         :param dict_in: A dictionary with string-keys.
@@ -47,8 +51,10 @@ class Loader(ABC):
                             dict_inner[inner_key] = {}
                         else:
                             if not isinstance(dict_inner[inner_key], dict):
-                                raise ConfZUpdateException(f'Config variables contradict each other: '
-                                                           f'Key "{inner_key}" is both a value and a nested dict.')
+                                raise ConfZUpdateException(
+                                    f"Config variables contradict each other: "
+                                    f'Key "{inner_key}" is both a value and a nested dict.'
+                                )
                         dict_inner = dict_inner[inner_key]
             else:
                 dict_out[key] = value

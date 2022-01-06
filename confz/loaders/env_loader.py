@@ -12,10 +12,12 @@ class EnvLoader(Loader):
 
     @classmethod
     def _transform_name(cls, name: str):
-        return name.lower().replace('-', '_')
+        return name.lower().replace("-", "_")
 
     @classmethod
-    def _transform_remap(cls, map_in: Optional[Dict[str, str]]) -> Optional[Dict[str, str]]:
+    def _transform_remap(
+        cls, map_in: Optional[Dict[str, str]]
+    ) -> Optional[Dict[str, str]]:
         if map_in is None:
             return None
 
@@ -55,7 +57,7 @@ class EnvLoader(Loader):
             if confz_source.prefix is not None:
                 if not var_name.startswith(confz_source.prefix):
                     continue
-                var_name = var_name[len(confz_source.prefix):]
+                var_name = var_name[len(confz_source.prefix) :]
 
             var_name = cls._transform_name(var_name)
             if not cls._check_allowance(var_name, confz_source):

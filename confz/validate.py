@@ -37,9 +37,11 @@ def validate_all_configs(include_listeners: bool = False):
         [fn() for fn in sync_listeners]
 
     if len(async_listeners) > 0:
+
         async def inner():
             sync_calls()
             [await fn() for fn in async_listeners]
+
     else:
         inner = sync_calls
 

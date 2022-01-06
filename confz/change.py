@@ -9,7 +9,7 @@ class SourceChangeManager(AbstractContextManager):
     """Config sources change context manager, allows to change config sources within a controlled context and resets
     everything afterwards."""
 
-    def __init__(self, config_class: Type['ConfZ'], config_sources: ConfZSources):
+    def __init__(self, config_class: Type["ConfZ"], config_sources: ConfZSources):
         self._config_class = config_class
         self._config_sources = config_sources
         self._backup_instance = None
@@ -40,9 +40,9 @@ class SourceChangeManager(AbstractContextManager):
 class Listener:
     """Listener of config, will add singleton mechanism which is aware of config changes."""
 
-    def __init__(self, fn: Callable[[], Any], config_classes: List[Type['ConfZ']]):
+    def __init__(self, fn: Callable[[], Any], config_classes: List[Type["ConfZ"]]):
         if len(inspect.getfullargspec(fn).args) != 0:
-            raise ValueError('Callable should not take any arguments')
+            raise ValueError("Callable should not take any arguments")
 
         for config_class in config_classes:
             if config_class._listeners is None:
@@ -59,15 +59,19 @@ class Listener:
 
     def __call__(self):
         if self.is_async:
+
             async def inner():
                 if self._instance is None:
                     self._instance = await self._fn()
                 return self._instance
+
         else:
+
             def inner():
                 if self._instance is None:
                     self._instance = self._fn()
                 return self._instance
+
         return inner()
 
     def change_enter(self, context):
