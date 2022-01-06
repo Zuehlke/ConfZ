@@ -27,6 +27,24 @@ pytest = "^6.2.5"
 Sphinx = "^4.2.0"
 pytest-cov = "^3.0.0"
 pytest-asyncio = "^0.16.0"
+black = {extras = ["d"], version = "^21.12b0"}
+mypy = "^0.930"
+pylint = "^2.12.2"
+
+[tool.black]
+# Use default black configuration
+
+[tool.pylint.messages_control]
+disable = [
+    "wrong-hanging-indentation",    # to work together with black
+    "bad-whitespace"                # to work together with black
+]
+
+[tool.pylint.format]
+max-line-length = "88"              # to work together with black
+
+[tool.mypy]
+# Use default mypy configuration
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
