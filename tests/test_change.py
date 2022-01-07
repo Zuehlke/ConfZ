@@ -106,4 +106,4 @@ def test_depends_invalid():
 
         @depends_on
         def fn_with_args(arg1):
-            return ""
+            """no body"""
