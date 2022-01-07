@@ -11,6 +11,9 @@ from .exceptions import ConfZException
 from .loaders import get_loader
 
 
+_test_variable: int = "string"
+
+
 def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:
     config = config_kwargs.copy()
     if isinstance(confz_sources, list):
