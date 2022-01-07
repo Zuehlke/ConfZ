@@ -1,0 +1,19 @@
+name: "Setup environment"
+description: "Checks out the repository, sets up python and installs all dependencies."
+inputs:
+  python-version:
+    description: "Version of python"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry
+        poetry config virtualenvs.create false
+        poetry install
