@@ -46,7 +46,8 @@ exclude_patterns = ["build", "Thumbs.db", ".DS_Store"]
 html_theme = "alabaster"
 
 html_theme_options = {
-    "description": "ConfZ is a configuration management library for Python based on pydantic.",
+    "description": "ConfZ is a configuration management library for Python based on "
+    "pydantic.",
     "github_user": "Zuehlke",
     "github_repo": "ConfZ",
     "github_button": True,

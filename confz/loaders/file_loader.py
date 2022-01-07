@@ -28,25 +28,28 @@ class FileLoader(Loader):
             if isinstance(confz_source.file_from_cl, int):
                 try:
                     file_path = Path(sys.argv[confz_source.file_from_cl])
-                except IndexError:
+                except IndexError as e:
                     raise ConfZFileException(
-                        f"Command-line argument number {confz_source.file_from_cl} is not set."
-                    )
+                        f"Command-line argument number {confz_source.file_from_cl} "
+                        f"is not set."
+                    ) from e
             else:
                 try:
                     idx = sys.argv.index(confz_source.file_from_cl)
-                except ValueError:
+                except ValueError as e:
                     raise ConfZFileException(
-                        f'Command-line argument "{confz_source.file_from_cl}" not found.'
-                    )
+                        f'Command-line argument "{confz_source.file_from_cl}" '
+                        f"not found."
+                    ) from e
                 try:
                     file_path = Path(sys.argv[idx + 1])
-                except IndexError:
+                except IndexError as e:
                     raise ConfZFileException(
-                        f'Command-line argument "{confz_source.file_from_cl}" is not set.'
-                    )
+                        f'Command-line argument "{confz_source.file_from_cl}" is not '
+                        f"set."
+                    ) from e
         else:
-            raise ConfZFileException(f"No file source set.")
+            raise ConfZFileException("No file source set.")
 
         if confz_source.folder is not None:
             file_path = confz_source.folder / file_path
@@ -68,11 +71,11 @@ class FileLoader(Loader):
         suffix = file_path.suffix
         try:
             suffix_format = suffix_formats[suffix]
-        except KeyError:
+        except KeyError as e:
             raise ConfZFileException(
                 f'File-ending "{suffix}" is not known. Supported are: '
                 f'{", ".join(list(suffix_formats.keys()))}.'
-            )
+            ) from e
 
         return suffix_format
 

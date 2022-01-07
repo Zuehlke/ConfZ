@@ -1,7 +1,7 @@
 import sys
 
-from .loader import Loader
 from confz.confz_source import ConfZCLArgSource
+from .loader import Loader
 
 
 class CLArgLoader(Loader):
@@ -9,7 +9,7 @@ class CLArgLoader(Loader):
 
     @classmethod
     def populate_config(cls, config: dict, confz_source: ConfZCLArgSource):
-        cl_args = dict()
+        cl_args = {}
         for idx, cl_arg in enumerate(sys.argv[1:]):
             if cl_arg.startswith("--") and idx + 2 < len(sys.argv):
                 cl_name = cl_arg[2:]

@@ -19,8 +19,8 @@ if TYPE_CHECKING:
 
 
 class SourceChangeManager(AbstractContextManager):
-    """Config sources change context manager, allows to change config sources within a controlled context and resets
-    everything afterwards."""
+    """Config sources change context manager, allows to change config sources within a
+    controlled context and resets everything afterwards."""
 
     def __init__(self, config_class: Type["ConfZ"], config_sources: ConfZSources):
         self._config_class = config_class
@@ -54,7 +54,7 @@ T = TypeVar("T")
 
 
 class Listener(Generic[T]):
-    """Listener of config, will add singleton mechanism which is aware of config changes."""
+    """Listener of config, will add singleton mechanism, aware of config changes."""
 
     def __init__(self, fn: Callable[[], T], config_classes: List[Type["ConfZ"]]):
         if len(inspect.getfullargspec(fn).args) != 0:
@@ -100,7 +100,8 @@ class Listener(Generic[T]):
 
 
 def depends_on(*args):
-    """Decorator to transform a function into a singleton and register it to a set of config classes."""
+    """Decorator to transform a function into a singleton and register it to a set of
+    config classes."""
     if len(args) == 1 and inspect.isfunction(args[0]):
         return Listener(args[0], [])
 

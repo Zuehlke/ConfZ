@@ -21,7 +21,7 @@ class EnvLoader(Loader):
         if map_in is None:
             return None
 
-        map_out = dict()
+        map_out = {}
         for key, value in map_in.items():
             map_out[cls._transform_name(key)] = value
         return map_out
@@ -51,7 +51,7 @@ class EnvLoader(Loader):
         if confz_source.file is not None:
             origin_env_vars = {**dotenv_values(confz_source.file), **origin_env_vars}
 
-        env_vars = dict()
+        env_vars = {}
         for env_var in origin_env_vars:
             var_name = env_var
             if confz_source.prefix is not None:

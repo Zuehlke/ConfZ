@@ -38,8 +38,14 @@ types-PyYAML = "^6.0.1"
 [tool.pylint.messages_control]
 disable = [
     "wrong-hanging-indentation",    # to work together with black
-    "bad-whitespace"                # to work together with black
+    "bad-whitespace",               # to work together with black
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "missing-function-docstring",
+    "invalid-name",
+    "too-few-public-methods"
 ]
+extension-pkg-whitelist = "pydantic"
 
 [tool.pylint.format]
 max-line-length = "88"              # to work together with black

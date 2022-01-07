@@ -20,12 +20,12 @@ _loaders: Dict[Type[ConfZSource], Type[Loader]] = {}
 def get_loader(confz_source: Type[ConfZSource]):
     if confz_source in _loaders:
         return _loaders[confz_source]
-    else:
-        raise ConfZException(f'Unknown config source type "{confz_source}"')
+    raise ConfZException(f'Unknown config source type "{confz_source}"')
 
 
 def register_loader(confz_source: Type[ConfZSource], loader: Type[Loader]):
-    """Register a :class:`~confz.ConfZSource` with a specific loader. Can be used to extend `ConfZ` with own loaders.
+    """Register a :class:`~confz.ConfZSource` with a specific loader. Can be used to
+    extend `ConfZ` with own loaders.
 
     :param confz_source: The :class:`~confz.ConfZSource` sub-type.
     :param loader: The :class:`~confz.loaders.Loader` sub-type.
