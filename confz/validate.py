@@ -12,10 +12,12 @@ def _get_sub_classes(cls):
 
 
 def validate_all_configs(include_listeners: bool = False):
-    """Instantiates all config classes with a singleton mechanism (`CONFIG_SOURCES` set). This allows to catch
-    validation errors early instead of waiting for the first access.
+    """Instantiates all config classes with a singleton mechanism
+    (`CONFIG_SOURCES` set). This allows to catch validation errors early instead of
+    waiting for the first access.
 
-    :param include_listeners: Whether all listeners (marked with :func:`~confz.depends_on`) should be included.
+    :param include_listeners: Whether all listeners (marked with
+        :func:`~confz.depends_on`) should be included.
     :raises ConfZException: If any config could not be loaded.
     """
     config_classes = []
@@ -24,22 +26,26 @@ def validate_all_configs(include_listeners: bool = False):
     for config_class in _get_sub_classes(ConfZ):
         if config_class.CONFIG_SOURCES is not None:
             config_classes.append(config_class)
-            if include_listeners:
-                if config_class._listeners is not None:
-                    for listener in config_class._listeners:
-                        if listener.is_async:
-                            async_listeners.append(listener)
-                        else:
-                            sync_listeners.append(listener)
+            if include_listeners and config_class.listeners is not None:
+                for listener in config_class.listeners:
+                    if listener.is_async:
+                        async_listeners.append(listener)
+                    else:
+                        sync_listeners.append(listener)
 
     def sync_calls():
-        [cls() for cls in config_classes]
-        [fn() for fn in sync_listeners]
+        for cls in config_classes:
+            cls()
+        for fn in sync_listeners:
+            fn()
 
     if len(async_listeners) > 0:
+
         async def inner():
             sync_calls()
-            [await fn() for fn in async_listeners]
+            for fn in async_listeners:
+                await fn()
+
     else:
         inner = sync_calls
 

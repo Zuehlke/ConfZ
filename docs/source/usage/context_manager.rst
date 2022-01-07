@@ -11,14 +11,14 @@ In some scenarios, you might want to change your config values, for example with
 
 >>> class MyConfig(ConfZ):
 ...     number: int
-...     CONFIG_SOURCES = ConfZFileSource(file=Path('/path/to/config.yml'))
+...     CONFIG_SOURCES = ConfZFileSource(file=Path("/path/to/config.yml"))
 
 >>> print(MyConfig().number)
 1
 
 To overcome this, every config class provides a context manager to temporarily change your config:
 
->>> new_source = ConfZDataSource(data={'number': 42})
+>>> new_source = ConfZDataSource(data={"number": 42})
 >>> with MyConfig.change_config_sources(new_source):
 ...     print(MyConfig().number)
 ...

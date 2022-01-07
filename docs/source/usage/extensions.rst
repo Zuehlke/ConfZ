@@ -25,7 +25,7 @@ config::
         def populate_config(cls, config: dict, confz_source: CustomSource):
             config_update = {
                 confz_source.platform: sys.platform,
-                confz_source.version: f'{sys.version_info[0]}.{sys.version_info[1]}'
+                confz_source.version: f"{sys.version_info[0]}.{sys.version_info[1]}"
             }
             cls.update_dict_recursively(config, config_update)
 
@@ -40,8 +40,8 @@ Now, any config class can use this new source:
 ...     attr2: str
 
 >>> MyConfig(config_sources=CustomSource(
-...     platform='attr1',
-...     version='attr2'
+...     platform="attr1",
+...     version="attr2"
 ... ))
 MyConfig(attr1='win32' attr2='3.9')
 

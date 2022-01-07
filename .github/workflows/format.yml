@@ -1,0 +1,13 @@
+name: format
+on: [ pull_request ]
+jobs:
+  run-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/workflows/setup-env
+        with:
+          python-version: "3.10"
+      - name: run black
+        run: |
+          black --check .

@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
 
-from confz.confz_source import ConfZSource
 from confz.exceptions import ConfZUpdateException
 
 
@@ -10,7 +9,8 @@ class Loader(ABC):
 
     @classmethod
     def update_dict_recursively(cls, original_dict: Dict, update_dict: Dict):
-        """Updates the original dict with the new data. Similar to `dict.update()`, but works with nested dicts.
+        """Updates the original dict with the new data. Similar to `dict.update()`, but
+        works with nested dicts.
 
         :param original_dict: The original dictionary to update in-place.
         :param update_dict: The new data.
@@ -19,22 +19,28 @@ class Loader(ABC):
         for key, value in update_dict.items():
             if isinstance(value, dict) and key in original_dict:
                 if not isinstance(original_dict[key], dict):
-                    raise ConfZUpdateException(f'Config variables contradict each other: '
-                                               f'Key "{key}" is both a value and a nested dict.')
+                    raise ConfZUpdateException(
+                        f"Config variables contradict each other: "
+                        f"Key '{key}' is both a value and a nested dict."
+                    )
                 cls.update_dict_recursively(original_dict[key], value)
             else:
                 original_dict[key] = value
 
     @classmethod
-    def transform_nested_dicts(cls, dict_in: Dict[str, Any], separator: str = '.') -> Dict[str, Any]:
-        """Transform dictionaries into nested dictionaries, using a separator in the keys as hint.
+    def transform_nested_dicts(
+        cls, dict_in: Dict[str, Any], separator: str = "."
+    ) -> Dict[str, Any]:
+        """Transform dictionaries into nested dictionaries, using a separator in the
+        keys as hint.
 
         :param dict_in: A dictionary with string-keys.
         :param separator: The string used to separate dict keys.
-        :return: The transformed dictionary, splitting keys at the separator and creating a new dictionary out of it.
+        :return: The transformed dictionary, splitting keys at the separator and
+            creating a new dictionary out of it.
         :raises ConfZUpdateException: If dict keys contradict each other.
         """
-        dict_out = dict()
+        dict_out: Dict[str, Any] = {}
         for key, value in dict_in.items():
             if separator in key:
                 inner_keys = key.split(separator)
@@ -45,10 +51,11 @@ class Loader(ABC):
                     else:
                         if inner_key not in dict_inner:
                             dict_inner[inner_key] = {}
-                        else:
-                            if not isinstance(dict_inner[inner_key], dict):
-                                raise ConfZUpdateException(f'Config variables contradict each other: '
-                                                           f'Key "{inner_key}" is both a value and a nested dict.')
+                        elif not isinstance(dict_inner[inner_key], dict):
+                            raise ConfZUpdateException(
+                                f"Config variables contradict each other: Key "
+                                f"'{inner_key}' is both a value and a nested dict."
+                            )
                         dict_inner = dict_inner[inner_key]
             else:
                 dict_out[key] = value
@@ -57,7 +64,7 @@ class Loader(ABC):
 
     @classmethod
     @abstractmethod
-    def populate_config(cls, config: dict, confz_source: ConfZSource):
+    def populate_config(cls, config: dict, confz_source):
         """Populate the config-dict with new config arguments based on the source.
 
         :param config: Config dictionary, gets extended with new arguments

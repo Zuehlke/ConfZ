@@ -1,10 +1,10 @@
 # ConfZ – Pydantic Config Management
 
-[![tests](https://github.com/Zuehlke/ConfZ/actions/workflows/tests.yaml/badge.svg)](https://github.com/Zuehlke/ConfZ/actions/workflows/tests.yaml)
-[![Documentation Status](https://readthedocs.org/projects/confz/badge/?version=latest)](https://confz.readthedocs.io/en/latest/?badge=latest)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/confz)
-![PyPI](https://img.shields.io/pypi/v/confz)
-![PyPI - License](https://img.shields.io/pypi/l/confz)
+[![test](https://github.com/Zuehlke/ConfZ/actions/workflows/test.yml/badge.svg)](https://github.com/Zuehlke/ConfZ/actions/workflows/test.yml)
+[![documentation](https://readthedocs.org/projects/confz/badge/?version=latest)](https://confz.readthedocs.io/en/latest/)
+[![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/Zuehlke/ConfZ/actions/workflows/coverage.yml)  <!-- hard-code because can not merge if below 100 -->
+[![python](https://img.shields.io/pypi/pyversions/confz)](https://pypi.org/project/confz/)
+[![pypi](https://img.shields.io/pypi/v/confz)](https://pypi.org/project/confz/)
 
 `ConfZ` is a configuration management library for Python based on [pydantic](https://pydantic-docs.helpmanual.io/).
 It easily allows you to

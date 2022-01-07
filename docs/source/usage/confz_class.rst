@@ -25,9 +25,9 @@ typehints, either using standard Python types or more
 This class can now be instantiated with keyword arguments:
 
 >>> api_config = APIConfig(
-...     host='http://my-host.com',
+...     host="http://my-host.com",
 ...     port=1234,
-...     db={'user': 'my-user', 'password': 'my-password'}
+...     db={"user": "my-user", "password": "my-password"}
 ... )
 
 >>> api_config
@@ -41,7 +41,7 @@ APIConfig(
 
    Pydantic sees itself as a parsing library, not a validation library. This means, it may cast input data to force it
    to conform to model field types, and in some cases this may result in a loss of information. See
-   `Data conversion <https://pydantic-docs.helpmanual.io/usage/models/#data-conversion>`_ for detailed information.
+   `data conversion <https://pydantic-docs.helpmanual.io/usage/models/#data-conversion>`_ for detailed information.
 
 Since ``api_config`` is a standard python object, your IDE will give you full support like code-completion and
 type-checks. It also supports all methods available by `BaseModel` of pydantic, for example:
@@ -74,7 +74,7 @@ We can load this file as follows:
 
 >>> from pathlib import Path
 >>> from confz import ConfZFileSource
->>> APIConfig(config_sources=ConfZFileSource(file=Path('/path/to/config.yaml')))
+>>> APIConfig(config_sources=ConfZFileSource(file=Path("/path/to/config.yaml")))
 APIConfig(
     host=AnyUrl('http://my-host.com', scheme='http', host='my-host.com', tld='com', host_type='domain'),
     port=1234,

@@ -1,5 +1,5 @@
 import os
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
 from dotenv import dotenv_values
 
@@ -12,14 +12,16 @@ class EnvLoader(Loader):
 
     @classmethod
     def _transform_name(cls, name: str):
-        return name.lower().replace('-', '_')
+        return name.lower().replace("-", "_")
 
     @classmethod
-    def _transform_remap(cls, map_in: Optional[Dict[str, str]]) -> Optional[Dict[str, str]]:
+    def _transform_remap(
+        cls, map_in: Optional[Dict[str, str]]
+    ) -> Optional[Dict[str, str]]:
         if map_in is None:
             return None
 
-        map_out = dict()
+        map_out = {}
         for key, value in map_in.items():
             map_out[cls._transform_name(key)] = value
         return map_out
@@ -45,17 +47,17 @@ class EnvLoader(Loader):
     def populate_config(cls, config: dict, confz_source: ConfZEnvSource):
         remap = cls._transform_remap(confz_source.remap)
 
-        origin_env_vars = os.environ
+        origin_env_vars: Dict[str, Any] = dict(os.environ)
         if confz_source.file is not None:
             origin_env_vars = {**dotenv_values(confz_source.file), **origin_env_vars}
 
-        env_vars = dict()
+        env_vars = {}
         for env_var in origin_env_vars:
             var_name = env_var
             if confz_source.prefix is not None:
                 if not var_name.startswith(confz_source.prefix):
                     continue
-                var_name = var_name[len(confz_source.prefix):]
+                var_name = var_name[len(confz_source.prefix) :]
 
             var_name = cls._transform_name(var_name)
             if not cls._check_allowance(var_name, confz_source):

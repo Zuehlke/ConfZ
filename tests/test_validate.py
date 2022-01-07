@@ -13,7 +13,7 @@ def test_validate():
         inner: NewInner
         attr2: int
 
-        CONFIG_SOURCES = ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2})
+        CONFIG_SOURCES = ConfZDataSource(data={"inner": {"attr1": 1}, "attr2": 2})
 
     validate_all_configs()
 
@@ -22,13 +22,13 @@ def test_validate():
         inner: NewInner
         attr2: int
 
-        CONFIG_SOURCES = ConfZDataSource(data={'attr2': 2})
+        CONFIG_SOURCES = ConfZDataSource(data={"attr2": 2})
 
     with pytest.raises(ValidationError):
         validate_all_configs()
 
     # adjust config sources so successive test don't fail because of NewOuter2
-    NewOuter2.CONFIG_SOURCES = ConfZDataSource(data={'inner': {'attr1': 1}, 'attr2': 2})
+    NewOuter2.CONFIG_SOURCES = ConfZDataSource(data={"inner": {"attr1": 1}, "attr2": 2})
 
 
 @pytest.mark.asyncio
