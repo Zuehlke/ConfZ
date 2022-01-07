@@ -1,5 +1,5 @@
 name: "Setup environment"
-description: "Checks out the repository, sets up python and installs all dependencies."
+description: "Sets up python and installs all dependencies."
 inputs:
   python-version:
     description: "Version of python"
