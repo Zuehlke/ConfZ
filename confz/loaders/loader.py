@@ -21,7 +21,7 @@ class Loader(ABC):
                 if not isinstance(original_dict[key], dict):
                     raise ConfZUpdateException(
                         f"Config variables contradict each other: "
-                        f'Key "{key}" is both a value and a nested dict.'
+                        f"Key '{key}' is both a value and a nested dict."
                     )
                 cls.update_dict_recursively(original_dict[key], value)
             else:
@@ -54,7 +54,7 @@ class Loader(ABC):
                         elif not isinstance(dict_inner[inner_key], dict):
                             raise ConfZUpdateException(
                                 f"Config variables contradict each other: Key "
-                                f'"{inner_key}" is both a value and a nested dict.'
+                                f"'{inner_key}' is both a value and a nested dict."
                             )
                         dict_inner = dict_inner[inner_key]
             else:

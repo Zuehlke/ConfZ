@@ -1,7 +1,7 @@
 from __future__ import annotations  # for sphinx's autodoc_type_aliases
 
 from contextlib import AbstractContextManager
-from typing import ClassVar, List, Optional, TYPE_CHECKING, Any
+from typing import ClassVar, List, Optional, Any
 
 from pydantic import BaseModel
 
@@ -9,9 +9,6 @@ from .change import SourceChangeManager
 from .confz_source import ConfZSources
 from .exceptions import ConfZException
 from .loaders import get_loader
-
-if TYPE_CHECKING:
-    from .change import Listener
 
 
 def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:

@@ -21,7 +21,7 @@ class FileLoader(Loader):
         elif confz_source.file_from_env is not None:
             if confz_source.file_from_env not in os.environ:
                 raise ConfZFileException(
-                    f'Environment variable "{confz_source.file_from_env}" is not set.'
+                    f"Environment variable '{confz_source.file_from_env}' is not set."
                 )
             file_path = Path(os.environ[confz_source.file_from_env])
         elif confz_source.file_from_cl is not None:
@@ -38,14 +38,14 @@ class FileLoader(Loader):
                     idx = sys.argv.index(confz_source.file_from_cl)
                 except ValueError as e:
                     raise ConfZFileException(
-                        f'Command-line argument "{confz_source.file_from_cl}" '
+                        f"Command-line argument '{confz_source.file_from_cl}' "
                         f"not found."
                     ) from e
                 try:
                     file_path = Path(sys.argv[idx + 1])
                 except IndexError as e:
                     raise ConfZFileException(
-                        f'Command-line argument "{confz_source.file_from_cl}" is not '
+                        f"Command-line argument '{confz_source.file_from_cl}' is not "
                         f"set."
                     ) from e
         else:
@@ -73,8 +73,8 @@ class FileLoader(Loader):
             suffix_format = suffix_formats[suffix]
         except KeyError as e:
             raise ConfZFileException(
-                f'File-ending "{suffix}" is not known. Supported are: '
-                f'{", ".join(list(suffix_formats.keys()))}.'
+                f"File-ending '{suffix}' is not known. Supported are: "
+                f"{', '.join(list(suffix_formats.keys()))}."
             ) from e
 
         return suffix_format
@@ -91,7 +91,7 @@ class FileLoader(Loader):
                     file_content = json.load(f)
         except OSError as e:
             raise ConfZFileException(
-                f'Could not open config file "{file_path}".'
+                f"Could not open config file '{file_path}'."
             ) from e
 
         return file_content

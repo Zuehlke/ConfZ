@@ -7,7 +7,7 @@ Still, you can change it for e.g. unit tests with the corresponding context mana
 However, some libraries require you to define certain objects **on module level**, e.g.
 `SQLAlchemy <https://docs.sqlalchemy.org/en/14/tutorial/engine.html>`_::
 
-    engine = create_engine('sqlite:///my_db.db', echo=True, future=True)
+    engine = create_engine("sqlite:///my_db.db", echo=True, future=True)
 
 If you would want to access your configuration here, you would loose all these benefits: The config file would be
 loaded while you import your database module (unwanted side effects) and changing your config afterwards would not
@@ -16,7 +16,7 @@ affect the engine at all.
 Instead, you could wrap the creation into a function call and only access your configuration within the function::
 
     def get_engine():
-        return create_engine(f'sqlite:///{DBConfig().path}', echo=True, future=True)
+        return create_engine(f"sqlite:///{DBConfig().path}", echo=True, future=True)
 
 However, now you create a new engine every time you access this function, which is not what you want / what
 SQLAlchemy intends.
@@ -27,7 +27,7 @@ To overcome this issue, ConfZ provides a decorator :func:`~confz.depends_on`::
 
     @depends_on(DBConfig)
     def get_engine():
-        return create_engine(f'sqlite:///{DBConfig().path}', echo=True, future=True)
+        return create_engine(f"sqlite:///{DBConfig().path}", echo=True, future=True)
 
 It transforms any function into a singleton and only executes it the first time it gets accessed. Additionally, it
 allows you to specify one or many config classes on which the function depends on. Whenever one of these configs
@@ -62,7 +62,7 @@ The decorator also works for asynchronous functions::
 
     @depends_on(DBConfig)
     async def get_engine():
-        engine = create_async_engine(f'sqlite:///{DBConfig().path}', echo=True)
+        engine = create_async_engine(f"sqlite:///{DBConfig().path}", echo=True)
 
         async with engine.begin() as conn:
             await conn.run_sync(meta.drop_all)
