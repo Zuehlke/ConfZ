@@ -83,4 +83,4 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
         :param config_sources: The temporary config sources for within the context.
         :return: Context manager for change of config sources.
         """
-        return SourceChangeManager(cls, config_sources)
+        return SourceChangeManager(cls,config_sources)
