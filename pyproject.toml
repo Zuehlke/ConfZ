@@ -53,6 +53,12 @@ max-line-length = "88"              # to work together with black
 [tool.mypy]
 # Use default mypy configuration
 
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:"
+]
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,16 @@
+name: test
+on: [ pull_request ]
+jobs:
+  run-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/workflows/setup-env
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: run pytest
+        run: |
+          pytest

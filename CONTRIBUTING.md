@@ -12,7 +12,7 @@ poetry install
 in this folder.
 
 Poetry is also used for building and publishing the library.
-This is normally handled by the corresponding [github action](.github/workflows/publish.yaml),
+This is normally handled by the corresponding [github action](.github/workflows/publish.yml),
 but can also be done manually with
 
 ```
