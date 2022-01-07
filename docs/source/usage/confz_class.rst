@@ -41,7 +41,7 @@ APIConfig(
 
    Pydantic sees itself as a parsing library, not a validation library. This means, it may cast input data to force it
    to conform to model field types, and in some cases this may result in a loss of information. See
-   `Data conversion <https://pydantic-docs.helpmanual.io/usage/models/#data-conversion>`_ for detailed information.
+   `data conversion <https://pydantic-docs.helpmanual.io/usage/models/#data-conversion>`_ for detailed information.
 
 Since ``api_config`` is a standard python object, your IDE will give you full support like code-completion and
 type-checks. It also supports all methods available by `BaseModel` of pydantic, for example:

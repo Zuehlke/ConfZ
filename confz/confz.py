@@ -23,14 +23,14 @@ def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:
     return config
 
 
-# metaclass of pydantic.Basemodel is not in __all__, so use type(BaseModel)
+# metaclass of pydantic.BaseModel is not in __all__, so use type(BaseModel)
 class ConfZMetaclass(type(BaseModel)):  # type: ignore
     """ConfZ Meta Class, inheriting from the pydantic `BaseModel` MetaClass."""
 
     # pylint: disable=all  # it doesn't know that metaclass with ConfZ single instance
     def __call__(cls, config_sources: ConfZSources = None, **kwargs):
         """Called every time an instance of any ConfZ object is created. Injects the
-        config value population and singleton mchanism."""
+        config value population and singleton mechanism."""
         if config_sources is not None:
             config = _load_config(kwargs, config_sources)
             return super().__call__(**config)
@@ -54,9 +54,9 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
     of pydantic and behaves transparent except for two cases:
 
     - If the constructor gets `config_sources` as kwarg, these sources are used as
-    input to enrich the other kwargs.
+      input to enrich the other kwargs.
     - If the class has the class variable `CONFIG_SOURCES` defined, these sources are
-    used as input.
+      used as input.
 
     In the latter case, a singleton mechanism is activated, returning the same config
     class instance every time the constructor is called."""

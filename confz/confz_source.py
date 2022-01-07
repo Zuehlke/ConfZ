@@ -56,7 +56,7 @@ class ConfZEnvSource(ConfZSource):
     allow: Optional[List[str]] = None
     """Only allow a list of environment variables as input."""
     deny: Optional[List[str]] = None
-    """Do not allow to read from environemnt variables in this list. Useful if
+    """Do not allow to read from environment variables in this list. Useful if
     `allow_all` is set and certain variables should be excluded."""
     prefix: Optional[str] = None
     """The selection above can be narrowed down to a specific prefix, e.g. `CONFIG_`.
