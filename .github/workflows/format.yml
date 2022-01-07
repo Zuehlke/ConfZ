@@ -1,4 +1,4 @@
-name: tests
+name: format
 on: [ pull_request ]
 jobs:
   run-format:
