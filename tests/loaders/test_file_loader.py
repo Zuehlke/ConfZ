@@ -54,6 +54,11 @@ def test_invalid_file():
         )
 
 
+def test_no_file():
+    with pytest.raises(ConfZFileException):
+        OuterConfig(config_sources=ConfZFileSource())
+
+
 def test_from_env(monkeypatch):
     env_var = "MY_CONFIG_FILE"
 
@@ -97,6 +102,15 @@ def test_from_cl_arg_name(monkeypatch):
 
     # raises error if not set
     with pytest.raises(ConfZFileException):
+        OuterConfig(
+            config_sources=ConfZFileSource(
+                file_from_cl=cl_arg_name, folder=ASSET_FOLDER
+            )
+        )
+
+    # raises error if missing value
+    with pytest.raises(ConfZFileException):
+        monkeypatch.setattr(sys, "argv", argv_backup + [cl_arg_name])
         OuterConfig(
             config_sources=ConfZFileSource(
                 file_from_cl=cl_arg_name, folder=ASSET_FOLDER

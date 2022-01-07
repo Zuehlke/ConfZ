@@ -99,3 +99,11 @@ async def test_depends_async():
 
     assert my_fn_sync() == "val2"
     assert my_fn_sync() is my_fn_sync()
+
+
+def test_depends_invalid():
+    with pytest.raises(ValueError):
+
+        @depends_on
+        def fn_with_args(arg1):
+            return ""

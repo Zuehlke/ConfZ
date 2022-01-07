@@ -44,6 +44,10 @@ def test_allow_deny(monkeypatch):
     with pytest.raises(ValidationError):
         OuterConfig(config_sources=ConfZEnvSource(allow=["attr2"]))
 
+    # raises error if none allowed
+    with pytest.raises(ValidationError):
+        OuterConfig(config_sources=ConfZEnvSource())
+
     # raises error if denied
     with pytest.raises(ValidationError):
         OuterConfig(

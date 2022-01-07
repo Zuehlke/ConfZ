@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 
-from confz import ConfZ, ConfZDataSource, ConfZSource
+import pytest
+
+from confz import ConfZ, ConfZDataSource, ConfZSource, ConfZEnvSource
+from confz.exceptions import ConfZUpdateException, ConfZException
 from confz.loaders import Loader, register_loader
 
 
@@ -16,6 +19,11 @@ class OuterConfig(ConfZ):
 @dataclass
 class CustomSource(ConfZSource):
     custom_attr: int
+
+
+@dataclass
+class CustomSource2(ConfZSource):
+    pass
 
 
 class CustomLoader(Loader):
@@ -42,7 +50,28 @@ def test_update_dict_recursively():
     assert config.attr2 == 4
 
 
+def test_dict_contradiction(monkeypatch):
+    with pytest.raises(ConfZUpdateException):
+        OuterConfig(
+            config_sources=[
+                ConfZDataSource(data={"inner": "something"}),
+                ConfZDataSource(data={"inner": {"attr1": 3}}),
+            ]
+        )
+    monkeypatch.setenv("INNER", "something")
+    monkeypatch.setenv("INNER.ATTR1", "3")
+    with pytest.raises(ConfZUpdateException):
+        OuterConfig(config_sources=ConfZEnvSource(allow_all=True))
+
+
 def test_own_loader():
     config = OuterConfig(config_sources=CustomSource(custom_attr=1), kwarg_2=2)
     assert config.inner.attr1 == 1
     assert config.attr2 == 2
+
+
+def test_unregistered_source():
+    InnerConfig(attr1=2)
+
+    with pytest.raises(ConfZException):
+        InnerConfig(config_sources=CustomSource2(), attr1=2)
