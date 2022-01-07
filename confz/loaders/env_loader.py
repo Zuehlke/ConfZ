@@ -1,5 +1,5 @@
 import os
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
 from dotenv import dotenv_values
 
@@ -47,7 +47,7 @@ class EnvLoader(Loader):
     def populate_config(cls, config: dict, confz_source: ConfZEnvSource):
         remap = cls._transform_remap(confz_source.remap)
 
-        origin_env_vars = os.environ
+        origin_env_vars: Dict[str, Any] = dict(os.environ)
         if confz_source.file is not None:
             origin_env_vars = {**dotenv_values(confz_source.file), **origin_env_vars}
 

@@ -1,7 +1,7 @@
 from __future__ import annotations  # for sphinx's autodoc_type_aliases
 
 from contextlib import AbstractContextManager
-from typing import ClassVar, List
+from typing import ClassVar, List, Optional, TYPE_CHECKING
 
 from pydantic import BaseModel
 
@@ -9,6 +9,9 @@ from .change import SourceChangeManager
 from .confz_source import ConfZSources
 from .exceptions import ConfZException
 from .loaders import get_loader
+
+if TYPE_CHECKING:
+    from .change import Listener
 
 
 def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:
@@ -23,10 +26,8 @@ def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:
     return config
 
 
-class ConfZMetaclass(type(BaseModel)):
-    """ConfZ Meta Class, inheriting from the pydantic `BaseModel` MetaClass. It would have been cleaner to
-    implemented the logic in `__call__` in the ConfZ class itself with `__new__` instead, but pydantic currently
-    does not support to overwrite this method."""
+class ConfZMetaclass(type(BaseModel)):  # type: ignore  # metaclass of pydantic.Basemodel is not in __all__
+    """ConfZ Meta Class, inheriting from the pydantic `BaseModel` MetaClass."""
 
     def __call__(cls, config_sources: ConfZSources = None, **kwargs):
         """Called every time an instance of any ConfZ object is created. Injects the config value population and
@@ -41,7 +42,7 @@ class ConfZMetaclass(type(BaseModel)):
                     'Singleton mechanism enabled ("CONFIG_SOURCES" is defined), so keyword arguments '
                     "are not supported"
                 )
-            if cls._confz_instance is None:
+            if cls._confz_instance is None:  # type: ignore
                 config = _load_config(kwargs, cls.CONFIG_SOURCES)
                 cls._confz_instance = super().__call__(**config)
             return cls._confz_instance
@@ -59,9 +60,9 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
     In the latter case, a singleton mechanism is activated, returning the same config class instance every time the
     constructor is called."""
 
-    CONFIG_SOURCES: ClassVar[ConfZSources] = None  #: Sources to use as input.
-    _confz_instance: ClassVar["ConfZ"] = None
-    _listeners: ClassVar[List["Listener"]] = None
+    CONFIG_SOURCES: ClassVar[Optional[ConfZSources]] = None  #: Sources to use as input.
+    _confz_instance: ClassVar[Optional["ConfZ"]] = None
+    _listeners: ClassVar[Optional[List["Listener"]]] = None
 
     class Config:
         allow_mutation = False

@@ -1,8 +1,21 @@
 import inspect
 from contextlib import AbstractContextManager
-from typing import Type, Callable, Any, List
+from typing import (
+    Type,
+    Callable,
+    Any,
+    List,
+    Dict,
+    TypeVar,
+    Generic,
+    Optional,
+    TYPE_CHECKING,
+)
 
 from .confz_source import ConfZSources
+
+if TYPE_CHECKING:
+    from .confz import ConfZ
 
 
 class SourceChangeManager(AbstractContextManager):
@@ -37,10 +50,13 @@ class SourceChangeManager(AbstractContextManager):
                 listener.change_exit(self)
 
 
-class Listener:
+T = TypeVar("T")
+
+
+class Listener(Generic[T]):
     """Listener of config, will add singleton mechanism which is aware of config changes."""
 
-    def __init__(self, fn: Callable[[], Any], config_classes: List[Type["ConfZ"]]):
+    def __init__(self, fn: Callable[[], T], config_classes: List[Type["ConfZ"]]):
         if len(inspect.getfullargspec(fn).args) != 0:
             raise ValueError("Callable should not take any arguments")
 
@@ -50,8 +66,8 @@ class Listener:
             config_class._listeners.append(self)
 
         self._fn = fn
-        self._instance = None
-        self._backup_instances = {}
+        self._instance: Optional[T] = None
+        self._backup_instances: Dict[SourceChangeManager, T] = {}
 
     @property
     def is_async(self):

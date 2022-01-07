@@ -38,7 +38,7 @@ class Loader(ABC):
         :return: The transformed dictionary, splitting keys at the separator and creating a new dictionary out of it.
         :raises ConfZUpdateException: If dict keys contradict each other.
         """
-        dict_out = dict()
+        dict_out: Dict[str, Any] = dict()
         for key, value in dict_in.items():
             if separator in key:
                 inner_keys = key.split(separator)
@@ -63,7 +63,7 @@ class Loader(ABC):
 
     @classmethod
     @abstractmethod
-    def populate_config(cls, config: dict, confz_source: ConfZSource):
+    def populate_config(cls, config: dict, confz_source):
         """Populate the config-dict with new config arguments based on the source.
 
         :param config: Config dictionary, gets extended with new arguments
