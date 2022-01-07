@@ -1,7 +1,7 @@
 from __future__ import annotations  # for sphinx's autodoc_type_aliases
 
 from contextlib import AbstractContextManager
-from typing import ClassVar, List, Optional, TYPE_CHECKING
+from typing import ClassVar, List, Optional, TYPE_CHECKING, Any
 
 from pydantic import BaseModel
 
@@ -30,6 +30,7 @@ def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:
 class ConfZMetaclass(type(BaseModel)):  # type: ignore
     """ConfZ Meta Class, inheriting from the pydantic `BaseModel` MetaClass."""
 
+    # pylint: disable=all  # it doesn't know that metaclass with ConfZ single instance
     def __call__(cls, config_sources: ConfZSources = None, **kwargs):
         """Called every time an instance of any ConfZ object is created. Injects the
         config value population and singleton mchanism."""
@@ -37,16 +38,16 @@ class ConfZMetaclass(type(BaseModel)):  # type: ignore
             config = _load_config(kwargs, config_sources)
             return super().__call__(**config)
 
-        if cls.CONFIG_SOURCES is not None:
+        if cls.CONFIG_SOURCES is not None:  # type: ignore
             if len(kwargs) > 0:
                 raise ConfZException(
                     'Singleton mechanism enabled ("CONFIG_SOURCES" is defined), so '
                     "keyword arguments are not supported"
                 )
-            if cls._confz_instance is None:  # type: ignore
+            if cls.confz_instance is None:  # type: ignore
                 config = _load_config(kwargs, cls.CONFIG_SOURCES)
-                cls._confz_instance = super().__call__(**config)
-            return cls._confz_instance
+                cls.confz_instance = super().__call__(**config)
+            return cls.confz_instance
 
         return super().__call__(**kwargs)
 
@@ -64,8 +65,12 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
     class instance every time the constructor is called."""
 
     CONFIG_SOURCES: ClassVar[Optional[ConfZSources]] = None  #: Sources to use as input.
-    _confz_instance: ClassVar[Optional["ConfZ"]] = None
-    _listeners: ClassVar[Optional[List["Listener"]]] = None
+
+    # type is ClassVar[Optional["ConfZ"]] (pydantic throws error with forward ref)
+    confz_instance: ClassVar[Optional[Any]] = None  #: *for internal use only*
+
+    # type is ClassVar[Optional[List["Listener"]]] (same here)
+    listeners: ClassVar[Optional[List[Any]]] = None  #: *for internal use only*
 
     class Config:
         allow_mutation = False

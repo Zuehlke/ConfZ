@@ -29,24 +29,24 @@ class SourceChangeManager(AbstractContextManager):
         self._backup_sources = None
 
     def __enter__(self):
-        self._backup_instance = self._config_class._confz_instance
-        self._config_class._confz_instance = None
+        self._backup_instance = self._config_class.confz_instance
+        self._config_class.confz_instance = None
 
         self._backup_sources = self._config_class.CONFIG_SOURCES
         self._config_class.CONFIG_SOURCES = self._config_sources
 
-        if self._config_class._listeners is not None:
-            for listener in self._config_class._listeners:
+        if self._config_class.listeners is not None:
+            for listener in self._config_class.listeners:
                 listener.change_enter(self)
 
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self._config_class._confz_instance = self._backup_instance
+        self._config_class.confz_instance = self._backup_instance
         self._config_class.CONFIG_SOURCES = self._backup_sources
 
-        if self._config_class._listeners is not None:
-            for listener in self._config_class._listeners:
+        if self._config_class.listeners is not None:
+            for listener in self._config_class.listeners:
                 listener.change_exit(self)
 
 
@@ -61,9 +61,9 @@ class Listener(Generic[T]):
             raise ValueError("Callable should not take any arguments")
 
         for config_class in config_classes:
-            if config_class._listeners is None:
-                config_class._listeners = []
-            config_class._listeners.append(self)
+            if config_class.listeners is None:
+                config_class.listeners = []
+            config_class.listeners.append(self)
 
         self._fn = fn
         self._instance: Optional[T] = None

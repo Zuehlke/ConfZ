@@ -26,8 +26,8 @@ def validate_all_configs(include_listeners: bool = False):
     for config_class in _get_sub_classes(ConfZ):
         if config_class.CONFIG_SOURCES is not None:
             config_classes.append(config_class)
-            if include_listeners and config_class._listeners is not None:
-                for listener in config_class._listeners:
+            if include_listeners and config_class.listeners is not None:
+                for listener in config_class.listeners:
                     if listener.is_async:
                         async_listeners.append(listener)
                     else:
