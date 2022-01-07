@@ -50,8 +50,7 @@ class ConfZMetaclass(type(BaseModel)):  # type: ignore
 
 
 class ConfZ(BaseModel, metaclass=ConfZMetaclass):
-    """Base class, parent of every config class. Internally wraps :class:`BaseModel`
-    of pydantic and behaves transparent except for two cases:
+    """Base class, parent of every config class. Internally wraps :class:`BaseModel`of pydantic and behaves transparent except for two cases:
 
     - If the constructor gets `config_sources` as kwarg, these sources are used as
       input to enrich the other kwargs.
