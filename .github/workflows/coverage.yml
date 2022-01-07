@@ -1,0 +1,14 @@
+name: coverage
+on: [ pull_request ]
+jobs:
+  run-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/workflows/setup-env
+        with:
+          python-version: "3.10"
+      - name: run coverage
+        run: |
+          coverage run -m pytest
+          coverage report --fail-under=100
