@@ -23,11 +23,13 @@ def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:
     return config
 
 
-# metaclass of pydantic.BaseModel is not in __all__, so use type(BaseModel)
+# Metaclass of pydantic.BaseModel is not in __all__, so use type(BaseModel).
+# ConfZ will be only class with this meta class.
+# Both of these things confuse mypy and pylint, so had to disable multiple times.
 class ConfZMetaclass(type(BaseModel)):  # type: ignore
     """ConfZ Meta Class, inheriting from the pydantic `BaseModel` MetaClass."""
 
-    # pylint: disable=all  # it doesn't know that metaclass with ConfZ single instance
+    # pylint: disable=no-self-argument,no-member
     def __call__(cls, config_sources: ConfZSources = None, **kwargs):
         """Called every time an instance of any ConfZ object is created. Injects the
         config value population and singleton mechanism."""
@@ -36,13 +38,15 @@ class ConfZMetaclass(type(BaseModel)):  # type: ignore
             return super().__call__(**config)
 
         if cls.CONFIG_SOURCES is not None:  # type: ignore
+            # pylint: disable=access-member-before-definition
+            # pylint: disable=attribute-defined-outside-init
             if len(kwargs) > 0:
                 raise ConfZException(
                     'Singleton mechanism enabled ("CONFIG_SOURCES" is defined), so '
                     "keyword arguments are not supported"
                 )
             if cls.confz_instance is None:  # type: ignore
-                config = _load_config(kwargs, cls.CONFIG_SOURCES)
+                config = _load_config(kwargs, cls.CONFIG_SOURCES)  # type: ignore
                 cls.confz_instance = super().__call__(**config)
             return cls.confz_instance
 
