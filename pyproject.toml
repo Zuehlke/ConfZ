@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "confz"
-version = "1.3.0"
+version = "1.3.1"
 description = "ConfZ is a configuration management library for Python based on pydantic."
 license = "MIT"
 authors = ["Zühlke"]
