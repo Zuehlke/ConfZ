@@ -15,7 +15,7 @@ There are multiple config sources which support a heterogeneous set of use-cases
   The filename can either be passed directly, via environment variable or via command line argument. The latter cases
   allow to easily configure multiple environments by having a separate file for each environment.
 - :class:`~confz.ConfZEnvSource` allows to load config data from environment variables and .env files. It supports to
-  select the corresponding variables with allow- and deny-lists and with an optional prefix. The variable names are
+  select the corresponding variables with allow- and deny-lists and with an optional prefix and optional custom separator for nested variables. The variable names are
   either inferred from the config name or can be explicitly mapped.
 - :class:`~confz.ConfZCLArgSource` allows to load config data from command line arguments. An optional prefix allows
   to select only parts of the arguments. The argument names are either inferred from the config name or can be

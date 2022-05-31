@@ -42,7 +42,7 @@ class Loader(ABC):
         """
         dict_out: Dict[str, Any] = {}
         for key, value in dict_in.items():
-            if separator in key:
+            if separator in key and not key.startswith(separator):
                 inner_keys = key.split(separator)
                 dict_inner = dict_out
                 for idx, inner_key in enumerate(inner_keys):

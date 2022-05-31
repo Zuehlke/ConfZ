@@ -69,6 +69,8 @@ class ConfZEnvSource(ConfZSource):
     file: Optional[Path] = None
     """Built in .env file loading with lower than environment precedence. Uses UTF-8
     for decoding."""
+    nested_separator: str = "."
+    """Separator will be used in nested environment variables."""
 
 
 @dataclass
