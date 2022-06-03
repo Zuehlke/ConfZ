@@ -1,6 +1,6 @@
 # Contribution Instruction & Guidelines
 
-Any kind of contribution to ConfZ is most welcome!
+Hello there! Any kind of contribution to ConfZ is most welcome!
 
 - If you have a question, please use GitHub
   [discussions](https://github.com/Zuehlke/ConfZ/discussions).

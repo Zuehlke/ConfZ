@@ -4,7 +4,7 @@ jobs:
   run-typecheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./.github/workflows/setup-env
         with:
           python-version: "3.10"
