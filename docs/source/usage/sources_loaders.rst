@@ -18,7 +18,7 @@ There are multiple config sources which support a heterogeneous set of use-cases
   select the corresponding variables with allow- and deny-lists and with an optional prefix and optional custom separator for nested variables. The variable names are
   either inferred from the config name or can be explicitly mapped.
 - :class:`~confz.ConfZCLArgSource` allows to load config data from command line arguments. An optional prefix allows
-  to select only parts of the arguments. The argument names are either inferred from the config name or can be
+  to select only parts of the arguments. Optional custom separator for nested variables is also supported. The argument names are either inferred from the config name or can be
   explicitly mapped.
 - :class:`~confz.ConfZDataSource` allows to define constant config data. This can be very useful for unit tests, see
   :ref:`context_manager`.

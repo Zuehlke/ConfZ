@@ -88,6 +88,8 @@ class ConfZCLArgSource(ConfZSource):
     remap: Optional[Dict[str, str]] = None
     """Certain command line arguments can be mapped to config arguments with a different
     name. The map does not need to include the two dashes at the beginning."""
+    nested_separator: str = "."
+    """Separator will be used in nested environment variables."""
 
 
 @dataclass
