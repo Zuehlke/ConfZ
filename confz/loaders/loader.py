@@ -29,7 +29,7 @@ class Loader(ABC):
 
     @classmethod
     def transform_nested_dicts(
-        cls, dict_in: Dict[str, Any], separator: str
+        cls, dict_in: Dict[str, Any], separator: str = "."
     ) -> Dict[str, Any]:
         """Transform dictionaries into nested dictionaries, using a separator in the
         keys as hint.
