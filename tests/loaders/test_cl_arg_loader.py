@@ -41,3 +41,20 @@ def test_remap(monkeypatch):
     config = OuterConfig(config_sources=ConfZCLArgSource(remap={"val1": "inner.attr1"}))
     assert config.inner.attr1 == 1
     assert config.attr2 == 2
+
+
+def test_nested_separator(monkeypatch):
+    argv = sys.argv.copy() + [
+        "--conf_inner__attr1",
+        "1",
+        "--conf_attr2",
+        "2",
+        "--attr1",
+        "100",
+    ]
+    monkeypatch.setattr(sys, "argv", argv)
+    config = OuterConfig(
+        config_sources=ConfZCLArgSource(prefix="conf_", nested_separator="__")
+    )
+    assert config.inner.attr1 == 1
+    assert config.attr2 == 2

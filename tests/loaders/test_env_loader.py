@@ -128,3 +128,15 @@ def test_dotenv_loading(monkeypatch):
     assert config.attr2 == 1
     assert config.inner.attr1_name == 21
     assert config.inner.attr_override == "2002"
+
+
+def test_separator(monkeypatch):
+    monkeypatch.setenv("INNER__ATTR1_NAME", "21")
+    monkeypatch.setenv("INNER__ATTR-OVERRIDE", "2002")
+    monkeypatch.setenv("ATTR2", "1")
+    config = OuterConfig(
+        config_sources=ConfZEnvSource(allow_all=True, nested_separator="__")
+    )
+    assert config.attr2 == 1
+    assert config.inner.attr1_name == 21
+    assert config.inner.attr_override == "2002"

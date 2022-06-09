@@ -36,13 +36,14 @@ class Loader(ABC):
 
         :param dict_in: A dictionary with string-keys.
         :param separator: The string used to separate dict keys.
+                          Default value will no longer be set in a future release.
         :return: The transformed dictionary, splitting keys at the separator and
             creating a new dictionary out of it.
         :raises ConfZUpdateException: If dict keys contradict each other.
         """
         dict_out: Dict[str, Any] = {}
         for key, value in dict_in.items():
-            if separator in key:
+            if separator in key and not key.startswith(separator):
                 inner_keys = key.split(separator)
                 dict_inner = dict_out
                 for idx, inner_key in enumerate(inner_keys):
