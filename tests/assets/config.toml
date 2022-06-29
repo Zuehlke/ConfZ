@@ -1,0 +1,13 @@
+attr2 = "2"
+
+[inner]
+attr1 = "1 🎉"
+
+
+[[attrs]]
+key = "A"
+value = "1"
+
+[[attrs]]
+key = "B"
+value = "2"

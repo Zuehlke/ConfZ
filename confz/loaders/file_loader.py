@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
+import toml
 import yaml
 
 from confz.confz_source import ConfZFileSource, FileFormat
@@ -67,6 +68,7 @@ class FileLoader(Loader):
             ".yml": FileFormat.YAML,
             ".yaml": FileFormat.YAML,
             ".json": FileFormat.JSON,
+            ".toml": FileFormat.TOML,
         }
         suffix = file_path.suffix
         try:
@@ -89,6 +91,8 @@ class FileLoader(Loader):
                     file_content = yaml.safe_load(f)
                 elif file_format == FileFormat.JSON:
                     file_content = json.load(f)
+                elif file_format == FileFormat.TOML:
+                    file_content = toml.load(f)
         except OSError as e:
             raise ConfZFileException(
                 f"Could not open config file '{file_path}'."

@@ -21,6 +21,7 @@ python = "^3.7"
 pydantic = "^1.9.0"
 PyYAML = ">=5.4.1, <7.0.0"
 python-dotenv = ">=0.19.2, <0.21.0"
+toml = "^0.10.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.1"
