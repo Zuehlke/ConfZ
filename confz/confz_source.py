@@ -17,6 +17,7 @@ class FileFormat(Enum):
 
     JSON = "json"  #: JSON file format
     YAML = "yaml"  #: YAML file format
+    TOML = "toml"  #: TOML file format
 
 
 @dataclass

@@ -1,4 +1,5 @@
 import sys
+from typing import List
 
 import pytest
 
@@ -16,6 +17,15 @@ class OuterConfig(ConfZ):
     inner: InnerConfig
 
 
+class ListElementConfig(ConfZ):
+    key: str
+    value: str
+
+
+class SecondOuterConfig(OuterConfig):
+    attrs: List[ListElementConfig]
+
+
 def test_json_file():
     config = OuterConfig(
         config_sources=ConfZFileSource(file=ASSET_FOLDER / "config.json")
@@ -30,6 +40,18 @@ def test_yaml_file():
     )
     assert config.inner.attr1 == "1 🎉"
     assert config.attr2 == "2"
+
+
+def test_toml_file():
+    config = SecondOuterConfig(
+        config_sources=ConfZFileSource(file=ASSET_FOLDER / "config.toml")
+    )
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
+    assert config.attrs[0].key == "A"
+    assert config.attrs[0].value == "1"
+    assert config.attrs[1].key == "B"
+    assert config.attrs[1].value == "2"
 
 
 def test_custom_file():

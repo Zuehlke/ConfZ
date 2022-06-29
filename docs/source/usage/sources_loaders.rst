@@ -11,7 +11,7 @@ as instructions for the corresponding :class:`~confz.loaders.Loader`.
 
 There are multiple config sources which support a heterogeneous set of use-cases:
 
-- :class:`~confz.ConfZFileSource` allows to load config data from files. Currently, yaml- and json-format is supported.
+- :class:`~confz.ConfZFileSource` allows to load config data from files. Currently, yaml- , json-, and toml-format is supported.
   The filename can either be passed directly, via environment variable or via command line argument. The latter cases
   allow to easily configure multiple environments by having a separate file for each environment.
 - :class:`~confz.ConfZEnvSource` allows to load config data from environment variables and .env files. It supports to
