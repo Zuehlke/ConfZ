@@ -40,6 +40,9 @@ class ConfZFileSource(ConfZSource):
     file ending."""
     encoding: str = "utf-8"
     """The encoding of the file. Default is UTF-8."""
+    optional: bool = False
+    """True if this config file is only optional. If set to True no error is thrown
+    when the file was not found."""
 
 
 @dataclass
