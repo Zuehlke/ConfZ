@@ -42,6 +42,30 @@ def test_yaml_file():
     assert config.attr2 == "2"
 
 
+def test_multiple_yaml_files_both_available():
+    config = OuterConfig(
+        config_sources=[
+            ConfZFileSource(file=ASSET_FOLDER / "config.yml"),
+            ConfZFileSource(file=ASSET_FOLDER / "config_2.yml"),
+        ]
+    )
+    assert config.inner.attr1 == "4 🎉"
+    assert config.attr2 == "10"
+
+
+def test_multiple_yaml_files_one_is_optional_and_unavailable():
+    config = OuterConfig(
+        config_sources=[
+            ConfZFileSource(file=ASSET_FOLDER / "config.yml"),
+            ConfZFileSource(
+                file=ASSET_FOLDER / "config_not_existing.yml", optional=True
+            ),
+        ]
+    )
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
+
+
 def test_toml_file():
     config = SecondOuterConfig(
         config_sources=ConfZFileSource(file=ASSET_FOLDER / "config.toml")
