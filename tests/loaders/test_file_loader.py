@@ -44,8 +44,10 @@ def test_yaml_file():
 
 def test_multiple_yaml_files_both_available():
     config = OuterConfig(
-        config_sources=[ConfZFileSource(file=ASSET_FOLDER / "config.yml"),
-                        ConfZFileSource(file=ASSET_FOLDER / "config_2.yml")]
+        config_sources=[
+            ConfZFileSource(file=ASSET_FOLDER / "config.yml"),
+            ConfZFileSource(file=ASSET_FOLDER / "config_2.yml"),
+        ]
     )
     assert config.inner.attr1 == "4 🎉"
     assert config.attr2 == "10"
@@ -53,8 +55,12 @@ def test_multiple_yaml_files_both_available():
 
 def test_multiple_yaml_files_one_is_optional_and_unavailable():
     config = OuterConfig(
-        config_sources=[ConfZFileSource(file=ASSET_FOLDER / "config.yml"),
-                        ConfZFileSource(file=ASSET_FOLDER / "config_not_existing.yml", optional=True)]
+        config_sources=[
+            ConfZFileSource(file=ASSET_FOLDER / "config.yml"),
+            ConfZFileSource(
+                file=ASSET_FOLDER / "config_not_existing.yml", optional=True
+            ),
+        ]
     )
     assert config.inner.attr1 == "1 🎉"
     assert config.attr2 == "2"

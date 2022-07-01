@@ -83,7 +83,11 @@ class FileLoader(Loader):
 
     @classmethod
     def _read_file(
-        cls, file_path: Path, file_format: FileFormat, file_encoding: str, optional: bool
+        cls,
+        file_path: Path,
+        file_format: FileFormat,
+        file_encoding: str,
+        optional: bool,
     ) -> dict:
         try:
             with file_path.open(encoding=file_encoding) as f:
@@ -95,11 +99,11 @@ class FileLoader(Loader):
                     file_content = toml.load(f)
         except OSError as e:
             if optional:
-                return dict()
-            else:
-                raise ConfZFileException(
-                    f"Could not open config file '{file_path}'."
-                ) from e
+                return {}
+
+            raise ConfZFileException(
+                f"Could not open config file '{file_path}'."
+            ) from e
 
         return file_content
 
@@ -107,5 +111,7 @@ class FileLoader(Loader):
     def populate_config(cls, config: dict, confz_source: ConfZFileSource):
         file_path = cls._get_filename(confz_source)
         file_format = cls._get_format(file_path, confz_source.format)
-        file_content = cls._read_file(file_path, file_format, confz_source.encoding, confz_source.optional)
+        file_content = cls._read_file(
+            file_path, file_format, confz_source.encoding, confz_source.optional
+        )
         cls.update_dict_recursively(config, file_content)
