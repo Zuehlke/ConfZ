@@ -170,3 +170,15 @@ def test_from_cl_arg_name(monkeypatch):
     )
     assert config.inner.attr1 == "1 🎉"
     assert config.attr2 == "2"
+
+
+def test_from_cl_arg_optional():
+    # if not set, should load the config file without errors
+    config = OuterConfig(
+        config_sources=[
+            ConfZFileSource(file_from_cl="--my_config_file", optional=True),
+            ConfZFileSource(file=ASSET_FOLDER / "config.yml"),
+        ]
+    )
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
