@@ -107,7 +107,12 @@ class FileLoader(Loader):
     def populate_config(cls, config: dict, confz_source: ConfZFileSource):
         try:
             file_path = cls._get_filename(confz_source)
-            file_format = cls._get_format(file_path, confz_source.format)
+        except ConfZFileException as e:
+            if confz_source.optional:
+                return
+            raise e
+        file_format = cls._get_format(file_path, confz_source.format)
+        try:
             file_content = cls._read_file(file_path, file_format, confz_source.encoding)
         except ConfZFileException as e:
             if confz_source.optional:

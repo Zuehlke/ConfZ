@@ -42,8 +42,8 @@ class ConfZFileSource(ConfZSource):
     """The encoding of the file. Default is UTF-8."""
     optional: bool = False
     """True if this config file is only optional. If set to True no error is
-    thrown when the file was not found, when the environment variable or the command
-    line argument was not set, or when the file format is invalid."""
+    thrown when the file was not found or when the environment variable or the
+    command line argument were not set."""
 
 
 @dataclass
