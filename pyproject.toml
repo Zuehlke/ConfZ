@@ -17,22 +17,22 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.7.2"
 pydantic = "^1.9.0"
 PyYAML = ">=5.4.1, <7.0.0"
 python-dotenv = ">=0.19.2, <0.22.0"
 toml = "^0.10.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^7.1.1"
-Sphinx = "^5.0.0"
-pytest-cov = "^3.0.0"
-pytest-asyncio = "^0.19.0"
-black = {extras = ["d"], version = "^22.3.0"}
-mypy = "^0.971"
-pylint = "^2.12.2"
-types-PyYAML = "^6.0.1"
-types-toml = "^0.10.7"
+pytest = "^7.2.0"
+Sphinx = "^5.3.0"
+pytest-cov = "^4.0.0"
+pytest-asyncio = "^0.20.1"
+black = {extras = ["d"], version = "^22.10.0"}
+mypy = "^0.982"
+pylint = "^2.15.5"
+types-PyYAML = "^6.0.12"
+types-toml = "^0.10.8"
 
 [tool.black]
 # Use default black configuration
