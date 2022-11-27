@@ -78,10 +78,24 @@ def test_toml_file():
     assert config.attrs[1].value == "2"
 
 
+def test_bytes_file():
+    json_dummy_content = b'{"inner":{"attr1": "2"}, "attr2": "5"}'
+    config = OuterConfig(
+        config_sources=ConfZFileSource(file=json_dummy_content,
+                                       format=FileFormat.JSON)
+    )
+    assert config.attr2 == "5"
+    assert config.inner.attr1 == "2"
+    with pytest.raises(ConfZFileException):
+        OuterConfig(
+            config_sources=ConfZFileSource(file=json_dummy_content))
+
+
 def test_custom_file():
     # does not recognize format per default
     with pytest.raises(ConfZFileException):
-        OuterConfig(config_sources=ConfZFileSource(file=ASSET_FOLDER / "config.txt"))
+        OuterConfig(
+            config_sources=ConfZFileSource(file=ASSET_FOLDER / "config.txt"))
 
     # can specify format
     config = OuterConfig(
@@ -93,10 +107,30 @@ def test_custom_file():
     assert config.attr2 == "2"
 
 
+def test_custom_file_str_path():
+    # can specify format
+    config = OuterConfig(
+        config_sources=ConfZFileSource(
+            file=str(ASSET_FOLDER)+ "/config.txt", format=FileFormat.YAML
+        )
+    )
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
+
+
 def test_invalid_file():
     with pytest.raises(ConfZFileException):
         OuterConfig(
-            config_sources=ConfZFileSource(file=ASSET_FOLDER / "non_existing.json")
+            config_sources=ConfZFileSource(
+                file=ASSET_FOLDER / "non_existing.json")
+        )
+
+
+def test_invalid_file_str():
+    with pytest.raises(ConfZFileException):
+        OuterConfig(
+            config_sources=ConfZFileSource(
+                file=str(ASSET_FOLDER) + "/non_existing.json")
         )
 
 
@@ -117,7 +151,8 @@ def test_from_env(monkeypatch):
     # works if set
     monkeypatch.setenv(env_var, "config.json")
     config = OuterConfig(
-        config_sources=ConfZFileSource(file_from_env=env_var, folder=ASSET_FOLDER)
+        config_sources=ConfZFileSource(file_from_env=env_var,
+                                       folder=ASSET_FOLDER)
     )
     assert config.inner.attr1 == "1 🎉"
     assert config.attr2 == "2"
@@ -136,7 +171,8 @@ def test_from_cl_arg_idx(monkeypatch):
     # works if set
     monkeypatch.setattr(sys, "argv", argv_backup + ["config.json"])
     config = OuterConfig(
-        config_sources=ConfZFileSource(file_from_cl=cl_arg_idx, folder=ASSET_FOLDER)
+        config_sources=ConfZFileSource(file_from_cl=cl_arg_idx,
+                                       folder=ASSET_FOLDER)
     )
     assert config.inner.attr1 == "1 🎉"
     assert config.attr2 == "2"

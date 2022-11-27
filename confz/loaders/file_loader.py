@@ -1,8 +1,10 @@
+import codecs
+import io
 import json
 import os
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Optional, TextIO, Union
 
 import toml
 import yaml
@@ -18,7 +20,10 @@ class FileLoader(Loader):
     @classmethod
     def _get_filename(cls, confz_source: ConfZFileSource) -> Path:
         if confz_source.file is not None:
-            file_path = confz_source.file
+            if isinstance(confz_source.file, str):
+                file_path = Path(confz_source.file)
+            else:
+                file_path = confz_source.file
         elif confz_source.file_from_env is not None:
             if confz_source.file_from_env not in os.environ:
                 raise ConfZFileException(
@@ -59,7 +64,7 @@ class FileLoader(Loader):
 
     @classmethod
     def _get_format(
-        cls, file_path: Path, file_format: Optional[FileFormat]
+            cls, file_path: Path, file_format: Optional[FileFormat]
     ) -> FileFormat:
         if file_format is not None:
             return file_format
@@ -82,29 +87,51 @@ class FileLoader(Loader):
         return suffix_format
 
     @classmethod
-    def _read_file(
-        cls,
-        file_path: Path,
-        file_format: FileFormat,
-        file_encoding: str,
+    def _parse_stream(
+            cls,
+            stream: Union[TextIO, codecs.StreamReader],
+            file_format: FileFormat,
     ) -> dict:
+        if file_format == FileFormat.YAML:
+            file_content = yaml.safe_load(stream)
+        elif file_format == FileFormat.JSON:
+            file_content = json.load(stream)
+        elif file_format == FileFormat.TOML:
+            file_content = toml.load(stream)
+        return file_content
+
+    @classmethod
+    def _create_stream(cls,
+                       file_path: Path,
+                       file_encoding: str) -> TextIO:
         try:
-            with file_path.open(encoding=file_encoding) as f:
-                if file_format == FileFormat.YAML:
-                    file_content = yaml.safe_load(f)
-                elif file_format == FileFormat.JSON:
-                    file_content = json.load(f)
-                elif file_format == FileFormat.TOML:
-                    file_content = toml.load(f)
+            return file_path.open(encoding=file_encoding)
         except OSError as e:
             raise ConfZFileException(
                 f"Could not open config file '{file_path}'."
             ) from e
 
-        return file_content
+    @classmethod
+    def _populate_config_from_bytes(cls, config: dict,
+                                    data: bytes,
+                                    confz_source: ConfZFileSource):
+        if confz_source.format is None:
+            raise ConfZFileException("The format needs to be defined if the "
+                                     "configuration is passed as byte-string")
+        byte_stream = io.BytesIO(data)
+        utf_reader = codecs.getreader(confz_source.encoding)
+        text_stream = utf_reader(byte_stream)
+        file_content = cls._parse_stream(text_stream, confz_source.format)
+        cls.update_dict_recursively(config, file_content)
 
     @classmethod
     def populate_config(cls, config: dict, confz_source: ConfZFileSource):
+        if (confz_source.file is not None and
+                isinstance(confz_source.file, bytes)):
+            cls._populate_config_from_bytes(config=config,
+                                            data=confz_source.file,
+                                            confz_source=confz_source)
+            return
         try:
             file_path = cls._get_filename(confz_source)
         except ConfZFileException as e:
@@ -113,7 +140,8 @@ class FileLoader(Loader):
             raise e
         file_format = cls._get_format(file_path, confz_source.format)
         try:
-            file_content = cls._read_file(file_path, file_format, confz_source.encoding)
+            file_stream = cls._create_stream(file_path, confz_source.encoding)
+            file_content = cls._parse_stream(file_stream, file_format)
         except ConfZFileException as e:
             if confz_source.optional:
                 return

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from os import PathLike
 from pathlib import Path
 from typing import Optional, Union, List, Dict, Any
 
@@ -24,8 +25,9 @@ class FileFormat(Enum):
 class ConfZFileSource(ConfZSource):
     """Source config for files."""
 
-    file: Optional[Path] = None
-    """Specify a config file directly by a path."""
+    file: Union[PathLike, str, bytes, None] = None
+    """Specify a config file directly by a path or by providing its content as 
+    bytes-string."""
     file_from_env: Optional[str] = None
     """Alternatively, use this environment variable to get the file."""
     file_from_cl: Optional[Union[int, str]] = None
