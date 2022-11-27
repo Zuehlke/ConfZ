@@ -26,7 +26,7 @@ class ConfZFileSource(ConfZSource):
     """Source config for files."""
 
     file: Union[PathLike, str, bytes, None] = None
-    """Specify a config file directly by a path or by providing its content as 
+    """Specify a config file directly by a path or by providing its content as
     bytes-string."""
     file_from_env: Optional[str] = None
     """Alternatively, use this environment variable to get the file."""

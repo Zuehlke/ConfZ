@@ -20,10 +20,9 @@ class FileLoader(Loader):
     @classmethod
     def _get_filename(cls, confz_source: ConfZFileSource) -> Path:
         if confz_source.file is not None:
-            if isinstance(confz_source.file, str):
-                file_path = Path(confz_source.file)
-            else:
-                file_path = confz_source.file
+            if isinstance(confz_source.file, bytes):
+                raise ConfZFileException("Can not detect filename from type bytes")
+            file_path = Path(confz_source.file)
         elif confz_source.file_from_env is not None:
             if confz_source.file_from_env not in os.environ:
                 raise ConfZFileException(
@@ -64,7 +63,7 @@ class FileLoader(Loader):
 
     @classmethod
     def _get_format(
-            cls, file_path: Path, file_format: Optional[FileFormat]
+        cls, file_path: Path, file_format: Optional[FileFormat]
     ) -> FileFormat:
         if file_format is not None:
             return file_format
@@ -88,9 +87,9 @@ class FileLoader(Loader):
 
     @classmethod
     def _parse_stream(
-            cls,
-            stream: Union[TextIO, codecs.StreamReader],
-            file_format: FileFormat,
+        cls,
+        stream: Union[TextIO, codecs.StreamReader],
+        file_format: FileFormat,
     ) -> dict:
         if file_format == FileFormat.YAML:
             file_content = yaml.safe_load(stream)
@@ -101,9 +100,7 @@ class FileLoader(Loader):
         return file_content
 
     @classmethod
-    def _create_stream(cls,
-                       file_path: Path,
-                       file_encoding: str) -> TextIO:
+    def _create_stream(cls, file_path: Path, file_encoding: str) -> TextIO:
         try:
             return file_path.open(encoding=file_encoding)
         except OSError as e:
@@ -112,12 +109,14 @@ class FileLoader(Loader):
             ) from e
 
     @classmethod
-    def _populate_config_from_bytes(cls, config: dict,
-                                    data: bytes,
-                                    confz_source: ConfZFileSource):
+    def _populate_config_from_bytes(
+        cls, config: dict, data: bytes, confz_source: ConfZFileSource
+    ):
         if confz_source.format is None:
-            raise ConfZFileException("The format needs to be defined if the "
-                                     "configuration is passed as byte-string")
+            raise ConfZFileException(
+                "The format needs to be defined if the "
+                "configuration is passed as byte-string"
+            )
         byte_stream = io.BytesIO(data)
         utf_reader = codecs.getreader(confz_source.encoding)
         text_stream = utf_reader(byte_stream)
@@ -126,11 +125,10 @@ class FileLoader(Loader):
 
     @classmethod
     def populate_config(cls, config: dict, confz_source: ConfZFileSource):
-        if (confz_source.file is not None and
-                isinstance(confz_source.file, bytes)):
-            cls._populate_config_from_bytes(config=config,
-                                            data=confz_source.file,
-                                            confz_source=confz_source)
+        if confz_source.file is not None and isinstance(confz_source.file, bytes):
+            cls._populate_config_from_bytes(
+                config=config, data=confz_source.file, confz_source=confz_source
+            )
             return
         try:
             file_path = cls._get_filename(confz_source)
