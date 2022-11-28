@@ -118,8 +118,8 @@ class FileLoader(Loader):
                 "configuration is passed as byte-string"
             )
         byte_stream = io.BytesIO(data)
-        utf_reader = codecs.getreader(confz_source.encoding)
-        text_stream = utf_reader(byte_stream)
+        text_reader = codecs.getreader(confz_source.encoding)
+        text_stream = text_reader(byte_stream)
         file_content = cls._parse_stream(text_stream, confz_source.format)
         cls.update_dict_recursively(config, file_content)
 
