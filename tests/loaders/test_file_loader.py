@@ -162,6 +162,19 @@ def test_from_env(monkeypatch):
     assert config.attr2 == "2"
 
 
+def test_from_env_using_str_path(monkeypatch):
+    env_var = "MY_CONFIG_FILE"
+
+    # works if set
+    monkeypatch.setenv(env_var, "config.json")
+    assert_folder_str: str = str(ASSET_FOLDER)
+    config = OuterConfig(
+        config_sources=ConfZFileSource(file_from_env=env_var, folder=assert_folder_str)
+    )
+    assert config.inner.attr1 == "1 🎉"
+    assert config.attr2 == "2"
+
+
 def test_from_cl_arg_idx(monkeypatch):
     argv_backup = sys.argv.copy()
     cl_arg_idx = len(argv_backup)

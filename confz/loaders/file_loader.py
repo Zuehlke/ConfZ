@@ -1,4 +1,3 @@
-import codecs
 import io
 import json
 import os
@@ -57,7 +56,7 @@ class FileLoader(Loader):
             raise ConfZFileException("No file source set.")
 
         if confz_source.folder is not None:
-            file_path = confz_source.folder / file_path
+            file_path = Path(confz_source.folder) / file_path
 
         return file_path
 
@@ -88,7 +87,7 @@ class FileLoader(Loader):
     @classmethod
     def _parse_stream(
         cls,
-        stream: Union[TextIO, codecs.StreamReader],
+        stream: Union[TextIO],
         file_format: FileFormat,
     ) -> dict:
         if file_format == FileFormat.YAML:
@@ -118,8 +117,7 @@ class FileLoader(Loader):
                 "configuration is passed as byte-string"
             )
         byte_stream = io.BytesIO(data)
-        text_reader = codecs.getreader(confz_source.encoding)
-        text_stream = text_reader(byte_stream)
+        text_stream = io.TextIOWrapper(byte_stream, encoding=confz_source.encoding)
         file_content = cls._parse_stream(text_stream, confz_source.format)
         cls.update_dict_recursively(config, file_content)
 

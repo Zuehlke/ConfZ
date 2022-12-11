@@ -130,6 +130,17 @@ def test_dotenv_loading(monkeypatch):
     assert config.inner.attr_override == "2002"
 
 
+def test_dotenv_loading_from_bytes(monkeypatch):
+    monkeypatch.setenv("INNER.ATTR1_NAME", "21")
+    monkeypatch.setenv("ATTR2", "1")
+    with (ASSET_FOLDER / "config.env").open("rb") as config_file:
+        data = config_file.read()
+    config = OuterConfig(config_sources=ConfZEnvSource(allow_all=True, file=data))
+    assert config.attr2 == 1
+    assert config.inner.attr1_name == 21
+    assert config.inner.attr_override == "2002"
+
+
 def test_separator(monkeypatch):
     monkeypatch.setenv("INNER__ATTR1_NAME", "21")
     monkeypatch.setenv("INNER__ATTR-OVERRIDE", "2002")

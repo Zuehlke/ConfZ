@@ -35,7 +35,7 @@ class ConfZFileSource(ConfZSource):
     be a specific position (integer, e.g. `1`) or after a specific option (string,
     e.g. `\\-\\-config-file`). In the latter case, the file name must follow after
     whitespace, an equal sign between argument and value is not supported right now."""
-    folder: Optional[Path] = None
+    folder: Union[PathLike, str, None] = None
     """The file specified above can optionally be relative to this folder."""
     format: Optional[FileFormat] = None
     """The format of the config file. If not specified, it will be inferred from the
@@ -73,7 +73,7 @@ class ConfZEnvSource(ConfZSource):
     remap: Optional[Dict[str, str]] = None
     """Certain environment variables can be mapped to config arguments with a different
     name."""
-    file: Optional[Path] = None
+    file: Union[Path, str, bytes, None] = None
     """Built in .env file loading with lower than environment precedence. Uses UTF-8
     for decoding."""
     nested_separator: str = "."

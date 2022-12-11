@@ -74,7 +74,7 @@ We can load this file as follows:
 
 >>> from pathlib import Path
 >>> from confz import ConfZFileSource
->>> APIConfig(config_sources=ConfZFileSource(file=Path("/path/to/config.yaml")))
+>>> APIConfig(config_sources=ConfZFileSource(file="/path/to/config.yaml"))
 APIConfig(
     host=AnyUrl('http://my-host.com', scheme='http', host='my-host.com', tld='com', host_type='domain'),
     port=1234,
@@ -100,7 +100,7 @@ source as a class variable `CONFIG_SOURCES`:
 ...     port: int
 ...     db: DBConfig
 ...
-...     CONFIG_SOURCES = ConfZFileSource(file=Path('/path/to/config.yaml'))
+...     CONFIG_SOURCES = ConfZFileSource(file="/path/to/config.yaml")
 
 From now on, your config values are accessible from anywhere within your code by just importing ``APIConfig`` and
 instantiating it:
