@@ -49,7 +49,7 @@ class APIConfig(ConfZ):
     port: int
     db: DBConfig
 
-    CONFIG_SOURCES = ConfZFileSource(file=Path('/path/to/config.yml'))
+    CONFIG_SOURCES = ConfZFileSource(file='/path/to/config.yml')
 ```
 
 Thanks to [pydantic](https://pydantic-docs.helpmanual.io/), you can use a wide variety of
@@ -93,7 +93,7 @@ from confz import ConfZ, ConfZFileSource
 class MyConfig(ConfZ):
     ...
     CONFIG_SOURCES = ConfZFileSource(
-        folder=Path('/path/to/config/folder'),
+        folder='/path/to/config/folder',
         file_from_env='ENVIRONMENT'
     )
 ```
@@ -110,7 +110,7 @@ from confz import ConfZ, ConfZEnvSource, ConfZCLArgSource
 class MyConfig(ConfZ):
     ...
     CONFIG_SOURCES = [
-        ConfZEnvSource(allow_all=True, file=Path(".env.local")),
+        ConfZEnvSource(allow_all=True, file=".env.local"),
         ConfZCLArgSource(prefix='conf_')
     ]
 ```
@@ -134,7 +134,7 @@ class MyConfig(ConfZ):
     number: int
     text: str
 
-config1 = MyConfig(config_sources=ConfZFileSource(file=Path('/path/to/config.yml')))
+config1 = MyConfig(config_sources=ConfZFileSource(file='/path/to/config.yml'))
 config2 = MyConfig(config_sources=ConfZEnvSource(prefix='CONF_', allow=['text']), number=1)
 config3 = MyConfig(number=1, text='hello world')
 ```
@@ -157,7 +157,7 @@ from confz import ConfZ, ConfZFileSource, ConfZDataSource
 
 class MyConfig(ConfZ):
     number: int
-    CONFIG_SOURCES = ConfZFileSource(file=Path('/path/to/config.yml'))
+    CONFIG_SOURCES = ConfZFileSource(file="/path/to/config.yml")
 
 print(MyConfig().number)                            # will print the value from the config-file
 

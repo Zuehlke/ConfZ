@@ -11,7 +11,7 @@ In some scenarios, you might want to change your config values, for example with
 
 >>> class MyConfig(ConfZ):
 ...     number: int
-...     CONFIG_SOURCES = ConfZFileSource(file=Path("/path/to/config.yml"))
+...     CONFIG_SOURCES = ConfZFileSource(file="/path/to/config.yml")
 
 >>> print(MyConfig().number)
 1

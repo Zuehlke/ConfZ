@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from os import PathLike
 from pathlib import Path
 from typing import Optional, Union, List, Dict, Any
 
@@ -24,8 +25,9 @@ class FileFormat(Enum):
 class ConfZFileSource(ConfZSource):
     """Source config for files."""
 
-    file: Optional[Path] = None
-    """Specify a config file directly by a path."""
+    file: Union[PathLike, str, bytes, None] = None
+    """Specify a config file directly by a path or by providing its content as
+    bytes-string."""
     file_from_env: Optional[str] = None
     """Alternatively, use this environment variable to get the file."""
     file_from_cl: Optional[Union[int, str]] = None
@@ -33,7 +35,7 @@ class ConfZFileSource(ConfZSource):
     be a specific position (integer, e.g. `1`) or after a specific option (string,
     e.g. `\\-\\-config-file`). In the latter case, the file name must follow after
     whitespace, an equal sign between argument and value is not supported right now."""
-    folder: Optional[Path] = None
+    folder: Union[PathLike, str, None] = None
     """The file specified above can optionally be relative to this folder."""
     format: Optional[FileFormat] = None
     """The format of the config file. If not specified, it will be inferred from the
@@ -71,7 +73,7 @@ class ConfZEnvSource(ConfZSource):
     remap: Optional[Dict[str, str]] = None
     """Certain environment variables can be mapped to config arguments with a different
     name."""
-    file: Optional[Path] = None
+    file: Union[Path, str, bytes, None] = None
     """Built in .env file loading with lower than environment precedence. Uses UTF-8
     for decoding."""
     nested_separator: str = "."
