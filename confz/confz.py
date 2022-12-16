@@ -30,7 +30,7 @@ class ConfZMetaclass(type(BaseModel)):  # type: ignore
     """ConfZ Meta Class, inheriting from the pydantic `BaseModel` MetaClass."""
 
     # pylint: disable=no-self-argument,no-member
-    def __call__(cls, config_sources: ConfZSources = None, **kwargs):
+    def __call__(cls, config_sources: Optional[ConfZSources] = None, **kwargs):
         """Called every time an instance of any ConfZ object is created. Injects the
         config value population and singleton mechanism."""
         if config_sources is not None:
