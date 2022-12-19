@@ -130,6 +130,17 @@ def test_dotenv_loading(monkeypatch):
     assert config.inner.attr_override == "2002"
 
 
+def test_dotenv_loading_missing_file(monkeypatch):
+    monkeypatch.setenv("INNER.ATTR1_NAME", "21")
+    monkeypatch.setenv("ATTR2", "1")
+    config = OuterConfig(
+        config_sources=ConfZEnvSource(allow_all=True, file=ASSET_FOLDER / "idontexist")
+    )
+    assert config.attr2 == 1
+    assert config.inner.attr1_name == 21
+    assert config.inner.attr_override is None
+
+
 def test_dotenv_loading_from_bytes(monkeypatch):
     monkeypatch.setenv("INNER.ATTR1_NAME", "21")
     monkeypatch.setenv("ATTR2", "1")

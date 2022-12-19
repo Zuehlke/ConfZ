@@ -1,6 +1,5 @@
 import io
 import os
-from pathlib import Path
 from typing import Dict, Optional, Any
 
 from dotenv import dotenv_values
@@ -52,11 +51,11 @@ class EnvLoader(Loader):
         origin_env_vars: Dict[str, Any] = dict(os.environ)
         if confz_source.file is not None:
             if not isinstance(confz_source.file, bytes):
-                stream = Path(confz_source.file).open("r", encoding="utf-8")
+                origin_env_vars = {**dotenv_values(confz_source.file), **origin_env_vars}
             else:
                 byte_stream = io.BytesIO(confz_source.file)
                 stream = io.TextIOWrapper(byte_stream, encoding="utf-8")
-            origin_env_vars = {**dotenv_values(None, stream), **origin_env_vars}
+                origin_env_vars = {**dotenv_values(None, stream), **origin_env_vars}
 
         env_vars = {}
         for env_var in origin_env_vars:
