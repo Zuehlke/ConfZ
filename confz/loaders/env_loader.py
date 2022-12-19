@@ -51,7 +51,10 @@ class EnvLoader(Loader):
         origin_env_vars: Dict[str, Any] = dict(os.environ)
         if confz_source.file is not None:
             if not isinstance(confz_source.file, bytes):
-                origin_env_vars = {**dotenv_values(confz_source.file), **origin_env_vars}
+                origin_env_vars = {
+                    **dotenv_values(confz_source.file),
+                    **origin_env_vars
+                }
             else:
                 byte_stream = io.BytesIO(confz_source.file)
                 stream = io.TextIOWrapper(byte_stream, encoding="utf-8")
