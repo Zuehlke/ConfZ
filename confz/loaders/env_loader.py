@@ -53,7 +53,7 @@ class EnvLoader(Loader):
             if not isinstance(confz_source.file, bytes):
                 origin_env_vars = {
                     **dotenv_values(confz_source.file),
-                    **origin_env_vars
+                    **origin_env_vars,
                 }
             else:
                 byte_stream = io.BytesIO(confz_source.file)
