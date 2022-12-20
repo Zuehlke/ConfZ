@@ -1,9 +1,10 @@
+from contextlib import contextmanager
 import io
 import json
 import os
 import sys
 from pathlib import Path
-from typing import Optional, TextIO, Union
+from typing import Iterator, Optional, TextIO, Union
 
 import toml
 import yaml
@@ -99,13 +100,16 @@ class FileLoader(Loader):
         return file_content
 
     @classmethod
-    def _create_stream(cls, file_path: Path, file_encoding: str) -> TextIO:
+    @contextmanager
+    def _create_stream(cls, file_path: Path, file_encoding: str) -> Iterator[TextIO]:
         try:
-            return file_path.open(encoding=file_encoding)
+            stream = file_path.open(encoding=file_encoding)
         except OSError as e:
             raise ConfZFileException(
                 f"Could not open config file '{file_path}'."
             ) from e
+        with stream:
+            yield stream
 
     @classmethod
     def _populate_config_from_bytes(
@@ -136,8 +140,8 @@ class FileLoader(Loader):
             raise e
         file_format = cls._get_format(file_path, confz_source.format)
         try:
-            file_stream = cls._create_stream(file_path, confz_source.encoding)
-            file_content = cls._parse_stream(file_stream, file_format)
+            with cls._create_stream(file_path, confz_source.encoding) as file_stream:
+                file_content = cls._parse_stream(file_stream, file_format)
         except ConfZFileException as e:
             if confz_source.optional:
                 return
