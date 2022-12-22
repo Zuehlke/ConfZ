@@ -36,7 +36,7 @@ in this folder. The built package is hosted on [PyPI](https://pypi.org/project/c
 [Pytest](https://pytest.org) is used for testing the code, just run
 
 ```
-pytest
+pytest -W error
 ```
 
 in this folder. We strive for a coverage of 100%. To check this, run the following:
