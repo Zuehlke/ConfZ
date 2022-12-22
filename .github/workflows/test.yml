@@ -13,4 +13,4 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: run pytest
         run: |
-          pytest
+          pytest -W error
