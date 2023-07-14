@@ -1,15 +1,15 @@
 import pytest
 from pydantic import ValidationError
 
-from confz import ConfZ, ConfZDataSource
-from confz.exceptions import ConfZException
+from confz import BaseConfig, DataSource
+from confz.exceptions import ConfigException
 
 
-class InnerConfig(ConfZ):
+class InnerConfig(BaseConfig):
     attr1: int
 
 
-class OuterConfig(ConfZ):
+class OuterConfig(BaseConfig):
     attr2: int
     inner: InnerConfig
 
@@ -17,17 +17,13 @@ class OuterConfig(ConfZ):
 class ParentConfig1(OuterConfig):
     attr3: int
 
-    CONFIG_SOURCES = ConfZDataSource(
-        data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3}
-    )
+    CONFIG_SOURCES = DataSource(data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3})
 
 
 class ParentConfig2(OuterConfig):
     attr4: int
 
-    CONFIG_SOURCES = ConfZDataSource(
-        data={"inner": {"attr1": 1}, "attr2": 2, "attr4": 4}
-    )
+    CONFIG_SOURCES = DataSource(data={"inner": {"attr1": 1}, "attr2": 2, "attr4": 4})
 
 
 class ParentConfig3(OuterConfig):
@@ -56,7 +52,7 @@ def test_class_var():
     assert config1.attr2 == 2
 
     # kwargs do not work
-    with pytest.raises(ConfZException):
+    with pytest.raises(ConfigException):
         ParentConfig1(attr3=3)
 
     # singleton
@@ -70,21 +66,17 @@ def test_class_var():
 def test_init_arg():
     # assert that uses sources
     config = OuterConfig(
-        config_sources=ConfZDataSource(data={"inner": {"attr1": 1}, "attr2": 20})
+        config_sources=DataSource(data={"inner": {"attr1": 1}, "attr2": 20})
     )
     assert config.attr2 == 20
 
     # no singleton
     assert ParentConfig1() is ParentConfig1()
     config1 = ParentConfig1(
-        config_sources=ConfZDataSource(
-            data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3}
-        )
+        config_sources=DataSource(data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3})
     )
     config2 = ParentConfig1(
-        config_sources=ConfZDataSource(
-            data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3}
-        )
+        config_sources=DataSource(data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3})
     )
     assert config1 == config2
     assert config1 is not config2
@@ -92,10 +84,10 @@ def test_init_arg():
     # uses kwargs
     with pytest.raises(ValidationError):
         ParentConfig3(
-            config_sources=ConfZDataSource(data={"inner": {"attr1": 1}, "attr2": 2})
+            config_sources=DataSource(data={"inner": {"attr1": 1}, "attr2": 2})
         )
     config = ParentConfig3(
         attr5=5,
-        config_sources=ConfZDataSource(data={"inner": {"attr1": 1}, "attr2": 2}),
+        config_sources=DataSource(data={"inner": {"attr1": 1}, "attr2": 2}),
     )
     assert config.attr5 == 5

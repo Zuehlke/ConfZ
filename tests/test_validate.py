@@ -1,39 +1,39 @@
 import pytest
 from pydantic import ValidationError
 
-from confz import ConfZ, ConfZDataSource, validate_all_configs, depends_on
+from confz import BaseConfig, DataSource, validate_all_configs, depends_on
 
 
 def test_validate():
     # works with new configs
-    class NewInner(ConfZ):
+    class NewInner(BaseConfig):
         attr1: int
 
-    class NewOuter(ConfZ):
+    class NewOuter(BaseConfig):
         inner: NewInner
         attr2: int
 
-        CONFIG_SOURCES = ConfZDataSource(data={"inner": {"attr1": 1}, "attr2": 2})
+        CONFIG_SOURCES = DataSource(data={"inner": {"attr1": 1}, "attr2": 2})
 
     validate_all_configs()
 
     # detects missing data
-    class NewOuter2(ConfZ):
+    class NewOuter2(BaseConfig):
         inner: NewInner
         attr2: int
 
-        CONFIG_SOURCES = ConfZDataSource(data={"attr2": 2})
+        CONFIG_SOURCES = DataSource(data={"attr2": 2})
 
     with pytest.raises(ValidationError):
         validate_all_configs()
 
     # adjust config sources so successive test don't fail because of NewOuter2
-    NewOuter2.CONFIG_SOURCES = ConfZDataSource(data={"inner": {"attr1": 1}, "attr2": 2})
+    NewOuter2.CONFIG_SOURCES = DataSource(data={"inner": {"attr1": 1}, "attr2": 2})
 
 
 @pytest.mark.asyncio
 async def test_listeners():
-    class EmptyConfig(ConfZ):
+    class EmptyConfig(BaseConfig):
         CONFIG_SOURCES = []
 
     called_sync = False

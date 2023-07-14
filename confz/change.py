@@ -12,17 +12,17 @@ from typing import (
     TYPE_CHECKING,
 )
 
-from .confz_source import ConfZSources
+from .config_source import ConfigSources
 
 if TYPE_CHECKING:
-    from .confz import ConfZ
+    from .base_config import BaseConfig
 
 
 class SourceChangeManager(AbstractContextManager):
     """Config sources change context manager, allows to change config sources within a
     controlled context and resets everything afterwards."""
 
-    def __init__(self, config_class: Type["ConfZ"], config_sources: ConfZSources):
+    def __init__(self, config_class: Type["BaseConfig"], config_sources: ConfigSources):
         self._config_class = config_class
         self._config_sources = config_sources
         self._backup_instance = None
@@ -56,7 +56,7 @@ T = TypeVar("T")
 class Listener(Generic[T]):
     """Listener of config, will add singleton mechanism, aware of config changes."""
 
-    def __init__(self, fn: Callable[[], T], config_classes: List[Type["ConfZ"]]):
+    def __init__(self, fn: Callable[[], T], config_classes: List[Type["BaseConfig"]]):
         if len(inspect.getfullargspec(fn).args) != 0:
             raise ValueError("Callable should not take any arguments")
 

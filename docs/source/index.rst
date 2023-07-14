@@ -39,6 +39,7 @@ Contents
    :maxdepth: 2
 
    usage/usage
+   migration_guide
    reference/reference
 
 

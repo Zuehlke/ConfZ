@@ -1,18 +1,18 @@
 import pytest
 
-from confz import ConfZ, ConfZDataSource, depends_on
+from confz import BaseConfig, DataSource, depends_on
 
 
-class Config1(ConfZ):
+class Config1(BaseConfig):
     attr: int
 
-    CONFIG_SOURCES = ConfZDataSource(data={"attr": 1})
+    CONFIG_SOURCES = DataSource(data={"attr": 1})
 
 
-class Config2(ConfZ):
+class Config2(BaseConfig):
     attr: int
 
-    CONFIG_SOURCES = ConfZDataSource(data={"attr": 2})
+    CONFIG_SOURCES = DataSource(data={"attr": 2})
 
 
 def test_change_sources():
@@ -22,7 +22,7 @@ def test_change_sources():
     assert config_before is Config1()
 
     # can change source and singleton
-    new_source = ConfZDataSource(data={"attr": 10})
+    new_source = DataSource(data={"attr": 10})
     with Config1.change_config_sources(new_source):
         assert Config1().attr == 10
         assert Config1() is Config1()
@@ -61,8 +61,8 @@ def test_depends_configs():
     assert my_fn2() is config_before2
 
     # can change source and singleton
-    new_source1 = ConfZDataSource(data={"attr": 10})
-    new_source2 = ConfZDataSource(data={"attr": 20})
+    new_source1 = DataSource(data={"attr": 10})
+    new_source2 = DataSource(data={"attr": 20})
 
     with Config2.change_config_sources(new_source2):
         # unrelated functions not changed

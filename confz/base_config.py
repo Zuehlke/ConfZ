@@ -6,33 +6,32 @@ from typing import ClassVar, List, Optional, Any
 from pydantic import BaseModel
 
 from .change import SourceChangeManager
-from .confz_source import ConfZSources
-from .exceptions import ConfZException
+from .config_source import ConfigSources
+from .exceptions import ConfigException
 from .loaders import get_loader
 
 
-def _load_config(config_kwargs: dict, confz_sources: ConfZSources) -> dict:
+def _load_config(config_kwargs: dict, config_sources: ConfigSources) -> dict:
     config = config_kwargs.copy()
-    if isinstance(confz_sources, list):
-        for confz_source in confz_sources:
-            loader = get_loader(type(confz_source))
-            loader.populate_config(config, confz_source)
+    if isinstance(config_sources, list):
+        for config_source in config_sources:
+            loader = get_loader(type(config_source))
+            loader.populate_config(config, config_source)
     else:
-        loader = get_loader(type(confz_sources))
-        loader.populate_config(config, confz_sources)
+        loader = get_loader(type(config_sources))
+        loader.populate_config(config, config_sources)
     return config
 
 
 # Metaclass of pydantic.BaseModel is not in __all__, so use type(BaseModel).
-# ConfZ will be only class with this meta class.
-# Both of these things confuse mypy and pylint, so had to disable multiple times.
-class ConfZMetaclass(type(BaseModel)):  # type: ignore
-    """ConfZ Meta Class, inheriting from the pydantic `BaseModel` MetaClass."""
+# This confuses mypy and pylint, so had to disable multiple times.
+class BaseConfigMetaclass(type(BaseModel)):  # type: ignore
+    """BaseConfig Meta Class, inheriting from the pydantic `BaseModel` MetaClass."""
 
     # pylint: disable=no-self-argument,no-member
-    def __call__(cls, config_sources: Optional[ConfZSources] = None, **kwargs):
-        """Called every time an instance of any ConfZ object is created. Injects the
-        config value population and singleton mechanism."""
+    def __call__(cls, config_sources: Optional[ConfigSources] = None, **kwargs):
+        """Called every time an instance of any BaseConfig object is created. Injects
+        the config value population and singleton mechanism."""
         if config_sources is not None:
             config = _load_config(kwargs, config_sources)
             return super().__call__(**config)
@@ -41,7 +40,7 @@ class ConfZMetaclass(type(BaseModel)):  # type: ignore
             # pylint: disable=access-member-before-definition
             # pylint: disable=attribute-defined-outside-init
             if len(kwargs) > 0:
-                raise ConfZException(
+                raise ConfigException(
                     'Singleton mechanism enabled ("CONFIG_SOURCES" is defined), so '
                     "keyword arguments are not supported"
                 )
@@ -53,8 +52,8 @@ class ConfZMetaclass(type(BaseModel)):  # type: ignore
         return super().__call__(**kwargs)
 
 
-class ConfZ(BaseModel, metaclass=ConfZMetaclass, frozen=True):
-    """Base class, parent of every config class. Internally wraps :class:`BaseModel`of
+class BaseConfig(BaseModel, metaclass=BaseConfigMetaclass, frozen=True):
+    """Base class, parent of every config class. Internally wraps :class:`BaseModel` of
     pydantic and behaves transparent except for two cases:
 
     - If the constructor gets `config_sources` as kwarg, these sources are used as
@@ -65,7 +64,7 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass, frozen=True):
     In the latter case, a singleton mechanism is activated, returning the same config
     class instance every time the constructor is called."""
 
-    CONFIG_SOURCES: ClassVar[Optional[ConfZSources]] = None  #: Sources to use as input.
+    CONFIG_SOURCES: ClassVar[Optional[ConfigSources]] = None  #: Sources to use.
 
     # type is ClassVar[Optional["ConfZ"]] (pydantic throws error with forward ref)
     confz_instance: ClassVar[Optional[Any]] = None  #: *for internal use only*
@@ -75,7 +74,7 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass, frozen=True):
 
     @classmethod
     def change_config_sources(
-        cls, config_sources: ConfZSources
+        cls, config_sources: ConfigSources
     ) -> AbstractContextManager:
         """Change the `CONFIG_SOURCES` class variable within a controlled context.
         Within this context, the sources will be different and the singleton reset.

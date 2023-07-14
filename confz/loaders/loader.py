@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
 
-from confz.exceptions import ConfZUpdateException
+from confz.exceptions import UpdateException
 
 
 class Loader(ABC):
@@ -14,12 +14,12 @@ class Loader(ABC):
 
         :param original_dict: The original dictionary to update in-place.
         :param update_dict: The new data.
-        :raises ConfZUpdateException: If dict keys contradict each other.
+        :raises UpdateException: If dict keys contradict each other.
         """
         for key, value in update_dict.items():
             if isinstance(value, dict) and key in original_dict:
                 if not isinstance(original_dict[key], dict):
-                    raise ConfZUpdateException(
+                    raise UpdateException(
                         f"Config variables contradict each other: "
                         f"Key '{key}' is both a value and a nested dict."
                     )
@@ -39,7 +39,7 @@ class Loader(ABC):
                           Default value will no longer be set in a future release.
         :return: The transformed dictionary, splitting keys at the separator and
             creating a new dictionary out of it.
-        :raises ConfZUpdateException: If dict keys contradict each other.
+        :raises UpdateException: If dict keys contradict each other.
         """
         dict_out: Dict[str, Any] = {}
         for key, value in dict_in.items():
@@ -53,7 +53,7 @@ class Loader(ABC):
                         if inner_key not in dict_inner:
                             dict_inner[inner_key] = {}
                         elif not isinstance(dict_inner[inner_key], dict):
-                            raise ConfZUpdateException(
+                            raise UpdateException(
                                 f"Config variables contradict each other: Key "
                                 f"'{inner_key}' is both a value and a nested dict."
                             )
@@ -65,9 +65,9 @@ class Loader(ABC):
 
     @classmethod
     @abstractmethod
-    def populate_config(cls, config: dict, confz_source):
+    def populate_config(cls, config: dict, config_source):
         """Populate the config-dict with new config arguments based on the source.
 
         :param config: Config dictionary, gets extended with new arguments
-        :param confz_source: Source configuration.
+        :param config_source: Source configuration.
         """

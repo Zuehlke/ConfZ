@@ -1,4 +1,4 @@
-from .confz import ConfZ
+from .base_config import BaseConfig
 
 
 def _get_sub_classes(cls):
@@ -18,12 +18,12 @@ def validate_all_configs(include_listeners: bool = False):
 
     :param include_listeners: Whether all listeners (marked with
         :func:`~confz.depends_on`) should be included.
-    :raises ConfZException: If any config could not be loaded.
+    :raises ConfigException: If any config could not be loaded.
     """
     config_classes = []
     sync_listeners = []
     async_listeners = []
-    for config_class in _get_sub_classes(ConfZ):
+    for config_class in _get_sub_classes(BaseConfig):
         if config_class.CONFIG_SOURCES is not None:
             config_classes.append(config_class)
             if include_listeners and config_class.listeners is not None:
