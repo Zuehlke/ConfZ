@@ -92,11 +92,13 @@ class FileLoader(Loader):
         file_format: FileFormat,
     ) -> dict:
         if file_format == FileFormat.YAML:
-            file_content = yaml.safe_load(stream)
+            file_content = yaml.load(stream, Loader=yaml.BaseLoader)
         elif file_format == FileFormat.JSON:
             file_content = json.load(stream)
         elif file_format == FileFormat.TOML:
             file_content = toml.load(stream)
+        else:
+            raise ConfZFileException(f"Unknown file format {file_format}.")
         return file_content
 
     @classmethod
