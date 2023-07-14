@@ -71,6 +71,6 @@ autodoc_default_options = {"members": None, "show-inheritance": None}
 
 autodoc_member_order = "bysource"
 
-autodoc_type_aliases = {"ConfZSources": "confz.confz_source.ConfZSources"}
+autodoc_type_aliases = {"ConfigSources": "confz.config_source.ConfigSources"}
 
 intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}

@@ -28,9 +28,9 @@ class CustomSource2(ConfigSource):
 
 class CustomLoader(Loader):
     @classmethod
-    def populate_config(cls, config: dict, confz_source: CustomSource):
+    def populate_config(cls, config: dict, config_source: CustomSource):
         assert config == {"kwarg_2": 2}
-        assert confz_source.custom_attr == 1
+        assert config_source.custom_attr == 1
         config["attr2"] = 2
         config["inner"] = {"attr1": 1}
 
