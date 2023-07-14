@@ -22,10 +22,10 @@ config::
 
     class CustomLoader(Loader):
         @classmethod
-        def populate_config(cls, config: dict, confz_source: CustomSource):
+        def populate_config(cls, config: dict, config_source: CustomSource):
             config_update = {
-                confz_source.platform: sys.platform,
-                confz_source.version: f"{sys.version_info[0]}.{sys.version_info[1]}"
+                config_source.platform: sys.platform,
+                config_source.version: f"{sys.version_info[0]}.{sys.version_info[1]}"
             }
             cls.update_dict_recursively(config, config_update)
 

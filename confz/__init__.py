@@ -1,6 +1,6 @@
 from .change import depends_on
-from .confz import BaseConfig
-from .confz_source import (
+from .base_config import BaseConfig
+from .config_source import (
     ConfigSources,
     ConfigSource,
     FileSource,

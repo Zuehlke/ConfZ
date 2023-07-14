@@ -1,4 +1,4 @@
-from .confz import BaseConfig
+from .base_config import BaseConfig
 
 
 def _get_sub_classes(cls):

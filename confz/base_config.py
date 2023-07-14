@@ -6,20 +6,20 @@ from typing import ClassVar, List, Optional, Any
 from pydantic import BaseModel
 
 from .change import SourceChangeManager
-from .confz_source import ConfigSources
+from .config_source import ConfigSources
 from .exceptions import ConfigException
 from .loaders import get_loader
 
 
-def _load_config(config_kwargs: dict, confz_sources: ConfigSources) -> dict:
+def _load_config(config_kwargs: dict, config_sources: ConfigSources) -> dict:
     config = config_kwargs.copy()
-    if isinstance(confz_sources, list):
-        for confz_source in confz_sources:
-            loader = get_loader(type(confz_source))
-            loader.populate_config(config, confz_source)
+    if isinstance(config_sources, list):
+        for config_source in config_sources:
+            loader = get_loader(type(config_source))
+            loader.populate_config(config, config_source)
     else:
-        loader = get_loader(type(confz_sources))
-        loader.populate_config(config, confz_sources)
+        loader = get_loader(type(config_sources))
+        loader.populate_config(config, config_sources)
     return config
 
 

@@ -65,9 +65,9 @@ class Loader(ABC):
 
     @classmethod
     @abstractmethod
-    def populate_config(cls, config: dict, confz_source):
+    def populate_config(cls, config: dict, config_source):
         """Populate the config-dict with new config arguments based on the source.
 
         :param config: Config dictionary, gets extended with new arguments
-        :param confz_source: Source configuration.
+        :param config_source: Source configuration.
         """

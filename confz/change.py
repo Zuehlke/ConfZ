@@ -12,10 +12,10 @@ from typing import (
     TYPE_CHECKING,
 )
 
-from .confz_source import ConfigSources
+from .config_source import ConfigSources
 
 if TYPE_CHECKING:
-    from .confz import BaseConfig
+    from .base_config import BaseConfig
 
 
 class SourceChangeManager(AbstractContextManager):

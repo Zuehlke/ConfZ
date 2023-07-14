@@ -1,6 +1,6 @@
 from typing import Type, Dict
 
-from confz.confz_source import (
+from confz.config_source import (
     ConfigSource,
     FileSource,
     EnvSource,
@@ -17,20 +17,20 @@ from .loader import Loader
 _loaders: Dict[Type[ConfigSource], Type[Loader]] = {}
 
 
-def get_loader(confz_source: Type[ConfigSource]):
-    if confz_source in _loaders:
-        return _loaders[confz_source]
-    raise ConfigException(f"Unknown config source type '{confz_source}'")
+def get_loader(config_source: Type[ConfigSource]):
+    if config_source in _loaders:
+        return _loaders[config_source]
+    raise ConfigException(f"Unknown config source type '{config_source}'")
 
 
-def register_loader(confz_source: Type[ConfigSource], loader: Type[Loader]):
+def register_loader(config_source: Type[ConfigSource], loader: Type[Loader]):
     """Register a :class:`~confz.ConfigSource` with a specific loader. Can be used to
     extend `ConfZ` with own loaders.
 
-    :param confz_source: The :class:`~confz.ConfigSource` sub-type.
+    :param config_source: The :class:`~confz.ConfigSource` sub-type.
     :param loader: The :class:`~confz.loaders.Loader` sub-type.
     """
-    _loaders[confz_source] = loader
+    _loaders[config_source] = loader
 
 
 register_loader(FileSource, FileLoader)
