@@ -35,8 +35,6 @@ pip install confz
 The first step of using `ConfZ` is to declare your config classes and sources, for example in `config.py`:
 
 ```python
-from pathlib import Path
-
 from confz import ConfZ, ConfZFileSource
 from pydantic import SecretStr, AnyUrl
 
@@ -73,7 +71,7 @@ _pydantic_ instance.
 ```python
 assert APIConfig() is APIConfig()   # true because of singleton mechanism
 APIConfig().port = 1234             # raises an error because of immutability
-APIConfig().json()                  # call pydantic's method to get a json representation
+APIConfig().model_dump()            # call pydantic's method to get a dict representation
 ```
 
 **Note:** While the implicit and hidden loading of your config might be surprising and feel a bit like Python magic at
@@ -86,8 +84,6 @@ and accessing for example `APIConfig().db.user` directly.
 `ConfZ` is highly flexible in defining the source of your config. Do you have multiple environments? No Problem:
 
 ```python
-from pathlib import Path
-
 from confz import ConfZ, ConfZFileSource
 
 class MyConfig(ConfZ):
@@ -104,7 +100,6 @@ You can also provide a list as config source and read for example from environme
 from command line arguments:
 
 ```python
-from pathlib import Path
 from confz import ConfZ, ConfZEnvSource, ConfZCLArgSource
 
 class MyConfig(ConfZ):
@@ -126,8 +121,6 @@ In some scenarios, the config should not be a global singleton, but loaded expli
 Instead of defining `CONFIG_SOURCES` as class variable, the sources can also be defined in the constructor directly:
 
 ```python
-from pathlib import Path
-
 from confz import ConfZ, ConfZFileSource, ConfZEnvSource
 
 class MyConfig(ConfZ):
@@ -151,8 +144,6 @@ In some scenarios, you might want to change your config values, for example with
 manager to temporarily change your config:
 
 ```python
-from pathlib import Path
-
 from confz import ConfZ, ConfZFileSource, ConfZDataSource
 
 class MyConfig(ConfZ):
