@@ -127,7 +127,7 @@ def test_wrong_format():
     with pytest.raises(ConfZFileException):
         OuterConfig(
             config_sources=ConfZFileSource(
-                file=str(ASSET_FOLDER) + "/config.txt", format='wrong value'
+                file=str(ASSET_FOLDER) + "/config.txt", format="wrong value"
             )
         )
 
