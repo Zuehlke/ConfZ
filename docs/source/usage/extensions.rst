@@ -10,12 +10,12 @@ config::
     import sys
     from dataclasses import dataclass
 
-    from confz import ConfZSource
+    from confz import ConfigSource
     from confz.loaders import Loader, register_loader
 
 
     @dataclass
-    class CustomSource(ConfZSource):
+    class CustomSource(ConfigSource):
         platform: str = None    # Write the current platform into a config variable with this name
         version: str = None     # Write the current python version into a config variable with this name
 
@@ -34,8 +34,8 @@ config::
 
 Now, any config class can use this new source:
 
->>> from confz import ConfZ
->>> class MyConfig(ConfZ):
+>>> from confz import BaseConfig
+>>> class MyConfig(BaseConfig):
 ...     attr1: str
 ...     attr2: str
 

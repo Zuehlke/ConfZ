@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "ConfZ"
-copyright = f"2021, Zühlke"
+copyright = f"2023, Zühlke"
 author = "Zühlke"
 
 

@@ -1,8 +1,8 @@
 Exceptions
 ==========
 
-.. autoexception:: confz.exceptions.ConfZException
+.. autoexception:: confz.exceptions.ConfigException
 
-.. autoexception:: confz.exceptions.ConfZUpdateException
+.. autoexception:: confz.exceptions.UpdateException
 
-.. autoexception:: confz.exceptions.ConfZFileException
+.. autoexception:: confz.exceptions.FileException

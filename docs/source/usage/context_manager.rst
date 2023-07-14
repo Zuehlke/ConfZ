@@ -7,18 +7,18 @@ In some scenarios, you might want to change your config values, for example with
 `CONFIG_SOURCES` class variable, this is not directly possible:
 
 >>> from pathlib import Path
->>> from confz import ConfZ, ConfZFileSource, ConfZDataSource
+>>> from confz import BaseConfig, FileSource, DataSource
 
->>> class MyConfig(ConfZ):
+>>> class MyConfig(BaseConfig):
 ...     number: int
-...     CONFIG_SOURCES = ConfZFileSource(file="/path/to/config.yml")
+...     CONFIG_SOURCES = FileSource(file="/path/to/config.yml")
 
 >>> print(MyConfig().number)
 1
 
 To overcome this, every config class provides a context manager to temporarily change your config:
 
->>> new_source = ConfZDataSource(data={"number": 42})
+>>> new_source = DataSource(data={"number": 42})
 >>> with MyConfig.change_config_sources(new_source):
 ...     print(MyConfig().number)
 ...

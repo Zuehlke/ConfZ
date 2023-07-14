@@ -35,19 +35,19 @@ pip install confz
 The first step of using `ConfZ` is to declare your config classes and sources, for example in `config.py`:
 
 ```python
-from confz import ConfZ, ConfZFileSource
+from confz import BaseConfig, FileSource
 from pydantic import SecretStr, AnyUrl
 
-class DBConfig(ConfZ):
+class DBConfig(BaseConfig):
     user: str
     password: SecretStr
 
-class APIConfig(ConfZ):
+class APIConfig(BaseConfig):
     host: AnyUrl
     port: int
     db: DBConfig
 
-    CONFIG_SOURCES = ConfZFileSource(file='/path/to/config.yml')
+    CONFIG_SOURCES = FileSource(file='/path/to/config.yml')
 ```
 
 Thanks to [pydantic](https://pydantic-docs.helpmanual.io/), you can use a wide variety of
@@ -84,11 +84,11 @@ and accessing for example `APIConfig().db.user` directly.
 `ConfZ` is highly flexible in defining the source of your config. Do you have multiple environments? No Problem:
 
 ```python
-from confz import ConfZ, ConfZFileSource
+from confz import BaseConfig, FileSource
 
-class MyConfig(ConfZ):
+class MyConfig(BaseConfig):
     ...
-    CONFIG_SOURCES = ConfZFileSource(
+    CONFIG_SOURCES = FileSource(
         folder='/path/to/config/folder',
         file_from_env='ENVIRONMENT'
     )
@@ -100,13 +100,13 @@ You can also provide a list as config source and read for example from environme
 from command line arguments:
 
 ```python
-from confz import ConfZ, ConfZEnvSource, ConfZCLArgSource
+from confz import BaseConfig, EnvSource, CLArgSource
 
-class MyConfig(ConfZ):
+class MyConfig(BaseConfig):
     ...
     CONFIG_SOURCES = [
-        ConfZEnvSource(allow_all=True, file=".env.local"),
-        ConfZCLArgSource(prefix='conf_')
+        EnvSource(allow_all=True, file=".env.local"),
+        CLArgSource(prefix='conf_')
     ]
 ```
 
@@ -121,20 +121,20 @@ In some scenarios, the config should not be a global singleton, but loaded expli
 Instead of defining `CONFIG_SOURCES` as class variable, the sources can also be defined in the constructor directly:
 
 ```python
-from confz import ConfZ, ConfZFileSource, ConfZEnvSource
+from confz import BaseConfig, FileSource, EnvSource
 
-class MyConfig(ConfZ):
+class MyConfig(BaseConfig):
     number: int
     text: str
 
-config1 = MyConfig(config_sources=ConfZFileSource(file='/path/to/config.yml'))
-config2 = MyConfig(config_sources=ConfZEnvSource(prefix='CONF_', allow=['text']), number=1)
+config1 = MyConfig(config_sources=FileSource(file='/path/to/config.yml'))
+config2 = MyConfig(config_sources=EnvSource(prefix='CONF_', allow=['text']), number=1)
 config3 = MyConfig(number=1, text='hello world')
 ```
 
 As can be seen, additional keyword-arguments can be provided as well.
 
-**Note:** If neither class variable `CONFIG_SOURCES` nor constructor argument `config_sources` is provided, `ConfZ`
+**Note:** If neither class variable `CONFIG_SOURCES` nor constructor argument `config_sources` is provided, `BaseConfig`
 behaves like a regular _pydantic_ class.
 
 ### Change Config Values
@@ -144,15 +144,15 @@ In some scenarios, you might want to change your config values, for example with
 manager to temporarily change your config:
 
 ```python
-from confz import ConfZ, ConfZFileSource, ConfZDataSource
+from confz import BaseConfig, FileSource, DataSource
 
-class MyConfig(ConfZ):
+class MyConfig(BaseConfig):
     number: int
-    CONFIG_SOURCES = ConfZFileSource(file="/path/to/config.yml")
+    CONFIG_SOURCES = FileSource(file="/path/to/config.yml")
 
 print(MyConfig().number)                            # will print the value from the config-file
 
-new_source = ConfZDataSource(data={'number': 42})
+new_source = DataSource(data={'number': 42})
 with MyConfig.change_config_sources(new_source):
     print(MyConfig().number)                        # will print '42'
 

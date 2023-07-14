@@ -1,7 +1,7 @@
 ConfZ
 =====
 
-.. autoclass:: confz.ConfZ
+.. autoclass:: confz.BaseConfig
 
 .. autofunction:: confz.depends_on
 

@@ -1,21 +1,21 @@
 Sources
 =======
 
-.. autoclass:: confz.ConfZSource
+.. autoclass:: confz.ConfigSource
    :exclude-members: __init__
 
-.. autoclass:: confz.ConfZFileSource
+.. autoclass:: confz.FileSource
    :exclude-members: __init__
 
-.. autoclass:: confz.ConfZEnvSource
+.. autoclass:: confz.EnvSource
    :exclude-members: __init__
 
-.. autoclass:: confz.ConfZCLArgSource
+.. autoclass:: confz.CLArgSource
    :exclude-members: __init__
 
-.. autoclass:: confz.ConfZDataSource
+.. autoclass:: confz.DataSource
    :exclude-members: __init__
 
-.. autodata:: confz.ConfZSources
+.. autodata:: confz.ConfigSources
 
 .. autoclass:: confz.FileFormat

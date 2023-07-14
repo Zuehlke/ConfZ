@@ -4,18 +4,18 @@ The ConfZ Class
 Raw Class
 ---------
 
-Per default, the :class:`~confz.ConfZ` class behaves like `BaseModel` of pydantic and allows to specify your config with
+Per default, the :class:`~confz.BaseConfig` class behaves like `BaseModel` of pydantic and allows to specify your config with
 typehints, either using standard Python types or more
 `advanced ones <https://pydantic-docs.helpmanual.io/usage/types/>`_:
 
->>> from confz import ConfZ
+>>> from confz import BaseConfig
 >>> from pydantic import SecretStr, AnyUrl
 
->>> class DBConfig(ConfZ):
+>>> class DBConfig(BaseConfig):
 ...     user: str
 ...     password: SecretStr
 
->>> class APIConfig(ConfZ):
+>>> class APIConfig(BaseConfig):
 ...     host: AnyUrl
 ...     port: int
 ...     db: DBConfig
@@ -59,7 +59,7 @@ Sources as Keyword
 ------------------
 
 In most cases, we would not want to provide the config as keyword arguments. Instead, we can provide
-:class:`~confz.ConfZSources` as argument `config_sources` and :class:`~confz.ConfZ` will load them. For example,
+:class:`~confz.ConfigSources` as argument `config_sources` and :class:`~confz.BaseConfig` will load them. For example,
 if we have a config file in yaml format like this:
 
 .. code-block:: yaml
@@ -72,9 +72,8 @@ if we have a config file in yaml format like this:
 
 We can load this file as follows:
 
->>> from pathlib import Path
->>> from confz import ConfZFileSource
->>> APIConfig(config_sources=ConfZFileSource(file="/path/to/config.yaml"))
+>>> from confz import FileSource
+>>> APIConfig(config_sources=FileSource(file="/path/to/config.yaml"))
 APIConfig(
     host=AnyUrl('http://my-host.com', scheme='http', host='my-host.com', tld='com', host_type='domain'),
     port=1234,
@@ -88,19 +87,19 @@ Sources as Class Variable
 -------------------------
 
 Defining config sources as keyword argument still requires you to explicitly instantiate your config class and passing
-it to all corresponding software components. :class:`~confz.ConfZ` provides an alternative to this by defining your
+it to all corresponding software components. :class:`~confz.BaseConfig` provides an alternative to this by defining your
 source as a class variable `CONFIG_SOURCES`:
 
->>> class DBConfig(ConfZ):
+>>> class DBConfig(BaseConfig):
 ...     user: str
 ...     password: SecretStr
 
->>> class APIConfig(ConfZ):
+>>> class APIConfig(BaseConfig):
 ...     host: AnyUrl
 ...     port: int
 ...     db: DBConfig
 ...
-...     CONFIG_SOURCES = ConfZFileSource(file="/path/to/config.yaml")
+...     CONFIG_SOURCES = FileSource(file="/path/to/config.yaml")
 
 From now on, your config values are accessible from anywhere within your code by just importing ``APIConfig`` and
 instantiating it:
@@ -123,9 +122,9 @@ set.
 Early Loading
 ^^^^^^^^^^^^^
 
-:class:`~confz.ConfZ` could also load your config sources directly during class creation. However, this yields unwanted
+:class:`~confz.BaseConfig` could also load your config sources directly during class creation. However, this yields unwanted
 side effects like reading files and command line arguments during import of your config classes, which should be
-avoided. Thus, :class:`~confz.ConfZ` loads your config the first time you instantiate the class.
+avoided. Thus, :class:`~confz.BaseConfig` loads your config the first time you instantiate the class.
 
 If at this point the config class cannot populate all mandatory fields, pydantic will raise an error. To make sure
 this does not happen in an inconvenient moment, you can also manually load all configs at the beginning of your
