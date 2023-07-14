@@ -66,7 +66,7 @@ class EnvLoader(Loader):
             if config_source.prefix is not None:
                 if not var_name.startswith(config_source.prefix):
                     continue
-                var_name = var_name[len(config_source.prefix):]
+                var_name = var_name[len(config_source.prefix) :]
 
             var_name = cls._transform_name(var_name)
             if not cls._check_allowance(var_name, config_source):

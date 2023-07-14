@@ -28,17 +28,13 @@ class SecondOuterConfig(OuterConfig):
 
 
 def test_json_file():
-    config = OuterConfig(
-        config_sources=FileSource(file=ASSET_FOLDER / "config.json")
-    )
+    config = OuterConfig(config_sources=FileSource(file=ASSET_FOLDER / "config.json"))
     assert config.inner.attr1 == "1 🎉"
     assert config.attr2 == "2"
 
 
 def test_yaml_file():
-    config = OuterConfig(
-        config_sources=FileSource(file=ASSET_FOLDER / "config.yml")
-    )
+    config = OuterConfig(config_sources=FileSource(file=ASSET_FOLDER / "config.yml"))
     assert config.inner.attr1 == "1 🎉"
     assert config.attr2 == "2"
 
@@ -58,9 +54,7 @@ def test_multiple_yaml_files_one_is_optional_and_unavailable():
     config = OuterConfig(
         config_sources=[
             FileSource(file=ASSET_FOLDER / "config.yml"),
-            FileSource(
-                file=ASSET_FOLDER / "config_not_existing.yml", optional=True
-            ),
+            FileSource(file=ASSET_FOLDER / "config_not_existing.yml", optional=True),
         ]
     )
     assert config.inner.attr1 == "1 🎉"
@@ -134,17 +128,13 @@ def test_wrong_format():
 
 def test_invalid_file():
     with pytest.raises(FileException):
-        OuterConfig(
-            config_sources=FileSource(file=ASSET_FOLDER / "non_existing.json")
-        )
+        OuterConfig(config_sources=FileSource(file=ASSET_FOLDER / "non_existing.json"))
 
 
 def test_invalid_file_str():
     with pytest.raises(FileException):
         OuterConfig(
-            config_sources=FileSource(
-                file=str(ASSET_FOLDER) + "/non_existing.json"
-            )
+            config_sources=FileSource(file=str(ASSET_FOLDER) + "/non_existing.json")
         )
 
 
@@ -210,18 +200,14 @@ def test_from_cl_arg_name(monkeypatch):
     # raises error if not set
     with pytest.raises(FileException):
         OuterConfig(
-            config_sources=FileSource(
-                file_from_cl=cl_arg_name, folder=ASSET_FOLDER
-            )
+            config_sources=FileSource(file_from_cl=cl_arg_name, folder=ASSET_FOLDER)
         )
 
     # raises error if missing value
     with pytest.raises(FileException):
         monkeypatch.setattr(sys, "argv", argv_backup + [cl_arg_name])
         OuterConfig(
-            config_sources=FileSource(
-                file_from_cl=cl_arg_name, folder=ASSET_FOLDER
-            )
+            config_sources=FileSource(file_from_cl=cl_arg_name, folder=ASSET_FOLDER)
         )
 
     # works if set

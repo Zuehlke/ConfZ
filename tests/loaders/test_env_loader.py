@@ -33,9 +33,7 @@ def test_allow_deny(monkeypatch):
     monkeypatch.setenv("INNER.ATTR-OVERRIDE", "secret")
 
     # works if all allowed
-    config = OuterConfig(
-        config_sources=EnvSource(allow=["inner.attr1_name", "attr2"])
-    )
+    config = OuterConfig(config_sources=EnvSource(allow=["inner.attr1_name", "attr2"]))
     assert config.attr2 == 2
     assert config.inner.attr1_name == 1
     assert config.inner.attr_override is None
@@ -62,17 +60,13 @@ def test_prefix(monkeypatch):
     monkeypatch.setenv("CONFIG_ATTR2", "2")
 
     # prefix works
-    config = OuterConfig(
-        config_sources=EnvSource(allow_all=True, prefix="CONFIG_")
-    )
+    config = OuterConfig(config_sources=EnvSource(allow_all=True, prefix="CONFIG_"))
     assert config.attr2 == 2
     assert config.inner.attr1_name == 1
 
     # allow does not use prefix
     config = OuterConfig(
-        config_sources=EnvSource(
-            allow=["inner.attr1_name", "attr2"], prefix="CONFIG_"
-        )
+        config_sources=EnvSource(allow=["inner.attr1_name", "attr2"], prefix="CONFIG_")
     )
     assert config.attr2 == 2
     assert config.inner.attr1_name == 1
@@ -80,9 +74,7 @@ def test_prefix(monkeypatch):
     # deny does not use prefix
     with pytest.raises(ValidationError):
         OuterConfig(
-            config_sources=EnvSource(
-                allow_all=True, deny=["attr2"], prefix="CONFIG_"
-            )
+            config_sources=EnvSource(allow_all=True, deny=["attr2"], prefix="CONFIG_")
         )
 
 

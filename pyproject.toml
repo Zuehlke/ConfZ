@@ -45,8 +45,6 @@ types-toml = "^0.10.8"
 
 [tool.pylint.messages_control]
 disable = [
-    "wrong-hanging-indentation",    # to work together with black
-    "bad-whitespace",               # to work together with black
     "missing-module-docstring",
     "missing-class-docstring",
     "missing-function-docstring",

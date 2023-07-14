@@ -107,9 +107,7 @@ class FileLoader(Loader):
         try:
             stream = file_path.open(encoding=file_encoding)
         except OSError as e:
-            raise FileException(
-                f"Could not open config file '{file_path}'."
-            ) from e
+            raise FileException(f"Could not open config file '{file_path}'.") from e
         with stream:
             yield stream
 

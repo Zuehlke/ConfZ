@@ -17,17 +17,13 @@ class OuterConfig(BaseConfig):
 class ParentConfig1(OuterConfig):
     attr3: int
 
-    CONFIG_SOURCES = DataSource(
-        data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3}
-    )
+    CONFIG_SOURCES = DataSource(data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3})
 
 
 class ParentConfig2(OuterConfig):
     attr4: int
 
-    CONFIG_SOURCES = DataSource(
-        data={"inner": {"attr1": 1}, "attr2": 2, "attr4": 4}
-    )
+    CONFIG_SOURCES = DataSource(data={"inner": {"attr1": 1}, "attr2": 2, "attr4": 4})
 
 
 class ParentConfig3(OuterConfig):
@@ -77,14 +73,10 @@ def test_init_arg():
     # no singleton
     assert ParentConfig1() is ParentConfig1()
     config1 = ParentConfig1(
-        config_sources=DataSource(
-            data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3}
-        )
+        config_sources=DataSource(data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3})
     )
     config2 = ParentConfig1(
-        config_sources=DataSource(
-            data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3}
-        )
+        config_sources=DataSource(data={"inner": {"attr1": 1}, "attr2": 2, "attr3": 3})
     )
     assert config1 == config2
     assert config1 is not config2
