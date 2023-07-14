@@ -1,6 +1,6 @@
 import sys
 
-from confz.confz_source import ConfZCLArgSource
+from confz.confz_source import CLArgSource
 from .loader import Loader
 
 
@@ -8,7 +8,7 @@ class CLArgLoader(Loader):
     """Config loader for command line arguments."""
 
     @classmethod
-    def populate_config(cls, config: dict, confz_source: ConfZCLArgSource):
+    def populate_config(cls, config: dict, confz_source: CLArgSource):
         cl_args = {}
         for idx, cl_arg in enumerate(sys.argv[1:]):
             if cl_arg.startswith("--") and idx + 2 < len(sys.argv):

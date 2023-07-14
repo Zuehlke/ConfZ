@@ -1,13 +1,13 @@
 import sys
 
-from confz import ConfZ, ConfZCLArgSource
+from confz import BaseConfig, CLArgSource
 
 
-class InnerConfig(ConfZ):
+class InnerConfig(BaseConfig):
     attr1: int
 
 
-class OuterConfig(ConfZ):
+class OuterConfig(BaseConfig):
     attr2: int
     inner: InnerConfig
 
@@ -15,7 +15,7 @@ class OuterConfig(ConfZ):
 def test_default(monkeypatch):
     argv = sys.argv.copy() + ["--inner.attr1", "1", "--attr2", "2"]
     monkeypatch.setattr(sys, "argv", argv)
-    config = OuterConfig(config_sources=ConfZCLArgSource())
+    config = OuterConfig(config_sources=CLArgSource())
     assert config.inner.attr1 == 1
     assert config.attr2 == 2
 
@@ -30,7 +30,7 @@ def test_prefix(monkeypatch):
         "100",
     ]
     monkeypatch.setattr(sys, "argv", argv)
-    config = OuterConfig(config_sources=ConfZCLArgSource(prefix="conf_"))
+    config = OuterConfig(config_sources=CLArgSource(prefix="conf_"))
     assert config.inner.attr1 == 1
     assert config.attr2 == 2
 
@@ -38,7 +38,7 @@ def test_prefix(monkeypatch):
 def test_remap(monkeypatch):
     argv = sys.argv.copy() + ["--val1", "1", "--attr2", "2"]
     monkeypatch.setattr(sys, "argv", argv)
-    config = OuterConfig(config_sources=ConfZCLArgSource(remap={"val1": "inner.attr1"}))
+    config = OuterConfig(config_sources=CLArgSource(remap={"val1": "inner.attr1"}))
     assert config.inner.attr1 == 1
     assert config.attr2 == 2
 
@@ -54,7 +54,7 @@ def test_nested_separator(monkeypatch):
     ]
     monkeypatch.setattr(sys, "argv", argv)
     config = OuterConfig(
-        config_sources=ConfZCLArgSource(prefix="conf_", nested_separator="__")
+        config_sources=CLArgSource(prefix="conf_", nested_separator="__")
     )
     assert config.inner.attr1 == 1
     assert config.attr2 == 2

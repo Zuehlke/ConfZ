@@ -1,26 +1,26 @@
 from .change import depends_on
-from .confz import ConfZ
+from .confz import BaseConfig
 from .confz_source import (
-    ConfZSources,
-    ConfZSource,
-    ConfZFileSource,
-    ConfZEnvSource,
-    ConfZCLArgSource,
+    ConfigSources,
+    ConfigSource,
+    FileSource,
+    EnvSource,
+    CLArgSource,
     FileFormat,
-    ConfZDataSource,
+    DataSource,
 )
 from .validate import validate_all_configs
 
 
 __all__ = [
     "depends_on",
-    "ConfZ",
-    "ConfZSources",
-    "ConfZSource",
-    "ConfZFileSource",
-    "ConfZEnvSource",
-    "ConfZCLArgSource",
+    "BaseConfig",
+    "ConfigSources",
+    "ConfigSource",
+    "FileSource",
+    "EnvSource",
+    "CLArgSource",
     "FileFormat",
-    "ConfZDataSource",
+    "DataSource",
     "validate_all_configs",
 ]

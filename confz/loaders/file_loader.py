@@ -9,8 +9,8 @@ from typing import Iterator, Optional, TextIO, Union
 import toml
 import yaml
 
-from confz.confz_source import ConfZFileSource, FileFormat
-from confz.exceptions import ConfZFileException
+from confz.confz_source import FileSource, FileFormat
+from confz.exceptions import FileException
 from .loader import Loader
 
 
@@ -18,14 +18,14 @@ class FileLoader(Loader):
     """Config loader for config files."""
 
     @classmethod
-    def _get_filename(cls, confz_source: ConfZFileSource) -> Path:
+    def _get_filename(cls, confz_source: FileSource) -> Path:
         if confz_source.file is not None:
             if isinstance(confz_source.file, bytes):
-                raise ConfZFileException("Can not detect filename from type bytes")
+                raise FileException("Can not detect filename from type bytes")
             file_path = Path(confz_source.file)
         elif confz_source.file_from_env is not None:
             if confz_source.file_from_env not in os.environ:
-                raise ConfZFileException(
+                raise FileException(
                     f"Environment variable '{confz_source.file_from_env}' is not set."
                 )
             file_path = Path(os.environ[confz_source.file_from_env])
@@ -34,7 +34,7 @@ class FileLoader(Loader):
                 try:
                     file_path = Path(sys.argv[confz_source.file_from_cl])
                 except IndexError as e:
-                    raise ConfZFileException(
+                    raise FileException(
                         f"Command-line argument number {confz_source.file_from_cl} "
                         f"is not set."
                     ) from e
@@ -42,19 +42,19 @@ class FileLoader(Loader):
                 try:
                     idx = sys.argv.index(confz_source.file_from_cl)
                 except ValueError as e:
-                    raise ConfZFileException(
+                    raise FileException(
                         f"Command-line argument '{confz_source.file_from_cl}' "
                         f"not found."
                     ) from e
                 try:
                     file_path = Path(sys.argv[idx + 1])
                 except IndexError as e:
-                    raise ConfZFileException(
+                    raise FileException(
                         f"Command-line argument '{confz_source.file_from_cl}' is not "
                         f"set."
                     ) from e
         else:
-            raise ConfZFileException("No file source set.")
+            raise FileException("No file source set.")
 
         if confz_source.folder is not None:
             file_path = Path(confz_source.folder) / file_path
@@ -78,7 +78,7 @@ class FileLoader(Loader):
         try:
             suffix_format = suffix_formats[suffix]
         except KeyError as e:
-            raise ConfZFileException(
+            raise FileException(
                 f"File-ending '{suffix}' is not known. Supported are: "
                 f"{', '.join(list(suffix_formats.keys()))}."
             ) from e
@@ -98,7 +98,7 @@ class FileLoader(Loader):
         elif file_format == FileFormat.TOML:
             file_content = toml.load(stream)
         else:
-            raise ConfZFileException(f"Unknown file format {file_format}.")
+            raise FileException(f"Unknown file format {file_format}.")
         return file_content
 
     @classmethod
@@ -107,7 +107,7 @@ class FileLoader(Loader):
         try:
             stream = file_path.open(encoding=file_encoding)
         except OSError as e:
-            raise ConfZFileException(
+            raise FileException(
                 f"Could not open config file '{file_path}'."
             ) from e
         with stream:
@@ -115,10 +115,10 @@ class FileLoader(Loader):
 
     @classmethod
     def _populate_config_from_bytes(
-        cls, config: dict, data: bytes, confz_source: ConfZFileSource
+        cls, config: dict, data: bytes, confz_source: FileSource
     ):
         if confz_source.format is None:
-            raise ConfZFileException(
+            raise FileException(
                 "The format needs to be defined if the "
                 "configuration is passed as byte-string"
             )
@@ -128,7 +128,7 @@ class FileLoader(Loader):
         cls.update_dict_recursively(config, file_content)
 
     @classmethod
-    def populate_config(cls, config: dict, confz_source: ConfZFileSource):
+    def populate_config(cls, config: dict, confz_source: FileSource):
         if confz_source.file is not None and isinstance(confz_source.file, bytes):
             cls._populate_config_from_bytes(
                 config=config, data=confz_source.file, confz_source=confz_source
@@ -136,7 +136,7 @@ class FileLoader(Loader):
             return
         try:
             file_path = cls._get_filename(confz_source)
-        except ConfZFileException as e:
+        except FileException as e:
             if confz_source.optional:
                 return
             raise e
@@ -144,7 +144,7 @@ class FileLoader(Loader):
         try:
             with cls._create_stream(file_path, confz_source.encoding) as file_stream:
                 file_content = cls._parse_stream(file_stream, file_format)
-        except ConfZFileException as e:
+        except FileException as e:
             if confz_source.optional:
                 return
             raise e

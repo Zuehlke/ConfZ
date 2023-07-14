@@ -2,27 +2,27 @@ from dataclasses import dataclass
 
 import pytest
 
-from confz import ConfZ, ConfZDataSource, ConfZSource, ConfZEnvSource
-from confz.exceptions import ConfZUpdateException, ConfZException
+from confz import BaseConfig, DataSource, ConfigSource, EnvSource
+from confz.exceptions import UpdateException, ConfigException
 from confz.loaders import Loader, register_loader
 
 
-class InnerConfig(ConfZ):
+class InnerConfig(BaseConfig):
     attr1: int
 
 
-class OuterConfig(ConfZ):
+class OuterConfig(BaseConfig):
     attr2: int
     inner: InnerConfig
 
 
 @dataclass
-class CustomSource(ConfZSource):
+class CustomSource(ConfigSource):
     custom_attr: int
 
 
 @dataclass
-class CustomSource2(ConfZSource):
+class CustomSource2(ConfigSource):
     pass
 
 
@@ -41,9 +41,9 @@ register_loader(CustomSource, CustomLoader)
 def test_update_dict_recursively():
     config = OuterConfig(
         config_sources=[
-            ConfZDataSource(data={"inner": {"attr1": 1}, "attr2": 2}),
-            ConfZDataSource(data={"inner": {"attr1": 3}}),
-            ConfZDataSource(data={"attr2": 4}),
+            DataSource(data={"inner": {"attr1": 1}, "attr2": 2}),
+            DataSource(data={"inner": {"attr1": 3}}),
+            DataSource(data={"attr2": 4}),
         ]
     )
     assert config.inner.attr1 == 3
@@ -51,17 +51,17 @@ def test_update_dict_recursively():
 
 
 def test_dict_contradiction(monkeypatch):
-    with pytest.raises(ConfZUpdateException):
+    with pytest.raises(UpdateException):
         OuterConfig(
             config_sources=[
-                ConfZDataSource(data={"inner": "something"}),
-                ConfZDataSource(data={"inner": {"attr1": 3}}),
+                DataSource(data={"inner": "something"}),
+                DataSource(data={"inner": {"attr1": 3}}),
             ]
         )
     monkeypatch.setenv("INNER", "something")
     monkeypatch.setenv("INNER.ATTR1", "3")
-    with pytest.raises(ConfZUpdateException):
-        OuterConfig(config_sources=ConfZEnvSource(allow_all=True))
+    with pytest.raises(UpdateException):
+        OuterConfig(config_sources=EnvSource(allow_all=True))
 
 
 def test_own_loader():
@@ -73,5 +73,5 @@ def test_own_loader():
 def test_unregistered_source():
     InnerConfig(attr1=2)
 
-    with pytest.raises(ConfZException):
+    with pytest.raises(ConfigException):
         InnerConfig(config_sources=CustomSource2(), attr1=2)

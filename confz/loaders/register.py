@@ -1,39 +1,39 @@
 from typing import Type, Dict
 
 from confz.confz_source import (
-    ConfZSource,
-    ConfZFileSource,
-    ConfZEnvSource,
-    ConfZCLArgSource,
-    ConfZDataSource,
+    ConfigSource,
+    FileSource,
+    EnvSource,
+    CLArgSource,
+    DataSource,
 )
-from confz.exceptions import ConfZException
+from confz.exceptions import ConfigException
 from .cl_arg_loader import CLArgLoader
 from .data_loader import DataLoader
 from .env_loader import EnvLoader
 from .file_loader import FileLoader
 from .loader import Loader
 
-_loaders: Dict[Type[ConfZSource], Type[Loader]] = {}
+_loaders: Dict[Type[ConfigSource], Type[Loader]] = {}
 
 
-def get_loader(confz_source: Type[ConfZSource]):
+def get_loader(confz_source: Type[ConfigSource]):
     if confz_source in _loaders:
         return _loaders[confz_source]
-    raise ConfZException(f"Unknown config source type '{confz_source}'")
+    raise ConfigException(f"Unknown config source type '{confz_source}'")
 
 
-def register_loader(confz_source: Type[ConfZSource], loader: Type[Loader]):
-    """Register a :class:`~confz.ConfZSource` with a specific loader. Can be used to
+def register_loader(confz_source: Type[ConfigSource], loader: Type[Loader]):
+    """Register a :class:`~confz.ConfigSource` with a specific loader. Can be used to
     extend `ConfZ` with own loaders.
 
-    :param confz_source: The :class:`~confz.ConfZSource` sub-type.
+    :param confz_source: The :class:`~confz.ConfigSource` sub-type.
     :param loader: The :class:`~confz.loaders.Loader` sub-type.
     """
     _loaders[confz_source] = loader
 
 
-register_loader(ConfZFileSource, FileLoader)
-register_loader(ConfZEnvSource, EnvLoader)
-register_loader(ConfZCLArgSource, CLArgLoader)
-register_loader(ConfZDataSource, DataLoader)
+register_loader(FileSource, FileLoader)
+register_loader(EnvSource, EnvLoader)
+register_loader(CLArgSource, CLArgLoader)
+register_loader(DataSource, DataLoader)

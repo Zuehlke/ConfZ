@@ -6,11 +6,11 @@ from typing import Optional, Union, List, Dict, Any
 
 
 @dataclass
-class ConfZSource:
-    """Source configuration for :class:`~confz.ConfZ` models."""
+class ConfigSource:
+    """Source configuration for :class:`~confz.BaseConfig` models."""
 
 
-ConfZSources = Union[ConfZSource, List[ConfZSource]]
+ConfigSources = Union[ConfigSource, List[ConfigSource]]
 
 
 class FileFormat(Enum):
@@ -22,7 +22,7 @@ class FileFormat(Enum):
 
 
 @dataclass
-class ConfZFileSource(ConfZSource):
+class FileSource(ConfigSource):
     """Source config for files."""
 
     file: Union[PathLike, str, bytes, None] = None
@@ -49,7 +49,7 @@ class ConfZFileSource(ConfZSource):
 
 
 @dataclass
-class ConfZEnvSource(ConfZSource):
+class EnvSource(ConfigSource):
     """Source config for environment variables and .env files. On loading of the
     source, the dotenv file values (if available) are merged with the environment,
     with environment always taking precedence in case of name collusion. All loaded
@@ -81,7 +81,7 @@ class ConfZEnvSource(ConfZSource):
 
 
 @dataclass
-class ConfZCLArgSource(ConfZSource):
+class CLArgSource(ConfigSource):
     """Source config for command line arguments. Command line arguments are
     case-sensitive. Dot-notation can be used to access nested configurations. Only
     command line arguments starting with two dashes (\\-\\-) are considered. Between
@@ -100,7 +100,7 @@ class ConfZCLArgSource(ConfZSource):
 
 
 @dataclass
-class ConfZDataSource(ConfZSource):
+class DataSource(ConfigSource):
     """Source config for raw data, i.e. constants. This can be useful for unit-test
     together with :meth:`~confz.ConfZ.change_config_sources` to inject test data into
     the config."""

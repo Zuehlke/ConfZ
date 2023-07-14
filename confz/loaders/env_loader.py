@@ -4,7 +4,7 @@ from typing import Dict, Optional, Any
 
 from dotenv import dotenv_values
 
-from confz.confz_source import ConfZEnvSource
+from confz.confz_source import EnvSource
 from .loader import Loader
 
 
@@ -28,7 +28,7 @@ class EnvLoader(Loader):
         return map_out
 
     @classmethod
-    def _check_allowance(cls, var_name: str, confz_source: ConfZEnvSource) -> bool:
+    def _check_allowance(cls, var_name: str, confz_source: EnvSource) -> bool:
         if not confz_source.allow_all:
             if confz_source.allow is None:
                 return False
@@ -45,7 +45,7 @@ class EnvLoader(Loader):
         return True
 
     @classmethod
-    def populate_config(cls, config: dict, confz_source: ConfZEnvSource):
+    def populate_config(cls, config: dict, confz_source: EnvSource):
         remap = cls._transform_remap(confz_source.remap)
 
         origin_env_vars: Dict[str, Any] = dict(os.environ)
