@@ -20,6 +20,8 @@ It furthermore supports you in common use cases like:
 * Config changes for unit tests
 * Custom config sources
 
+**UPDATE**: ConfZ 2 is here, with support for pydantic 2 and improved naming conventions.
+Check out the [migration guide](https://confz.readthedocs.io/en/latest/migration_guide.html). 
 
 ## :package: Installation
 

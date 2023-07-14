@@ -53,7 +53,7 @@ class BaseConfigMetaclass(type(BaseModel)):  # type: ignore
 
 
 class BaseConfig(BaseModel, metaclass=BaseConfigMetaclass, frozen=True):
-    """Base class, parent of every config class. Internally wraps :class:`BaseModel`of
+    """Base class, parent of every config class. Internally wraps :class:`BaseModel` of
     pydantic and behaves transparent except for two cases:
 
     - If the constructor gets `config_sources` as kwarg, these sources are used as
