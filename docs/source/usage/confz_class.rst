@@ -46,7 +46,7 @@ APIConfig(
 Since ``api_config`` is a standard python object, your IDE will give you full support like code-completion and
 type-checks. It also supports all methods available by `BaseModel` of pydantic, for example:
 
->>> api_config.json()
+>>> api_config.model_dump_json()
 '{"host": "http://my-host.com", "port": 1234, "db": {"user": "my-user", "password": "**********"}}'
 
 It is `faux-immutable <https://pydantic-docs.helpmanual.io/usage/models/#faux-immutability>`_ per default:

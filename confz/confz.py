@@ -53,7 +53,7 @@ class ConfZMetaclass(type(BaseModel)):  # type: ignore
         return super().__call__(**kwargs)
 
 
-class ConfZ(BaseModel, metaclass=ConfZMetaclass):
+class ConfZ(BaseModel, metaclass=ConfZMetaclass, frozen=True):
     """Base class, parent of every config class. Internally wraps :class:`BaseModel`of
     pydantic and behaves transparent except for two cases:
 
@@ -72,9 +72,6 @@ class ConfZ(BaseModel, metaclass=ConfZMetaclass):
 
     # type is ClassVar[Optional[List["Listener"]]] (same here)
     listeners: ClassVar[Optional[List[Any]]] = None  #: *for internal use only*
-
-    class Config:
-        allow_mutation = False
 
     @classmethod
     def change_config_sources(

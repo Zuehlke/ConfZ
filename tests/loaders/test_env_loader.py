@@ -9,7 +9,7 @@ from tests.assets import ASSET_FOLDER
 
 class InnerConfig(ConfZ):
     attr1_name: int
-    attr_override: Optional[str]
+    attr_override: Optional[str] = None
 
 
 class OuterConfig(ConfZ):

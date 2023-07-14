@@ -123,6 +123,15 @@ def test_custom_file_str_path():
     assert config.attr2 == "2"
 
 
+def test_wrong_format():
+    with pytest.raises(ConfZFileException):
+        OuterConfig(
+            config_sources=ConfZFileSource(
+                file=str(ASSET_FOLDER) + "/config.txt", format="wrong value"
+            )
+        )
+
+
 def test_invalid_file():
     with pytest.raises(ConfZFileException):
         OuterConfig(

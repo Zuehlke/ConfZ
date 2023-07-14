@@ -24,7 +24,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7.2"
-pydantic = "^1.9.0"
+pydantic = ">=1.9.0, <3.0.0"
 PyYAML = ">=5.4.1, <7.0.0"
 python-dotenv = ">=0.19.2, <2.0.0"
 toml = "^0.10.2"
