@@ -18,7 +18,7 @@ class CLArgLoader(Loader):
                 if confz_source.prefix is not None:
                     if not cl_name.startswith(confz_source.prefix):
                         continue
-                    cl_name = cl_name[len(confz_source.prefix):]
+                    cl_name = cl_name[len(confz_source.prefix) :]
 
                 if confz_source.remap is not None and cl_name in confz_source.remap:
                     cl_name = confz_source.remap[cl_name]
