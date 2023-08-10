@@ -92,7 +92,7 @@ class FileLoader(Loader):
         file_format: FileFormat,
     ) -> dict:
         if file_format == FileFormat.YAML:
-            file_content = yaml.load(stream, Loader=yaml.BaseLoader)
+            file_content = yaml.load(stream, Loader=yaml.SafeLoader)
         elif file_format == FileFormat.JSON:
             file_content = json.load(stream)
         elif file_format == FileFormat.TOML:
