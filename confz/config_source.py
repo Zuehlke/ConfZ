@@ -56,7 +56,7 @@ class EnvSource(ConfigSource):
     variable names are transformed to lowercase and all dashes are replaced by
     underscores. The definitions below are not case-sensitive and can be written with
     underscore or dash. An exception is `prefix`, which needs to match exactly.
-    Dot-notation can be used to access nested configurations."""
+    Separators can be used to create nested configurations."""
 
     allow_all: bool = False
     """Allow potentially all environment variables to be read as config option."""
@@ -77,7 +77,9 @@ class EnvSource(ConfigSource):
     """Built in .env file loading with lower than environment precedence. Uses UTF-8
     for decoding."""
     nested_separator: str = "."
-    """Separator will be used in nested environment variables."""
+    """Separator which will be used in nested environment variables. Note that
+    dot-notation is not supported by some shells, so consider using an alternative
+    like double underscore."""
 
 
 @dataclass
