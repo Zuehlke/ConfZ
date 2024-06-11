@@ -12,3 +12,4 @@ This part of the documentation contains user guides explaining all aspects of Co
    context_manager
    listeners
    extensions
+   mypy
