@@ -46,6 +46,9 @@ class FileSource(ConfigSource):
     """True if this config file is only optional. If set to True no error is
     thrown when the file was not found or when the environment variable or the
     command line argument were not set."""
+    j2_template_params: Optional[Dict[str, Any]] = None
+    """A dictionary whose values will be used when during render 
+    performing from a configuration file with included Jinja templates. """
 
 
 @dataclass
