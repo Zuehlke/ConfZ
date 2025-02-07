@@ -37,7 +37,7 @@ pytest-cov = "^4.0.0"
 pytest-asyncio = "^0.21.0"
 black = {extras = ["d"], version = "^23.3.0"}
 mypy = "^1.4.1"
-pylint = "^2.15.5"
+pylint = "^3.2.4"
 types-PyYAML = "^6.0.12"
 types-toml = "^0.10.8"
 
