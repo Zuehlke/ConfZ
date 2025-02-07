@@ -7,7 +7,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./.github/workflows/setup-env
         with:
-          python-version: "3.11"
+          python-version: "3.13"
       - name: run mypy
         run: |
           mypy confz

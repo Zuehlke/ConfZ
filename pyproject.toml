@@ -14,16 +14,17 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7.2"
+python = "^3.8.0"
 pydantic = ">=1.9.0, <3.0.0"
 PyYAML = ">=5.4.1, <7.0.0"
 python-dotenv = ">=0.19.2, <2.0.0"
@@ -36,7 +37,7 @@ pytest-cov = "^4.0.0"
 pytest-asyncio = "^0.21.0"
 black = {extras = ["d"], version = "^23.3.0"}
 mypy = "^1.4.1"
-pylint = "^2.15.5"
+pylint = "^3.2.4"
 types-PyYAML = "^6.0.12"
 types-toml = "^0.10.8"
 

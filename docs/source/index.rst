@@ -29,7 +29,7 @@ ConfZ is on `PyPI <https://pypi.org/project/confz/>`_ and can be installed with 
 
    pip install confz
 
-It requires python >= 3.7.
+It requires python >= 3.8.
 
 
 Contents
