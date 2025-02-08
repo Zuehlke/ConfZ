@@ -4,7 +4,7 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Iterator, Optional, TextIO, Union
+from typing import Iterator, Optional, TextIO, Union, Dict, Any
 
 import toml
 import yaml
@@ -13,6 +13,7 @@ from confz.config_source import FileSource, FileFormat
 from confz.exceptions import FileException
 from .loader import Loader
 
+import jinja2 as j2
 
 class FileLoader(Loader):
     """Config loader for config files."""
@@ -86,17 +87,32 @@ class FileLoader(Loader):
         return suffix_format
 
     @classmethod
+    def _jinja2_render(
+        cls,
+        stream: Union[TextIO],
+        j2_template_params: Optional[Dict[str, Any]] = None
+    ) -> Union[TextIO]:
+        template_params = j2_template_params if j2_template_params else {}    
+        j2_env = j2.Environment()
+        unparsed_content: str = stream.read(-1)
+        j2_env_template = j2_env.from_string( unparsed_content )
+        parsed_content = j2_env_template.render( template_params )
+        stream_parsed = io.StringIO(initial_value=parsed_content, newline='\n')
+        return stream_parsed
+
+    @classmethod
     def _parse_stream(
         cls,
         stream: Union[TextIO],
         file_format: FileFormat,
+        j2_template_params: Optional[Dict[str, Any]] = None
     ) -> dict:
         if file_format == FileFormat.YAML:
-            file_content = yaml.load(stream, Loader=yaml.SafeLoader)
+            file_content = yaml.load(cls._jinja2_render(stream, j2_template_params), Loader=yaml.SafeLoader)
         elif file_format == FileFormat.JSON:
-            file_content = json.load(stream)
+            file_content = json.load(stream) # does not support any comments, so skipping jinja templating for this type of files 
         elif file_format == FileFormat.TOML:
-            file_content = toml.load(stream)
+            file_content = toml.load(cls._jinja2_render(stream, j2_template_params))
         else:
             raise FileException(f"Unknown file format {file_format}.")
         return file_content
@@ -122,7 +138,7 @@ class FileLoader(Loader):
             )
         byte_stream = io.BytesIO(data)
         text_stream = io.TextIOWrapper(byte_stream, encoding=config_source.encoding)
-        file_content = cls._parse_stream(text_stream, config_source.format)
+        file_content = cls._parse_stream(text_stream, config_source.format, config_source.j2_template_params)
         cls.update_dict_recursively(config, file_content)
 
     @classmethod
@@ -141,7 +157,7 @@ class FileLoader(Loader):
         file_format = cls._get_format(file_path, config_source.format)
         try:
             with cls._create_stream(file_path, config_source.encoding) as file_stream:
-                file_content = cls._parse_stream(file_stream, file_format)
+                file_content = cls._parse_stream(file_stream, file_format, config_source.j2_template_params)
         except FileException as e:
             if config_source.optional:
                 return
